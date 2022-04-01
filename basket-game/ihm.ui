@@ -149,12 +149,18 @@
              </spacer>
             </item>
             <item alignment="Qt::AlignHCenter">
-             <widget class="QPushButton" name="nouvellePartie">
+             <widget class="QPushButton" name="nouvellePartieBouton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>500</width>
+                <height>0</height>
+               </size>
               </property>
               <property name="font">
                <font>
@@ -186,7 +192,7 @@
              </spacer>
             </item>
             <item alignment="Qt::AlignHCenter">
-             <widget class="QPushButton" name="regleBoutton">
+             <widget class="QPushButton" name="reglesBouton">
               <property name="enabled">
                <bool>true</bool>
               </property>
@@ -195,6 +201,12 @@
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>500</width>
+                <height>0</height>
+               </size>
               </property>
               <property name="font">
                <font>
@@ -213,69 +225,6 @@
              </widget>
             </item>
             <item>
-             <spacer name="espaceurVertical3">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Maximum</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item alignment="Qt::AlignHCenter">
-             <widget class="QPushButton" name="connexionModuleBoutton">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>40</pointsize>
-               </font>
-              </property>
-              <property name="layoutDirection">
-               <enum>Qt::LeftToRight</enum>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">background-color: rgb(252, 227, 138);</string>
-              </property>
-              <property name="text">
-               <string>Connexion au module </string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="verticalSpacer">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Minimum</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QProgressBar" name="etatConnexionModule">
-              <property name="value">
-               <number>24</number>
-              </property>
-             </widget>
-            </item>
-            <item>
              <spacer name="espaceurVertical4">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -289,7 +238,7 @@
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="quitterButton">
+             <widget class="QPushButton" name="quitterBouton">
               <property name="font">
                <font>
                 <pointsize>40</pointsize>
@@ -364,14 +313,7 @@
              </font>
             </property>
             <property name="text">
-             <string>-Respecter son adversaire et respecter le matériel.
--Interdit de taper le ballon de son adversaire.
--Il y aura 4 paniers de basket, chacun représente une colonne de jeu.
--Un panier marqué, un pion placé dans la puissance 4.
--Les équipes devront donc envoyer le ballon dans le bon panier afin de créer l’alignement de jetons.
--Un écran affichera la partie en cours.
-L'équipe rouge commence.
--Bon jeu à tous !!</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;- Respecter son adversaire et respecter le matériel.&lt;/p&gt;&lt;p&gt;- Interdit de taper le ballon de son adversaire.&lt;/p&gt;&lt;p&gt;- Il y aura 4 paniers de basket, chacun représente une colonne de jeu.&lt;/p&gt;&lt;p&gt;- Un panier marqué, un pion placé dans la puissance 4.&lt;/p&gt;&lt;p&gt;- Les équipes devront donc envoyer le ballon dans le bon panier afin de créer l’alignement de jetons amenant à la victoire.&lt;/p&gt;&lt;p&gt;- Un écran affichera la partie en cours.&lt;/p&gt;&lt;p&gt;L'équipe rouge commence.&lt;/p&gt;&lt;p&gt;- Bon jeu à tous ! Que le meilleur gagne ...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -389,7 +331,7 @@ L'équipe rouge commence.
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="bouttonRetour">
+           <widget class="QPushButton" name="retourReglesBouton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -644,19 +586,19 @@ L'équipe rouge commence.
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="bouttonContinuer">
+           <widget class="QPushButton" name="continuerBouton">
             <property name="font">
              <font>
               <pointsize>40</pointsize>
              </font>
             </property>
             <property name="text">
-             <string>Continuer</string>
+             <string>Démarrer</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="bouttonRetour_2">
+           <widget class="QPushButton" name="retourConfigurationBouton">
             <property name="font">
              <font>
               <pointsize>40</pointsize>
@@ -863,7 +805,7 @@ L'équipe rouge commence.
           <item>
            <layout class="QHBoxLayout" name="layoutBasDePagePartie">
             <item>
-             <widget class="QPushButton" name="bouttonRetourPartie">
+             <widget class="QPushButton" name="retourPartieBouton1">
               <property name="font">
                <font>
                 <pointsize>40</pointsize>
@@ -888,7 +830,7 @@ L'équipe rouge commence.
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="retourMenu">
+             <widget class="QPushButton" name="retourPartieBouton2">
               <property name="font">
                <font>
                 <pointsize>30</pointsize>
@@ -930,7 +872,7 @@ L'équipe rouge commence.
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="finale"/>
+      <widget class="QWidget" name="pageFinale"/>
      </widget>
     </item>
    </layout>

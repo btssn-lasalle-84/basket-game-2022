@@ -27,7 +27,9 @@ IHM::IHM(QWidget* parent) : QMainWindow(parent), ui(new Ui::IHM)
     fixerRaccourcisClavier();
 #endif
 
-    afficherFenetre(IHM::Principale);
+    connecterSignalSlot();
+
+    afficherFenetre(IHM::PagePrincipale);
 
 #ifdef PLEIN_ECRAN
     showFullScreen();
@@ -88,6 +90,26 @@ void IHM::afficherFenetrePrecedente()
     afficherFenetre(IHM::Fenetre(fenetrePrecedente));
 }
 
+void IHM::afficherPagePrincipale()
+{
+    afficherFenetre(IHM::PagePrincipale);
+}
+
+void IHM::afficherPageRegles()
+{
+    afficherFenetre(IHM::PageRegles);
+}
+
+void IHM::afficherPageConfiguration()
+{
+    afficherFenetre(IHM::PageConfiguration);
+}
+
+void IHM::afficherPagePartie()
+{
+    afficherFenetre(IHM::PagePartie);
+}
+
 /**
  * @brief Méthode qui permet de quitter la fenêtre principale de l'application
  *
@@ -97,6 +119,51 @@ void IHM::quitter()
 {
     this->close();
     qDebug() << Q_FUNC_INFO;
+}
+
+/**
+ * @brief Assure la connexion des signaux aux slots
+ *
+ * @fn IHM::connecterSignalSlot
+ */
+void IHM::connecterSignalSlot()
+{
+    // PagePrincipale
+    connect(ui->nouvellePartieBouton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(afficherPageConfiguration()));
+    connect(ui->reglesBouton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(afficherPageRegles()));
+    connect(this->ui->quitterBouton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(quitter()));
+    // PageRegles
+    connect(ui->retourReglesBouton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(afficherPagePrincipale()));
+    // PageConfiguration
+    connect(ui->retourConfigurationBouton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(afficherPagePrincipale()));
+    connect(ui->continuerBouton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(afficherPagePartie()));
+    // PagePartie
+    connect(ui->retourPartieBouton1,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(afficherPageConfiguration()));
+    connect(ui->retourPartieBouton2,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(afficherPagePrincipale()));
 }
 
 #ifdef TEST_IHM
