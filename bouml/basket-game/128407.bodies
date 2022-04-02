@@ -1,0 +1,105 @@
+class IHM
+!!!129559.cpp!!!	IHM(inout parent : QWidget = nullptr)
+    ui->setupUi(this);
+    qDebug() << Q_FUNC_INFO;
+
+#ifdef TEST_IHM
+    fixerRaccourcisClavier();
+#endif
+
+    connecterSignalSlot();
+
+    afficherFenetre(IHM::PagePrincipale);
+
+#ifdef PLEIN_ECRAN
+    showFullScreen();
+// showMaximized();
+#endif
+!!!129687.cpp!!!	~IHM()
+    delete ui;
+    qDebug() << Q_FUNC_INFO;
+!!!129815.cpp!!!	connecterSignalSlot() : void
+    // PagePrincipale
+    connect(ui->nouvellePartieBouton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(afficherPageConfiguration()));
+    connect(ui->reglesBouton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(afficherPageRegles()));
+    connect(this->ui->quitterBouton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(quitter()));
+    // PageRegles
+    connect(ui->retourReglesBouton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(afficherPagePrincipale()));
+    // PageConfiguration
+    connect(ui->retourConfigurationBouton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(afficherPagePrincipale()));
+    connect(ui->continuerBouton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(afficherPagePartie()));
+    // PagePartie
+    connect(ui->retourPartieBouton1,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(afficherPageConfiguration()));
+    connect(ui->retourPartieBouton2,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(afficherPagePrincipale()));
+!!!129943.cpp!!!	fixerRaccourcisClavier() : void
+    // Ctrl-Q pour quitter
+    QAction* quitter = new QAction(this);
+    quitter->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
+    addAction(quitter);
+    connect(quitter, SIGNAL(triggered()), this, SLOT(quitter()));
+
+    // Flèche droite pour écran suivant
+    QAction* actionAllerDroite = new QAction(this);
+    actionAllerDroite->setShortcut(QKeySequence(Qt::Key_Right));
+    addAction(actionAllerDroite);
+    connect(actionAllerDroite,
+            SIGNAL(triggered()),
+            this,
+            SLOT(afficherFenetreSuivante()));
+
+    // Flèche gauche pour écran précédent
+    QAction* actionAllerGauche = new QAction(this);
+    actionAllerGauche->setShortcut(QKeySequence(Qt::Key_Left));
+    addAction(actionAllerGauche);
+    connect(actionAllerGauche,
+            SIGNAL(triggered()),
+            this,
+            SLOT(afficherFenetrePrecedente()));
+!!!130071.cpp!!!	afficherFenetre(in fenetre : IHM::Fenetre) : void
+    qDebug() << Q_FUNC_INFO << "fenetre" << fenetre;
+    ui->fenetres->setCurrentIndex(fenetre);
+!!!130199.cpp!!!	afficherFenetrePrecedente() : void
+    int fenetreCourante   = ui->fenetres->currentIndex();
+    int fenetrePrecedente = (fenetreCourante - 1) % int(IHM::NbFenetres);
+    if(fenetrePrecedente == -1)
+        fenetrePrecedente = int(IHM::NbFenetres) - 1;
+    afficherFenetre(IHM::Fenetre(fenetrePrecedente));
+!!!130327.cpp!!!	afficherFenetreSuivante() : void
+    int fenetreCourante = IHM::Fenetre(ui->fenetres->currentIndex());
+    int fenetreSuivante = (fenetreCourante + 1) % int(IHM::NbFenetres);
+    afficherFenetre(IHM::Fenetre(fenetreSuivante));
+!!!130455.cpp!!!	afficherPagePrincipale() : void
+    afficherFenetre(IHM::PagePrincipale);
+!!!130583.cpp!!!	afficherPageRegles() : void
+    afficherFenetre(IHM::PageRegles);
+!!!130711.cpp!!!	afficherPageConfiguration() : void
+    afficherFenetre(IHM::PageConfiguration);
+!!!130839.cpp!!!	afficherPagePartie() : void
+    afficherFenetre(IHM::PagePartie);
+!!!130967.cpp!!!	quitter() : void
+    this->close();
+    qDebug() << Q_FUNC_INFO;

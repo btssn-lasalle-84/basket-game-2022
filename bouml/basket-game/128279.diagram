@@ -1,0 +1,42 @@
+format 224
+
+classcanvas 128023 class_ref 128919 // Joueur
+  simpleclassdiagramsettings end
+  xyz 35 26 2000
+end
+classcanvas 128151 class_ref 129047 // Entraineur
+  simpleclassdiagramsettings end
+  xyz 13 380 2000
+end
+usecasecanvas 128279 usecase_ref 128151 // Gérer le deroulement d'une séance
+  xyzwh 638 403 3005 64 32 label_xy 441 435
+end
+usecasecanvas 128407 usecase_ref 128279 // Dialoguer avec le module de détection
+  xyzwh 1170 403 3005 64 32 label_xy 954 435
+end
+usecasecanvas 128535 usecase_ref 128407 // Paramétrer une séance
+  xyzwh 378 736 3005 64 32 label_xy 258 768
+end
+usecasecanvas 128663 usecase_ref 128535 // Produire des sons
+  xyzwh 699 858 3005 64 32 label_xy 613 890
+end
+usecasecanvas 128791 usecase_ref 128663 // Visualiser le plateau de jeu et les informations
+  xyzwh 638 49 3005 64 32 label_xy 372 81
+end
+line 128919 ----
+  from ref 128023 z 3006 to ref 128791
+simplerelationcanvas 129047 simplerelation_ref 128151
+  from ref 128279 z 3006 stereotype "<<include>>" xyz 589 241 3000 to ref 128791
+end
+simplerelationcanvas 129175 simplerelation_ref 128279
+  from ref 128663 z 3006 stereotype "<<extend>>" xyz 621 645 3000 to ref 128279
+end
+simplerelationcanvas 129303 simplerelation_ref 128407
+  from ref 128279 z 3006 stereotype "<<include>>" xyz 457 584 3000 to ref 128535
+end
+simplerelationcanvas 129431 simplerelation_ref 128535
+  from ref 128279 z 3006 stereotype "<<include>>" xyz 855 388 3000 to ref 128407
+end
+line 129687 ----
+  from ref 128151 z 3006 to ref 128279
+end

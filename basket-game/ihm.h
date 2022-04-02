@@ -24,56 +24,59 @@
  */
 #define PLEIN_ECRAN
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
+// QT_BEGIN_NAMESPACE
+namespace Ui
+{
 class IHM;
 }
-QT_END_NAMESPACE
+// QT_END_NAMESPACE
 
 /**
  * @class IHM
  * @brief Déclaration de la classe IHM
  * @details Cette classe s'occupe de l'affichage sur l'écran de télévision
  */
-class IHM : public QMainWindow {
-  Q_OBJECT
+class IHM : public QMainWindow
+{
+    Q_OBJECT
 
-public:
-  IHM(QWidget *parent = nullptr);
-  ~IHM();
+  public:
+    IHM(QWidget* parent = nullptr);
+    ~IHM();
 
-private:
-  Ui::IHM *ui; //!< la fenêtre graphique associée à cette classe
+  private:
+    Ui::IHM* ui; //!< la fenêtre graphique associée à cette classe
 
-  /**
-   * @enum Fenetre
-   * @brief Définit les différents fenêtres de l'IHM
-   *
-   */
-  enum Fenetre {
-    PagePrincipale = 0,
-    PageRegles,
-    PageConfiguration,
-    PagePartie,
-    PageFinale,
-    NbFenetres
-  };
+    /**
+     * @enum Fenetre
+     * @brief Définit les différents fenêtres de l'IHM
+     *
+     */
+    enum Fenetre
+    {
+        PagePrincipale = 0,
+        PageRegles,
+        PageConfiguration,
+        PagePartie,
+        PageFinale,
+        NbFenetres
+    };
 
-  void connecterSignalSlot();
+    void connecterSignalSlot();
 
 #ifdef TEST_IHM
-  void fixerRaccourcisClavier();
+    void fixerRaccourcisClavier();
 #endif
 
-public slots:
-  void afficherFenetre(IHM::Fenetre fenetre);
-  void afficherFenetrePrecedente();
-  void afficherFenetreSuivante();
-  void afficherPagePrincipale();
-  void afficherPageRegles();
-  void afficherPageConfiguration();
-  void afficherPagePartie();
-  void quitter();
+  public slots:
+    void afficherFenetre(IHM::Fenetre fenetre);
+    void afficherFenetrePrecedente();
+    void afficherFenetreSuivante();
+    void afficherPagePrincipale();
+    void afficherPageRegles();
+    void afficherPageConfiguration();
+    void afficherPagePartie();
+    void quitter();
 };
 
 #endif // IHM_H
