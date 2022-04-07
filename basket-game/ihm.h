@@ -24,12 +24,12 @@
  */
 #define PLEIN_ECRAN
 
-QT_BEGIN_NAMESPACE
+// QT_BEGIN_NAMESPACE
 namespace Ui
 {
 class IHM;
 }
-QT_END_NAMESPACE
+// QT_END_NAMESPACE
 
 /**
  * @class IHM
@@ -54,10 +54,15 @@ class IHM : public QMainWindow
      */
     enum Fenetre
     {
-        Principale = 0,
-        Finale,
+        PagePrincipale = 0,
+        PageRegles,
+        PageConfiguration,
+        PagePartie,
+        PageFinale,
         NbFenetres
     };
+
+    void connecterSignalSlot();
 
 #ifdef TEST_IHM
     void fixerRaccourcisClavier();
@@ -67,6 +72,10 @@ class IHM : public QMainWindow
     void afficherFenetre(IHM::Fenetre fenetre);
     void afficherFenetrePrecedente();
     void afficherFenetreSuivante();
+    void afficherPagePrincipale();
+    void afficherPageRegles();
+    void afficherPageConfiguration();
+    void afficherPagePartie();
     void quitter();
 };
 

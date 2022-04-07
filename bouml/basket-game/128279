@@ -1,0 +1,226 @@
+format 224
+"version 0.1" // version 0.1
+  revision 1
+  modified_by 23 "tv"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  usecaseview 128151 "uc view"
+    
+    usecasediagramsettings end
+    
+    sequencediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    activitydiagramsettings
+     end
+    usecasediagram 128279 "uc"
+      usecasediagramsettings end
+      size A0
+    end
+
+    class 128919 "Joueur"
+      visibility package stereotype "actor"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 129047 "Entraineur"
+      visibility package stereotype "actor"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    usecase 128151 "Gérer le deroulement d'une séance"
+      
+      usecasediagramsettings end
+      
+      sequencediagramsettings end
+      
+      collaborationdiagramsettings end
+      
+      classdiagramsettings member_max_width 0 end
+      
+      classcompositediagramsettings end
+      
+      objectdiagramsettings end
+      
+      objectcompositediagramsettings end
+      
+      statediagramsettings
+       end
+      
+      activitydiagramsettings
+       end
+      simplerelation 128151
+	-_->
+	  stereotype "include"
+	  on usecase_ref 128663 // Visualiser le plateau de jeu et les informations
+      end
+
+      simplerelation 128407
+	-_->
+	  stereotype "include"
+	  on usecase_ref 128407 // Paramétrer une séance
+      end
+
+      simplerelation 128535
+	-_->
+	  stereotype "include"
+	  on usecase_ref 128279 // Dialoguer avec le module de détection
+      end
+    end
+
+    usecase 128279 "Dialoguer avec le module de détection"
+      
+      usecasediagramsettings end
+      
+      sequencediagramsettings end
+      
+      collaborationdiagramsettings end
+      
+      classdiagramsettings member_max_width 0 end
+      
+      classcompositediagramsettings end
+      
+      objectdiagramsettings end
+      
+      objectcompositediagramsettings end
+      
+      statediagramsettings
+       end
+      
+      activitydiagramsettings
+       end
+    end
+
+    usecase 128407 "Paramétrer une séance"
+      
+      usecasediagramsettings end
+      
+      sequencediagramsettings end
+      
+      collaborationdiagramsettings end
+      
+      classdiagramsettings member_max_width 0 end
+      
+      classcompositediagramsettings end
+      
+      objectdiagramsettings end
+      
+      objectcompositediagramsettings end
+      
+      statediagramsettings
+       end
+      
+      activitydiagramsettings
+       end
+    end
+
+    usecase 128535 "Produire des sons"
+      
+      usecasediagramsettings end
+      
+      sequencediagramsettings end
+      
+      collaborationdiagramsettings end
+      
+      classdiagramsettings member_max_width 0 end
+      
+      classcompositediagramsettings end
+      
+      objectdiagramsettings end
+      
+      objectcompositediagramsettings end
+      
+      statediagramsettings
+       end
+      
+      activitydiagramsettings
+       end
+      simplerelation 128279
+	-_->
+	  stereotype "extend"
+	  on usecase_ref 128151 // Gérer le deroulement d'une séance
+      end
+    end
+
+    usecase 128663 "Visualiser le plateau de jeu et les informations"
+      
+      usecasediagramsettings end
+      
+      sequencediagramsettings end
+      
+      collaborationdiagramsettings end
+      
+      classdiagramsettings member_max_width 0 end
+      
+      classcompositediagramsettings end
+      
+      objectdiagramsettings end
+      
+      objectcompositediagramsettings end
+      
+      statediagramsettings
+       end
+      
+      activitydiagramsettings
+       end
+    end
+  end
+end

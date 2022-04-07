@@ -1,4 +1,4 @@
-QT       += core gui widgets
+QT       += core gui widgets sql
 
 CONFIG += c++11
 
@@ -7,11 +7,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     Seance.cpp \
+    Joueur.cpp \
+    basededonnees.cpp \
     main.cpp \
     ihm.cpp
 
 HEADERS += \
     Seance.h \
+    Joueur.h \
+    basededonnees.h \
     ihm.h
 
 FORMS += \
@@ -19,5 +23,10 @@ FORMS += \
 
 RESOURCES += \
     ressources.qrc
+
+COPIES += bd
+bd.files = basket-game.sqlite
+bd.path = $$OUT_PWD/
+bd.base = $$PWD/
 
 CONFIG(release, debug|release):DEFINES+=QT_NO_DEBUG_OUTPUT
