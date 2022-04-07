@@ -1,6 +1,10 @@
 #include "Joueur.h"
 
-Joueur::Joueur(QString pseudo/*=""*/, QString nom/*=""*/,QString prenom/*=""*/) : pseudo(pseudo),nom(nom),prenom(prenom)
+Joueur::Joueur(QString pseudo /*=""*/,
+               QString nom /*=""*/,
+               QString prenom /*=""*/) :
+    pseudo(pseudo),
+    nom(nom), prenom(prenom)
 {
 }
 
@@ -9,6 +13,8 @@ Joueur& Joueur::operator=(const Joueur& j)
     if(this != &j)
     {
         pseudo = j.pseudo;
+        nom    = j.nom;
+        prenom = j.prenom;
     }
     return *this;
 }

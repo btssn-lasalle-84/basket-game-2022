@@ -1,4 +1,4 @@
-#include "ihm.h"
+#include "IHM.h"
 #include "ui_ihm.h"
 #include <QDebug>
 
