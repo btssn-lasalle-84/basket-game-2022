@@ -1,4 +1,4 @@
-#include "ihm.h"
+#include "IHM.h"
 #include <QApplication>
 
 /**

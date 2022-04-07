@@ -6,18 +6,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    BaseDeDonnees.cpp \
+    IHM.cpp \
     Joueur.cpp \
-    basededonnees.cpp \
-    main.cpp \
-    ihm.cpp
+    Seance.cpp \
+    main.cpp
 
 HEADERS += \
+    BaseDeDonnees.h \
+    IHM.h \
     Joueur.h \
-    basededonnees.h \
-    ihm.h
+    Seance.h
 
 FORMS += \
-    ihm.ui
+    IHM.ui
 
 RESOURCES += \
     ressources.qrc
