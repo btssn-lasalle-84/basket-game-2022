@@ -1,5 +1,5 @@
 #include "IHM.h"
-#include "ui_ihm.h"
+#include "ui_IHM.h"
 #include <QDebug>
 
 /**
@@ -129,38 +129,38 @@ void IHM::quitter()
 void IHM::connecterSignalSlot()
 {
     // PagePrincipale
-    connect(ui->nouvellePartieBouton,
+    connect(ui->boutonNouvellePartiePagePrincipale,
             SIGNAL(clicked(bool)),
             this,
             SLOT(afficherPageConfiguration()));
-    connect(ui->reglesBouton,
+    connect(ui->boutonReglesPagePrincipale,
             SIGNAL(clicked(bool)),
             this,
             SLOT(afficherPageRegles()));
-    connect(this->ui->quitterBouton,
+    connect(ui->boutonQuitterPagePrincipale,
             SIGNAL(clicked(bool)),
             this,
             SLOT(quitter()));
     // PageRegles
-    connect(ui->retourReglesBouton,
+    connect(ui->boutonRetourPageRegles,
             SIGNAL(clicked(bool)),
             this,
             SLOT(afficherPagePrincipale()));
     // PageConfiguration
-    connect(ui->retourConfigurationBouton,
+    connect(ui->boutonRetourPageConfiguration,
             SIGNAL(clicked(bool)),
             this,
             SLOT(afficherPagePrincipale()));
-    connect(ui->continuerBouton,
+    connect(ui->boutonDemarrerPageConfiguration,
             SIGNAL(clicked(bool)),
             this,
             SLOT(afficherPagePartie()));
     // PagePartie
-    connect(ui->retourPartieBouton1,
+    connect(ui->boutonRetourPagePartie,
             SIGNAL(clicked(bool)),
             this,
             SLOT(afficherPageConfiguration()));
-    connect(ui->retourPartieBouton2,
+    connect(ui->boutonRetourPrincipalePagePartie,
             SIGNAL(clicked(bool)),
             this,
             SLOT(afficherPagePrincipale()));

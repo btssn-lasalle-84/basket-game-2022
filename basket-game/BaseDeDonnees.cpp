@@ -4,7 +4,7 @@
  * @file basededonnees.cpp
  */
 
-#include "basededonnees.h"
+#include "BaseDeDonnees.h"
 #include <QDebug>
 #include <QMessageBox>
 

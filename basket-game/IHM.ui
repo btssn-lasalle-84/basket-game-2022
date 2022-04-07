@@ -26,6 +26,18 @@
    <string>IHM</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>1920</width>
+     <height>1080</height>
+    </size>
+   </property>
    <property name="styleSheet">
     <string notr="true">background: rgb(255, 255, 255);</string>
    </property>
@@ -47,10 +59,22 @@
     </property>
     <item>
      <widget class="QStackedWidget" name="fenetres">
+      <property name="maximumSize">
+       <size>
+        <width>1920</width>
+        <height>1080</height>
+       </size>
+      </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pagePrincipale">
+       <property name="maximumSize">
+        <size>
+         <width>1920</width>
+         <height>1080</height>
+        </size>
+       </property>
        <property name="styleSheet">
         <string notr="true">background-color: rgb(149, 225, 211);</string>
        </property>
@@ -110,7 +134,7 @@
              </spacer>
             </item>
             <item alignment="Qt::AlignHCenter">
-             <widget class="QLabel" name="basketGameLabel">
+             <widget class="QLabel" name="labelBasketGame">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -149,7 +173,7 @@
              </spacer>
             </item>
             <item alignment="Qt::AlignHCenter">
-             <widget class="QPushButton" name="nouvellePartieBouton">
+             <widget class="QPushButton" name="boutonNouvellePartiePagePrincipale">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -192,7 +216,7 @@
              </spacer>
             </item>
             <item alignment="Qt::AlignHCenter">
-             <widget class="QPushButton" name="reglesBouton">
+             <widget class="QPushButton" name="boutonReglesPagePrincipale">
               <property name="enabled">
                <bool>true</bool>
               </property>
@@ -238,7 +262,7 @@
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="quitterBouton">
+             <widget class="QPushButton" name="boutonQuitterPagePrincipale">
               <property name="font">
                <font>
                 <pointsize>40</pointsize>
@@ -258,7 +282,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="pageRegle">
+      <widget class="QWidget" name="pageRegles">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(149, 225, 211);</string>
        </property>
@@ -278,7 +302,7 @@
         <item>
          <layout class="QVBoxLayout" name="layoutPrincipal">
           <item alignment="Qt::AlignHCenter">
-           <widget class="QLabel" name="regleLabel">
+           <widget class="QLabel" name="labelTitrePageRegles">
             <property name="font">
              <font>
               <family>URW Bookman</family>
@@ -306,7 +330,7 @@
            </spacer>
           </item>
           <item alignment="Qt::AlignHCenter">
-           <widget class="QLabel" name="reglesCompletes">
+           <widget class="QLabel" name="labelReglesCompletes">
             <property name="font">
              <font>
               <pointsize>34</pointsize>
@@ -331,7 +355,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="retourReglesBouton">
+           <widget class="QPushButton" name="boutonRetourPageRegles">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -362,7 +386,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <widget class="QLabel" name="nomEquipeRouge">
+             <widget class="QLabel" name="labelNomEquipeRouge">
               <property name="enabled">
                <bool>true</bool>
               </property>
@@ -375,7 +399,7 @@
                <string notr="true">background-color: rgb(239, 41, 41);</string>
               </property>
               <property name="text">
-               <string>Equipe Rouge (équipe qui commence)</string>
+               <string>Equipe Rouge</string>
               </property>
               <property name="wordWrap">
                <bool>false</bool>
@@ -396,7 +420,7 @@
              </spacer>
             </item>
             <item>
-             <widget class="QLabel" name="nomEquipeJaune">
+             <widget class="QLabel" name="labelNomEquipeJaune">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -424,19 +448,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="QLabel" name="AjouterNomEquipeRouge">
-              <property name="font">
-               <font>
-                <pointsize>30</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">background-color: rgb(239, 41, 41);</string>
-              </property>
-              <property name="text">
-               <string>&quot;Ajouter le nom de l'équipe&quot;</string>
-              </property>
-             </widget>
+             <widget class="QLineEdit" name="lineEditNomEquipeRouge"/>
             </item>
             <item>
              <spacer name="horizontalSpacer_2">
@@ -452,25 +464,7 @@
              </spacer>
             </item>
             <item>
-             <widget class="QLabel" name="ajouterNomEquipeJaune">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>30</pointsize>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">background-color: rgb(252, 233, 79);</string>
-              </property>
-              <property name="text">
-               <string>&quot;Ajouter le nom de l'équipe&quot;</string>
-              </property>
-             </widget>
+             <widget class="QLineEdit" name="lineEditNomEquipeJaune"/>
             </item>
            </layout>
           </item>
@@ -586,7 +580,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="continuerBouton">
+           <widget class="QPushButton" name="boutonDemarrerPageConfiguration">
             <property name="font">
              <font>
               <pointsize>40</pointsize>
@@ -598,7 +592,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="retourConfigurationBouton">
+           <widget class="QPushButton" name="boutonRetourPageConfiguration">
             <property name="font">
              <font>
               <pointsize>40</pointsize>
@@ -805,7 +799,7 @@
           <item>
            <layout class="QHBoxLayout" name="layoutBasDePagePartie">
             <item>
-             <widget class="QPushButton" name="retourPartieBouton1">
+             <widget class="QPushButton" name="boutonRetourPagePartie">
               <property name="font">
                <font>
                 <pointsize>40</pointsize>
@@ -830,7 +824,7 @@
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="retourPartieBouton2">
+             <widget class="QPushButton" name="boutonRetourPrincipalePagePartie">
               <property name="font">
                <font>
                 <pointsize>30</pointsize>
@@ -855,14 +849,14 @@
              </spacer>
             </item>
             <item>
-             <widget class="QPushButton" name="demarrerArreterJouer">
+             <widget class="QPushButton" name="boutonGererPartiePagePartie">
               <property name="font">
                <font>
                 <pointsize>35</pointsize>
                </font>
               </property>
               <property name="text">
-               <string>Démarrer/Arreter/Jouer</string>
+               <string>Démarrer</string>
               </property>
              </widget>
             </item>
