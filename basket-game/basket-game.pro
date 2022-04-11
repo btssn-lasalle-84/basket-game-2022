@@ -7,6 +7,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     BaseDeDonnees.cpp \
+    Club.cpp \
     Equipe.cpp \
     IHM.cpp \
     Joueur.cpp \
@@ -15,6 +16,7 @@ SOURCES += \
 
 HEADERS += \
     BaseDeDonnees.h \
+    Club.h \
     Equipe.h \
     IHM.h \
     Joueur.h \
