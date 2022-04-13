@@ -31,6 +31,8 @@ class IHM;
 }
 // QT_END_NAMESPACE
 
+class BaseDeDonnees;
+
 /**
  * @class IHM
  * @brief Déclaration de la classe IHM
@@ -45,7 +47,13 @@ class IHM : public QMainWindow
     ~IHM();
 
   private:
-    Ui::IHM* ui; //!< la fenêtre graphique associée à cette classe
+    Ui::IHM*       ui;  //!< la fenêtre graphique associée à cette classe
+    BaseDeDonnees* bdd; //!< Base de donnes
+    QVector<QStringList> equipes; //!< Les équipes
+
+    void connecterSignalSlot();
+    void recupererEquipes();
+    void afficherListeEquipe(QStringList equipe);
 
     /**
      * @enum Fenetre
@@ -62,13 +70,29 @@ class IHM : public QMainWindow
         NbFenetres
     };
 
-    void connecterSignalSlot();
+    /**
+     * @enum ChampsTableSalle
+     * @brief Définit les différents champs de la table Salle
+     */
+    enum ChampsEquipe
+    {
+        ID_EQUIPE,     //!< l'id de l'équipe
+        ID_CLUB,       //!< l'id du club
+        ID_JOUEUR,     //!< l'id du joueur
+        NOM_EQUIPE,    //!< le nom de l'équipe
+        NOM_CLUB,      //!< le nom du club
+        PSEUDO_JOUEUR, //!< le pseudo du joueur
+        NOM_JOUEUR,    //!< le nom du joueur
+        PRENOM_JOUEUR, //!< le prénom du joueur
+        NbChampsEquipe
+    };
 
 #ifdef TEST_IHM
     void fixerRaccourcisClavier();
 #endif
 
   public slots:
+    void demarrerNouvellePartie();
     void afficherFenetre(IHM::Fenetre fenetre);
     void afficherFenetrePrecedente();
     void afficherFenetreSuivante();

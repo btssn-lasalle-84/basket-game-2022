@@ -1,5 +1,6 @@
 #include "IHM.h"
 #include "ui_IHM.h"
+#include "BaseDeDonnees.h"
 #include <QDebug>
 
 /**
@@ -27,6 +28,9 @@ IHM::IHM(QWidget* parent) : QMainWindow(parent), ui(new Ui::IHM)
     fixerRaccourcisClavier();
 #endif
 
+    bdd = BaseDeDonnees::getInstance();
+    bdd->ouvrir("basket-game.sqlite");
+
     connecterSignalSlot();
 
     afficherFenetre(IHM::PagePrincipale);
@@ -46,7 +50,15 @@ IHM::IHM(QWidget* parent) : QMainWindow(parent), ui(new Ui::IHM)
 IHM::~IHM()
 {
     delete ui;
+    BaseDeDonnees::detruireInstance();
     qDebug() << Q_FUNC_INFO;
+}
+
+void IHM::demarrerNouvellePartie()
+{
+    qDebug() << Q_FUNC_INFO;
+    recupererEquipes();
+    afficherPageConfiguration();
 }
 
 /**
@@ -132,7 +144,7 @@ void IHM::connecterSignalSlot()
     connect(ui->boutonNouvellePartiePagePrincipale,
             SIGNAL(clicked(bool)),
             this,
-            SLOT(afficherPageConfiguration()));
+            SLOT(demarrerNouvellePartie()));
     connect(ui->boutonReglesPagePrincipale,
             SIGNAL(clicked(bool)),
             this,
@@ -199,3 +211,37 @@ void IHM::fixerRaccourcisClavier()
             SLOT(afficherFenetrePrecedente()));
 }
 #endif
+
+void IHM::recupererEquipes()
+{
+    QString requete =
+      "SELECT Equipe.idEquipe, Equipe.idClub, Equipe.idJoueur, "
+      "Equipe.nomEquipe, Club.nom AS nomClub, Joueur.pseudo, Joueur.nom, "
+      "Joueur.prenom FROM Equipe "
+      "INNER JOIN Club ON Equipe.idClub=Club.idClub "
+      "INNER JOIN Joueur ON Equipe.idJoueur=Joueur.idJoueur;";
+
+    bool retour = bdd->recuperer(requete, equipes);
+    qDebug() << Q_FUNC_INFO << equipes;
+    if(retour)
+    {
+        ui->listeEquipesRouges->clear();
+        ui->listeEquipesJaunes->clear();
+        for(int i = 0; i < equipes.size(); ++i)
+            afficherListeEquipe(equipes.at(i));
+    }
+}
+
+void IHM::afficherListeEquipe(QStringList equipe)
+{
+    if(!equipe.at(ChampsEquipe::NOM_EQUIPE).isEmpty())
+    {
+        ui->listeEquipesRouges->addItem(equipe.at(ChampsEquipe::NOM_EQUIPE));
+        ui->listeEquipesJaunes->addItem(equipe.at(ChampsEquipe::NOM_EQUIPE));
+    }
+    else if(!equipe.at(ChampsEquipe::PSEUDO_JOUEUR).isEmpty())
+    {
+        ui->listeEquipesRouges->addItem(equipe.at(ChampsEquipe::PSEUDO_JOUEUR));
+        ui->listeEquipesJaunes->addItem(equipe.at(ChampsEquipe::PSEUDO_JOUEUR));
+    }
+}
