@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="panneau-basket.png">images/panneau-basket.png</file>
+        <file alias="panneau-basket.png">images/panneau-basket-transparent.png</file>
         <file alias="puissance4.png">images/puissance4.png</file>
         <file>images/jetonJaune.png</file>
         <file>images/jetonRouge.png</file>
