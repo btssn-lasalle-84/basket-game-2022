@@ -2,13 +2,17 @@
 #define EQUIPE_H
 
 #include <QString>
+#include <QList>
+
+class Joueur;
 
 class Equipe
 {
   private:
-    QString nomEquipe;
-    int     nbrPointEquipeRouge;
-    int     nbrPointEquipeJaune;
+    QString        nomEquipe;
+    int            nbrPointEquipeRouge;
+    int            nbrPointEquipeJaune;
+    QList<Joueur*> joueurs;
 
   public:
     Equipe(QString nomEquipe        = "",
@@ -25,6 +29,9 @@ class Equipe
 
     int  getNbrPointEquipeJaune() const;
     void setNbrPointEquipeJaune(const int& nbrPointEquipeJaune);
+
+    void supprimerJoueurs();
+    void ajouterJoueur(QString idJoueur);
 };
 
 #endif // EQUIPE_H

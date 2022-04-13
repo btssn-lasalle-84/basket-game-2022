@@ -1,4 +1,6 @@
 #include "Equipe.h"
+#include "Joueur.h"
+#include <QDebug>
 
 Equipe::Equipe(QString nomEquipe /*=""*/,
                int     nbrPointEquipeRouge,
@@ -7,10 +9,14 @@ Equipe::Equipe(QString nomEquipe /*=""*/,
     nbrPointEquipeRouge(nbrPointEquipeRouge),
     nbrPointEquipeJaune(nbrPointEquipeJaune)
 {
+    qDebug() << Q_FUNC_INFO << this;
 }
 
 Equipe::~Equipe()
 {
+    for(int i = 0; i < joueurs.size(); ++i)
+        delete joueurs[i];
+    qDebug() << Q_FUNC_INFO << this;
 }
 
 Equipe& Equipe::operator=(const Equipe& e)
@@ -32,6 +38,7 @@ QString Equipe::getNomEquipe() const
 void Equipe::setNomEquipe(const QString& nomEquipe)
 {
     this->nomEquipe = nomEquipe;
+    qDebug() << Q_FUNC_INFO << nomEquipe;
 }
 
 int Equipe::getNbrPointEquipeRouge() const
@@ -52,4 +59,21 @@ int Equipe::getNbrPointEquipeJaune() const
 void Equipe::setNbrPointEquipeJaune(const int& nbrPointEquipeJaune)
 {
     this->nbrPointEquipeJaune = nbrPointEquipeJaune;
+}
+
+void Equipe::supprimerJoueurs()
+{
+    for(int i = 0; i < joueurs.size(); ++i)
+        delete joueurs[i];
+    joueurs.clear();
+}
+
+void Equipe::ajouterJoueur(QString idJoueur)
+{
+    qDebug() << Q_FUNC_INFO << "idJoueur" << idJoueur;
+    /**
+     * @todo récupérer le joueur dans la base de données, instancier un nouveau
+     * Joueur et l'ajouter au conteneur
+     */
+    joueurs.push_back(new Joueur);
 }
