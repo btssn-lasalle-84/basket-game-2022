@@ -1,4 +1,5 @@
 #include "Joueur.h"
+#include <QDebug>
 
 Joueur::Joueur(QString pseudo /*=""*/,
                QString nom /*=""*/,
@@ -6,6 +7,7 @@ Joueur::Joueur(QString pseudo /*=""*/,
     pseudo(pseudo),
     nom(nom), prenom(prenom)
 {
+    qDebug() << Q_FUNC_INFO << this;
 }
 
 Joueur& Joueur::operator=(const Joueur& j)
@@ -21,6 +23,7 @@ Joueur& Joueur::operator=(const Joueur& j)
 
 Joueur::~Joueur()
 {
+    qDebug() << Q_FUNC_INFO << this;
 }
 
 QString Joueur::getPseudo() const

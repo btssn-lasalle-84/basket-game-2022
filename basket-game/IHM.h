@@ -32,6 +32,7 @@ class IHM;
 // QT_END_NAMESPACE
 
 class BaseDeDonnees;
+class Equipe;
 
 /**
  * @class IHM
@@ -49,10 +50,14 @@ class IHM : public QMainWindow
   private:
     Ui::IHM*       ui;  //!< la fenêtre graphique associée à cette classe
     BaseDeDonnees* bdd; //!< Base de donnes
-    QVector<QStringList> equipes; //!< Les équipes
+    QVector<QStringList> listeEquipes;              //!< La liste des équipes
+    QVector<Equipe*>     equipes;                   //!< Les deux équipes
+    int                  idEquipeRougeSelectionnee; //!< L'id de l'équipe rouge
+    int                  idEquipeJauneSelectionnee; //!< L'id de l'équipe jaune
 
     void connecterSignalSlot();
     void recupererEquipes();
+    void ajouterJoueurs(QString idEquipe, int couleurEquipe);
     void afficherListeEquipe(QStringList equipe);
 
     /**
@@ -68,6 +73,18 @@ class IHM : public QMainWindow
         PagePartie,
         PageFinale,
         NbFenetres
+    };
+
+    /**
+     * @enum CouleurEquipe
+     * @brief Définit les couleurs des deux équipes
+     *
+     */
+    enum CouleurEquipe
+    {
+        Rouge = 0,
+        Jaune,
+        NbEquipes
     };
 
     /**
@@ -93,6 +110,13 @@ class IHM : public QMainWindow
 
   public slots:
     void demarrerNouvellePartie();
+    void selectionnerEquipeRouge(int numeroEquipe);
+    void selectionnerEquipeJaune(int numeroEquipe);
+    void saisirNouvelleEquipeRouge();
+    void saisirNouvelleEquipeJaune();
+    void saisirTempsParTourEnSecondes(int tempsParTourEnSecondes);
+    void saisirTempsParPartieEnMinutes(int tempsParPartieEnMinutes);
+    void validerDemarragePartie();
     void afficherFenetre(IHM::Fenetre fenetre);
     void afficherFenetrePrecedente();
     void afficherFenetreSuivante();
