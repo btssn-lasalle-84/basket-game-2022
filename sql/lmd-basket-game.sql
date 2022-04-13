@@ -22,7 +22,7 @@ INSERT INTO Joueur(idJoueur, pseudo, nom, prenom) VALUES (null,'Black Mamba','BR
 INSERT INTO Joueur(idJoueur, pseudo, nom, prenom) VALUES (null,'TP','PARKER','Tony');
 
 INSERT INTO Joueur(idJoueur, pseudo, nom, prenom) VALUES (null,'','LAMBERT','Guillaume');
-INSERT INTO Joueur(idJoueur, pseudo, nom, prenom) VALUES (null,'','LADRIERE','Enzo');
+INSERT INTO Joueur(idJoueur, pseudo, nom, prenom) VALUES (null,'','El moussaoui','Mohamed');
 
 --- Table Equipe
 
@@ -33,8 +33,8 @@ INSERT INTO Equipe(idClub, idJoueur, nomEquipe) VALUES (3,4,'');
 INSERT INTO Equipe(idClub, idJoueur, nomEquipe) VALUES (3,5,'');
 INSERT INTO Equipe(idClub, idJoueur, nomEquipe) VALUES (7,6,'');
 
-INSERT INTO Equipe(idClub, idJoueur, nomEquipe) VALUES (1,7,'');
-INSERT INTO Equipe(idClub, idJoueur, nomEquipe) VALUES (1,8,'');
+INSERT INTO Equipe(idClub, idJoueur, nomEquipe) VALUES (1,7,'IR');
+INSERT INTO Equipe(idClub, idJoueur, nomEquipe) VALUES (1,8,'EC');
 
 --- Table Rencontre
 
