@@ -1,72 +1,236 @@
 #include "Communication.h"
-#include <QString>
+#include <QDebug>
 
-Communication::Communication()
+Communication::Communication(QObject* parent) :
+    QObject(parent), socket(nullptr), discoveryAgent(nullptr),
+    peripheriqueTrouve(false)
 {
+    qDebug() << Q_FUNC_INFO;
+
+    initialiser();
 }
 
 Communication::~Communication()
 {
-    arreter();
-    peripheriqueLocal.setHostMode(QBluetoothLocalDevice::HostPoweredOff);
     qDebug() << Q_FUNC_INFO;
 }
 
-void Communication::demarrer()
+/**
+ * @brief Méthode de recherche des périphériques bluetooth
+ */
+void Communication::rechercher()
 {
-    if(!serveur)
-    {
-        serveur =
-          new QBluetoothServer(QBluetoothServiceInfo::RfcommProtocol, this);
-        connect(serveur, SIGNAL(newConnection()), this, SLOT(nouveauClient()));
+    // vérifie la présence du bluetooth
+    if(!estBluetoothPresent())
+        return;
 
-        QBluetoothUuid uuid = QBluetoothUuid(serviceUuid);
-        serviceInfo         = serveur->listen(uuid, serviceNom);
+    if(discoveryAgent == nullptr)
+        return;
+
+    qDebug() << Q_FUNC_INFO;
+
+    // démarre la recherche de périphériques bluetooth
+    peripheriqueTrouve = false;
+    discoveryAgent->start();
+}
+
+/**
+ * @brief Méthode qui permet de se connecter au périphérique
+ */
+void Communication::connecter()
+{
+    // vérifie la présence du bluetooth
+    if(!estBluetoothPresent())
+        return;
+    // vérifie si le périphérique est déjà connecté
+    if(estConnecte())
+        return;
+    // vérifie si le périphérique a été trouvé
+    if(!estPeripheriqueTrouve())
+        return;
+
+    // prépare la socket bluetooth
+    if(socket == nullptr)
+    {
+        socket = new QBluetoothSocket(QBluetoothServiceInfo::RfcommProtocol);
+        connect(socket,
+                SIGNAL(connected()),
+                this,
+                SIGNAL(peripheriqueConnecte()));
+        connect(socket,
+                SIGNAL(disconnected()),
+                this,
+                SIGNAL(peripheriqueDeconnecte()));
+        connect(socket, SIGNAL(readyRead()), this, SLOT(receptionnerTrame()));
+    }
+
+    qDebug() << Q_FUNC_INFO << peripheriqueDistant.name()
+             << peripheriqueDistant.address().toString();
+
+    // assure la connexion
+    QBluetoothAddress adresse =
+      QBluetoothAddress(peripheriqueDistant.address());
+    QBluetoothUuid uuid = QBluetoothUuid(QBluetoothUuid::SerialPort);
+    socket->connectToService(adresse, uuid);
+    socket->open(QIODevice::ReadWrite);
+}
+
+/**
+ * @brief Méthode de déconnexion bluetooth
+ */
+void Communication::deconnecter()
+{
+    // vérifie la présence du bluetooth
+    if(!estBluetoothPresent())
+        return;
+    // vérifie la socket bluetooth
+    if(socket == nullptr)
+        return;
+    // vérifie si le périphérique est connecté
+    if(estConnecte())
+        socket->close();
+
+    qDebug() << Q_FUNC_INFO << peripheriqueDistant.name()
+             << peripheriqueDistant.address().toString();
+}
+
+/**
+ * @brief Retourne l'état de connexion
+ */
+bool Communication::estConnecte() const
+{
+    // vérifie la présence du bluetooth
+    if(!estBluetoothPresent())
+        return false;
+    // vérifie la socket bluetooth
+    if(socket == nullptr)
+        return false;
+    qDebug() << Q_FUNC_INFO << socket->isOpen();
+    return socket->isOpen();
+}
+
+/**
+ * @brief Retourne l'état de la recherche
+ */
+bool Communication::estPeripheriqueTrouve() const
+{
+    return peripheriqueTrouve;
+}
+
+/**
+ * @brief Méthode d'envoi de trame
+ */
+void Communication::envoyer(QString trame)
+{
+    // vérifie la présence du bluetooth
+    if(!estBluetoothPresent())
+        return;
+    // vérifie la connexion du périphrique
+    if(!estConnecte())
+        return;
+    qDebug() << Q_FUNC_INFO << trame;
+    socket->write(trame.toLocal8Bit());
+}
+
+/**
+ * @brief Slot qui permet de rechercher le périphérique distant
+ */
+void Communication::decouvrirPeripherique(const QBluetoothDeviceInfo& device)
+{
+    qDebug() << Q_FUNC_INFO << device.name() << device.address().toString();
+    if(device.name().startsWith(ENTETE_NOM_PERIPHERIQUE))
+    {
+        qDebug() << Q_FUNC_INFO << "périphérique trouvé !";
+        discoveryAgent->stop();
+        peripheriqueDistant = device;
+        peripheriqueTrouve  = true;
+        emit peripheriqueDetecte(device.name(), device.address().toString());
+        discoveryAgent->stop();
+        terminerRecherche();
     }
 }
 
-void Communication::arreter()
+/**
+ * @brief Slot de fin de recherche des périphériques
+ */
+void Communication::terminerRecherche()
 {
-    if(!serveur)
-        return;
+    qDebug() << Q_FUNC_INFO;
+    emit rechercheTerminee();
+}
 
-    serviceInfo.unregisterService();
+/**
+ * @brief Slot de reception de trame
+ */
+void Communication::receptionnerTrame()
+{
+    QByteArray donnees;
 
-    if(socket)
+    // récupère les données reçues
+    donnees = socket->readAll();
+    // qDebug() << Q_FUNC_INFO << donnees;
+
+    // ajoute les données reçues
+    trameReception += QString(donnees.data());
+    qDebug() << Q_FUNC_INFO << trameReception;
+
+    // vérifie si la trame est valide
+    if(trameReception.startsWith(TYPE_TRAME) &&
+       trameReception.endsWith(DELIMITEUR_FIN))
     {
-        if(socket->isOpen())
-            socket->close();
-        delete socket;
-        socket = NULL;
+        // qDebug() << Q_FUNC_INFO << trameReception;
+        decomposerTrame();
+        trameReception.clear();
     }
-
-    delete serveur;
-    serveur = NULL;
 }
 
-void Communication::nouveauClient()
+/**
+ * @brief Méthode d'inititialisation du bluetooth
+ */
+void Communication::initialiser()
 {
-    // on récupère la socket
-    socket = serveur->nextPendingConnection();
-    if(!socket)
-        return;
+    // vérifie la présence du Bluetooth
+    if(estBluetoothPresent())
+    {
+        // active le bluetooth
+        peripheriqueLocal.powerOn();
 
-    connect(socket, SIGNAL(disconnected()), this, SLOT(socketDisconnected()));
-    connect(socket, SIGNAL(readyRead()), this, SLOT(socketReadyRead()));
-    connect(socket,
-            SIGNAL(error(QBluetoothSocket::SocketError)),
-            this,
-            SLOT(socketError(QBluetoothSocket::SocketError)));
-    connect(socket,
-            SIGNAL(stateChanged(QBluetoothSocket::SocketState)),
-            this,
-            SLOT(socketStateChanged(QBluetoothSocket::SocketState)));
+        qDebug() << Q_FUNC_INFO << peripheriqueLocal.name()
+                 << peripheriqueLocal.address().toString();
+
+        // instancie l'agent de recherche
+        discoveryAgent = new QBluetoothDeviceDiscoveryAgent(this);
+        connect(discoveryAgent,
+                SIGNAL(finished()),
+                this,
+                SLOT(terminerRecherche()));
+        connect(discoveryAgent,
+                SIGNAL(deviceDiscovered(QBluetoothDeviceInfo)),
+                this,
+                SLOT(decouvrirPeripherique(QBluetoothDeviceInfo)));
+    }
+    else
+        qDebug() << Q_FUNC_INFO << "Pas de bluetooh !";
 }
 
+/**
+ * @brief Vérifie la présence du bluetooth
+ */
+bool Communication::estBluetoothPresent() const
+{
+    // vérifie la présence du bluetooth
+    if(!peripheriqueLocal.isValid())
+        return false;
+    return true;
+}
+
+/**
+ * @brief Méthode qui décompose une trame
+ */
 void Communication::decomposerTrame()
 {
-}
-
-bool Communication::trameEstValide()
-{
+    qDebug() << Q_FUNC_INFO << trameReception;
+    /**
+     * @todo Extraire les champs avec split puis signaler les données
+     */
 }

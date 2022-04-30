@@ -1,6 +1,7 @@
 #include "IHM.h"
 #include "ui_IHM.h"
 #include "BaseDeDonnees.h"
+#include "Communication.h"
 #include "Equipe.h"
 #include <QDebug>
 
@@ -21,8 +22,8 @@
  * fenêtre principale de l'application
  */
 IHM::IHM(QWidget* parent) :
-    QMainWindow(parent), ui(new Ui::IHM), idEquipeRougeSelectionnee(-1),
-    idEquipeJauneSelectionnee(-1)
+    QMainWindow(parent), ui(new Ui::IHM), bdd(nullptr), communication(nullptr),
+    idEquipeRougeSelectionnee(-1), idEquipeJauneSelectionnee(-1)
 {
     ui->setupUi(this);
     qDebug() << Q_FUNC_INFO;
@@ -34,11 +35,15 @@ IHM::IHM(QWidget* parent) :
     bdd = BaseDeDonnees::getInstance();
     bdd->ouvrir("basket-game.sqlite");
 
+    communication = new Communication(this);
+
     // crée les deux équipes
     equipes.push_back(new Equipe);
     equipes.push_back(new Equipe);
 
     connecterSignalSlot();
+
+    communication->rechercher();
 
     afficherFenetre(IHM::PagePrincipale);
 
@@ -57,6 +62,7 @@ IHM::IHM(QWidget* parent) :
 IHM::~IHM()
 {
     delete ui;
+    communication->deconnecter();
     BaseDeDonnees::detruireInstance();
     for(int i = 0; i < equipes.size(); ++i)
         delete equipes[i];
@@ -244,6 +250,29 @@ void IHM::quitter()
     qDebug() << Q_FUNC_INFO;
 }
 
+void IHM::gererPeripherique(QString nom, QString adresseMAC)
+{
+    qDebug() << Q_FUNC_INFO << nom << adresseMAC;
+    communication->connecter();
+}
+
+void IHM::afficherEtatConnexion()
+{
+    qDebug() << Q_FUNC_INFO;
+    // Test l'envoi d'une trame
+    communication->envoyer("$basket;STT;\r");
+}
+
+void IHM::afficherEtatDeconnexion()
+{
+    qDebug() << Q_FUNC_INFO;
+}
+
+void IHM::terminerRecherche()
+{
+    qDebug() << Q_FUNC_INFO;
+}
+
 /**
  * @brief Assure la connexion des signaux aux slots
  *
@@ -311,6 +340,19 @@ void IHM::connecterSignalSlot()
             SIGNAL(clicked(bool)),
             this,
             SLOT(afficherPagePrincipale()));
+    // Communication
+    connect(communication,
+            SIGNAL(peripheriqueDetecte(QString, QString)),
+            this,
+            SLOT(gererPeripherique(QString, QString)));
+    connect(communication,
+            SIGNAL(peripheriqueConnecte()),
+            this,
+            SLOT(afficherEtatConnexion()));
+    connect(communication,
+            SIGNAL(peripheriqueDeconnecte()),
+            this,
+            SLOT(afficherEtatDeconnexion()));
 }
 
 #ifdef TEST_IHM
