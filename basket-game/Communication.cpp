@@ -1,6 +1,6 @@
 #include "Communication.h"
+#include "Seance.h"
 #include <QDebug>
-
 Communication::Communication(QObject* parent) :
     QObject(parent), socket(nullptr), discoveryAgent(nullptr),
     peripheriqueTrouve(false)
@@ -178,7 +178,7 @@ void Communication::receptionnerTrame()
     if(trameReception.startsWith(TYPE_TRAME) &&
        trameReception.endsWith(DELIMITEUR_FIN))
     {
-        // qDebug() << Q_FUNC_INFO << trameReception;
+        qDebug() << Q_FUNC_INFO << trameReception;
         decomposerTrame();
         trameReception.clear();
     }
@@ -229,8 +229,18 @@ bool Communication::estBluetoothPresent() const
  */
 void Communication::decomposerTrame()
 {
-    qDebug() << Q_FUNC_INFO << trameReception;
-    /**
-     * @todo Extraire les champs avec split puis signaler les données
+    // $basket;P;{NUMERO};{EQUIPE};\r
+    /* Exemples :
+        Panier n°1 par joueur Rouge
+        $basket;P;1;R;\r
+
+        Panier n°4 par joueur Jaune
+        $basket;P;4;J;\r
      */
+    QStringList champs =
+      trameReception.split(DELIMITEUR_CHAMP, QString::KeepEmptyParts);
+    qDebug() << Q_FUNC_INFO << champs;
+    // "$basket" "P" "4" "J" "\r"
+    //  0        1   2   3   4
+    qDebug() << Q_FUNC_INFO << champs.at(2);
 }

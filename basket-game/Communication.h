@@ -4,6 +4,10 @@
 #include <QString>
 #include <QtBluetooth>
 
+#define NOMTRAME      = 1
+#define NUMEROPANIER  = 2
+#define COULEUREQUIPE = 3
+
 /**
  * @def ENTETE_NOM_PERIPHERIQUE
  * @brief Définition du préfixe du nom de périphérique bluetooth
@@ -18,9 +22,15 @@
 
 /**
  * @def DELIMITEUR_FIN
- * @brief Délimiteur de fin de fin de trame
+ * @brief Délimiteur de fin de trame
  */
 #define DELIMITEUR_FIN "\r"
+
+/**
+ * @def DELIMITEUR_CHAMP
+ * @brief Délimiteur de champs
+ */
+#define DELIMITEUR_CHAMP ";"
 
 static const QString serviceUuid(
   QStringLiteral("00001101-0000-1000-8000-00805F9B34FB"));
