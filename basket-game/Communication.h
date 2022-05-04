@@ -4,10 +4,6 @@
 #include <QString>
 #include <QtBluetooth>
 
-#define NOMTRAME      = 1
-#define NUMEROPANIER  = 2
-#define COULEUREQUIPE = 3
-
 /**
  * @def ENTETE_NOM_PERIPHERIQUE
  * @brief Définition du préfixe du nom de périphérique bluetooth
@@ -18,7 +14,31 @@
  * @def TYPE_TRAME
  * @brief Définition de l'entête de trame
  */
-#define TYPE_TRAME "$basket"
+#define ENTETE_TRAME "$basket"
+
+/**
+ * @def TYPE_TRAME_PANIER
+ * @brief Une trame P (PANIER)
+ */
+#define TYPE_TRAME_PANIER "P"
+
+/**
+ * @def CHAMP_TYPE_TRAME
+ * @brief Position du champ dans la trame P
+ */
+#define CHAMP_TYPE_TRAME 1
+
+/**
+ * @def CHAMP_NUMERO_PANIER
+ * @brief Position du champ dans la trame P
+ */
+#define CHAMP_NUMERO_PANIER 2
+
+/**
+ * @def CHAMP_COULEUR_EQUIPE
+ * @brief Position du champ dans la trame P
+ */
+#define CHAMP_COULEUR_EQUIPE 3
 
 /**
  * @def DELIMITEUR_FIN
@@ -75,6 +95,7 @@ class Communication : public QObject
     void rechercheTerminee();
     void peripheriqueConnecte();
     void peripheriqueDeconnecte();
+    void nouveauPanier(QString numeroPanier, QString equipe);
 };
 
 #endif // COMMUNICATION_H

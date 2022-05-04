@@ -175,7 +175,7 @@ void Communication::receptionnerTrame()
     qDebug() << Q_FUNC_INFO << trameReception;
 
     // vérifie si la trame est valide
-    if(trameReception.startsWith(TYPE_TRAME) &&
+    if(trameReception.startsWith(ENTETE_TRAME) &&
        trameReception.endsWith(DELIMITEUR_FIN))
     {
         qDebug() << Q_FUNC_INFO << trameReception;
@@ -233,7 +233,6 @@ void Communication::decomposerTrame()
     /* Exemples :
         Panier n°1 par joueur Rouge
         $basket;P;1;R;\r
-
         Panier n°4 par joueur Jaune
         $basket;P;4;J;\r
      */
@@ -242,25 +241,9 @@ void Communication::decomposerTrame()
     qDebug() << Q_FUNC_INFO << champs;
     // "$basket" "P" "4" "J" "\r"
     //  0        1   2   3   4
-    qDebug() << Q_FUNC_INFO << champs.at(2);
-    if(champs.at(3) == "J" && champs.at(2) != "0")
-    { // TODO : Rajouter une methode pour un tir réussi equipe jaune
-        qDebug() << Q_FUNC_INFO << "Panier de l'équipe Jaune !";
-    }
-
-    else if(champs.at(3) == "J" && champs.at(2) == "0")
-    { // TODO : Rajouter une methode pour un tir raté equipe jaune
-        qDebug() << Q_FUNC_INFO << "Tir Raté de l'équipe Jaune !";
-    }
-
-    else if(champs.at(3) == "R" && champs.at(2) != "0")
-    { // TODO : Rajouter une methode pour un tir réussi equipe rouge
-        qDebug() << Q_FUNC_INFO << "Panier de l'équipe Rouge !";
-    }
-
-    else if(champs.at(3) == "R" && champs.at(2) == "0")
+    if(champs.at(CHAMP_TYPE_TRAME) == TYPE_TRAME_PANIER)
     {
-        // TODO : Rajouter une methode pour un tir raté equipe rouge
-        qDebug() << Q_FUNC_INFO << "Tir Raté de l'équipe Rouge !";
+        emit nouveauPanier(champs.at(CHAMP_NUMERO_PANIER),
+                           champs.at(CHAMP_COULEUR_EQUIPE));
     }
 }
