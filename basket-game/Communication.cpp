@@ -243,4 +243,24 @@ void Communication::decomposerTrame()
     // "$basket" "P" "4" "J" "\r"
     //  0        1   2   3   4
     qDebug() << Q_FUNC_INFO << champs.at(2);
+    if(champs.at(3) == "J" && champs.at(2) != "0")
+    { // TODO : Rajouter une methode pour un tir réussi equipe jaune
+        qDebug() << Q_FUNC_INFO << "Panier de l'équipe Jaune !";
+    }
+
+    else if(champs.at(3) == "J" && champs.at(2) == "0")
+    { // TODO : Rajouter une methode pour un tir raté equipe jaune
+        qDebug() << Q_FUNC_INFO << "Tir Raté de l'équipe Jaune !";
+    }
+
+    else if(champs.at(3) == "R" && champs.at(2) != "0")
+    { // TODO : Rajouter une methode pour un tir réussi equipe rouge
+        qDebug() << Q_FUNC_INFO << "Panier de l'équipe Rouge !";
+    }
+
+    else if(champs.at(3) == "R" && champs.at(2) == "0")
+    {
+        // TODO : Rajouter une methode pour un tir raté equipe rouge
+        qDebug() << Q_FUNC_INFO << "Tir Raté de l'équipe Rouge !";
+    }
 }
