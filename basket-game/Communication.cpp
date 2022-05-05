@@ -243,6 +243,8 @@ void Communication::decomposerTrame()
     //  0        1   2   3   4
     if(champs.at(CHAMP_TYPE_TRAME) == TYPE_TRAME_PANIER)
     {
+        qDebug() << Q_FUNC_INFO << champs.at(CHAMP_NUMERO_PANIER)
+                 << champs.at(CHAMP_COULEUR_EQUIPE);
         emit nouveauPanier(champs.at(CHAMP_NUMERO_PANIER),
                            champs.at(CHAMP_COULEUR_EQUIPE));
     }
