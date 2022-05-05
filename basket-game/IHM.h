@@ -33,6 +33,7 @@ class IHM;
 
 class BaseDeDonnees;
 class Equipe;
+class Communication;
 
 /**
  * @class IHM
@@ -50,8 +51,9 @@ class IHM : public QMainWindow
   private:
     Ui::IHM*       ui;  //!< la fenêtre graphique associée à cette classe
     BaseDeDonnees* bdd; //!< Base de donnes
-    QVector<QStringList> listeEquipes;              //!< La liste des équipes
-    QVector<Equipe*>     equipes;                   //!< Les deux équipes
+    Communication* communication;      //!< pour la communication bluetooth
+    QVector<QStringList> listeEquipes; //!< La liste des équipes
+    QVector<Equipe*>     equipes;      //!< Les deux équipes
     int                  idEquipeRougeSelectionnee; //!< L'id de l'équipe rouge
     int                  idEquipeJauneSelectionnee; //!< L'id de l'équipe jaune
 
@@ -125,6 +127,10 @@ class IHM : public QMainWindow
     void afficherPageConfiguration();
     void afficherPagePartie();
     void quitter();
+    void gererPeripherique(QString, QString);
+    void afficherEtatConnexion();
+    void afficherEtatDeconnexion();
+    void terminerRecherche();
 };
 
 #endif // IHM_H
