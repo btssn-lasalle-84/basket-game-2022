@@ -1,5 +1,5 @@
 #include "Seance.h"
-
+#include "QDebug"
 Seance::Seance(int   numeroManche /*=0*/,
                int   nbPaniersEquipeA /*=0*/,
                int   nbPaniersEquipeB /*=0*/,
@@ -8,6 +8,7 @@ Seance::Seance(int   numeroManche /*=0*/,
     numeroManche(numeroManche),
     nbPaniersEquipeA(nbPaniersEquipeA), nbPaniersEquipeB(nbPaniersEquipeB),
     debutTemps(debutTemps), finTemps(finTemps)
+
 {
 }
 
@@ -83,4 +84,24 @@ QTime Seance::getFinTemps() const
 void Seance::setFinTemps(const QTime& finTemps)
 {
     this->finTemps = finTemps;
+}
+
+void Seance::marquerUnPointEquipeJaune()
+{
+    nbPaniersEquipeB = this->nbPaniersEquipeA + 1;
+}
+
+void Seance::marquerUnPointEquipeRouge()
+{
+    nbPaniersEquipeB = this->nbPaniersEquipeB + 1;
+}
+
+bool Seance::estFinie()
+{
+    if((getNbPaniersEquipeA() == POINT_POUR_VICTOIRE) ||
+       (getNbPaniersEquipeB() == POINT_POUR_VICTOIRE))
+    {
+        return true;
+    }
+    return false;
 }
