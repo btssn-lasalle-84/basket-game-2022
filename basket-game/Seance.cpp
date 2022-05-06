@@ -7,7 +7,8 @@ Seance::Seance(Equipe* equipeJaune /*= nullptr*/,
                Equipe* equipeRouge /*= nullptr*/) :
     numeroManche(0),
     equipeJaune(equipeJaune), equipeRouge(equipeRouge), nbPaniersEquipeJaune(0),
-    nbPaniersEquipeRouge(0), debutTemps(QTime::currentTime()), finTemps(QTime())
+    nbPaniersEquipeRouge(0), debutTemps(QTime::currentTime()),
+    finTemps(QTime()), timer(QTimer(this))
 
 {
 }

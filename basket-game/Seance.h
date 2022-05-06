@@ -2,6 +2,7 @@
 #define SEANCE_H
 
 #include <QTime>
+#include <QTimer>
 
 class Equipe;
 
@@ -11,8 +12,9 @@ class Equipe;
  */
 #define POINT_POUR_VICTOIRE 4
 
-class Seance
+class Seance : public QObject
 {
+    Q_OBJECT
   private:
     int     numeroManche;
     Equipe* equipeJaune;
@@ -21,6 +23,7 @@ class Seance
     int     nbPaniersEquipeRouge;
     QTime   debutTemps;
     QTime   finTemps;
+    QTimer* timer;
 
   public:
     Seance(Equipe* equipeJaune = nullptr, Equipe* equipeRouge = nullptr);

@@ -197,8 +197,8 @@ void IHM::validerDemarragePartie()
         /**
          * @todo Initialiser le reste de la page Partie
          */
-        ui->tempsTour->setText("20 s");
-        ui->tempsPartie->setText("5 min");
+        ui->tempsTour->setText("Temps restant du tour : 20 s");
+        ui->tempsPartie->setText("Temps restant de la partie : 5 min");
         afficherPagePartie();
     }
 }

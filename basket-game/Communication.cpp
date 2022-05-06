@@ -250,3 +250,14 @@ void Communication::decomposerTrame()
                            champs.at(CHAMP_COULEUR_EQUIPE));
     }
 }
+void Communication::gererHorloge()
+{
+    /*
+     * connect(discoveryAgent,
+                SIGNAL(finished()),
+                this,
+                SLOT(terminerRecherche()));
+     * */
+    // timer->start(1000);
+    // connect(timer, SIGNAL(timeout()), this, SLOT(gererHorloge()));
+}
