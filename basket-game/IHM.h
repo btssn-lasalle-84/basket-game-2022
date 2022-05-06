@@ -32,8 +32,9 @@ class IHM;
 // QT_END_NAMESPACE
 
 class BaseDeDonnees;
-class Equipe;
 class Communication;
+class Equipe;
+class Seance;
 
 /**
  * @class IHM
@@ -56,6 +57,7 @@ class IHM : public QMainWindow
     QVector<Equipe*>     equipes;      //!< Les deux équipes
     int                  idEquipeRougeSelectionnee; //!< L'id de l'équipe rouge
     int                  idEquipeJauneSelectionnee; //!< L'id de l'équipe jaune
+    Seance*              seance;
 
     void connecterSignalSlot();
     void recupererEquipes();
@@ -90,8 +92,8 @@ class IHM : public QMainWindow
     };
 
     /**
-     * @enum ChampsTableSalle
-     * @brief Définit les différents champs de la table Salle
+     * @enum ChampsEquipe
+     * @brief Définit les différents champs d'e la table Salle'une équipe
      */
     enum ChampsEquipe
     {
@@ -119,6 +121,7 @@ class IHM : public QMainWindow
     void saisirTempsParTourEnSecondes(int tempsParTourEnSecondes);
     void saisirTempsParPartieEnMinutes(int tempsParPartieEnMinutes);
     void validerDemarragePartie();
+    void gererPartie();
     void afficherFenetre(IHM::Fenetre fenetre);
     void afficherFenetrePrecedente();
     void afficherFenetreSuivante();

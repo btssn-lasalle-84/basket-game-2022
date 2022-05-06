@@ -3,6 +3,7 @@
 #include "BaseDeDonnees.h"
 #include "Communication.h"
 #include "Equipe.h"
+#include "Seance.h"
 #include <QDebug>
 
 /**
@@ -23,7 +24,8 @@
  */
 IHM::IHM(QWidget* parent) :
     QMainWindow(parent), ui(new Ui::IHM), bdd(nullptr), communication(nullptr),
-    idEquipeRougeSelectionnee(-1), idEquipeJauneSelectionnee(-1)
+    idEquipeRougeSelectionnee(-1), idEquipeJauneSelectionnee(-1),
+    seance(nullptr)
 {
     ui->setupUi(this);
     qDebug() << Q_FUNC_INFO;
@@ -175,7 +177,39 @@ void IHM::saisirTempsParPartieEnMinutes(int tempsParPartieEnMinutes)
 void IHM::validerDemarragePartie()
 {
     if(idEquipeRougeSelectionnee != -1 && idEquipeJauneSelectionnee != -1)
+    {
+        qDebug() << Q_FUNC_INFO << equipes[CouleurEquipe::Rouge]->getNomEquipe()
+                 << equipes[CouleurEquipe::Jaune]->getNomEquipe();
+        // séance déjà en cours ?!
+        if(seance != nullptr)
+        {
+            delete seance;
+            seance = nullptr;
+        }
+        // Il faut instancier une nouvelle séance
+        seance = new Seance(equipes[CouleurEquipe::Jaune],
+                            equipes[CouleurEquipe::Rouge]);
+        ui->boutonGererPartiePagePartie->setEnabled(true);
+        ui->nomEquipeRouge_2->setText(
+          equipes[CouleurEquipe::Rouge]->getNomEquipe());
+        ui->nomEquipeJaune_2->setText(
+          equipes[CouleurEquipe::Jaune]->getNomEquipe());
+        /**
+         * @todo Initialiser le reste de la page Partie
+         */
+        ui->tempsTour->setText("20 s");
+        ui->tempsPartie->setText("5 min");
         afficherPagePartie();
+    }
+}
+
+void IHM::gererPartie()
+{
+    qDebug() << Q_FUNC_INFO;
+    /**
+     * @todo Envoyer trame START
+     */
+    ui->boutonGererPartiePagePartie->setEnabled(false);
 }
 
 /**
@@ -340,6 +374,10 @@ void IHM::connecterSignalSlot()
             SIGNAL(clicked(bool)),
             this,
             SLOT(afficherPagePrincipale()));
+    connect(ui->boutonGererPartiePagePartie,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(gererPartie()));
     // Communication
     connect(communication,
             SIGNAL(peripheriqueDetecte(QString, QString)),

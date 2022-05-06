@@ -1,39 +1,19 @@
 #include "Seance.h"
+#include "Equipe.h"
 #include "QDebug"
-Seance::Seance(int   numeroManche /*=0*/,
-               int   nbPaniersEquipeA /*=0*/,
-               int   nbPaniersEquipeB /*=0*/,
-               QTime debutTemps /*=0*/,
-               QTime finTemps /*=0*/) :
-    numeroManche(numeroManche),
-    nbPaniersEquipeA(nbPaniersEquipeA), nbPaniersEquipeB(nbPaniersEquipeB),
-    debutTemps(debutTemps), finTemps(finTemps)
+#include "IHM.h"
 
-{
-}
+Seance::Seance(Equipe* equipeJaune /*= nullptr*/,
+               Equipe* equipeRouge /*= nullptr*/) :
+    numeroManche(0),
+    equipeJaune(equipeJaune), equipeRouge(equipeRouge), nbPaniersEquipeJaune(0),
+    nbPaniersEquipeRouge(0), debutTemps(QTime::currentTime()), finTemps(QTime())
 
-Seance::Seance(const Seance& s) :
-    numeroManche(s.numeroManche), nbPaniersEquipeA(s.nbPaniersEquipeA),
-    nbPaniersEquipeB(s.nbPaniersEquipeB), debutTemps(s.debutTemps),
-    finTemps(s.finTemps)
 {
 }
 
 Seance::~Seance()
 {
-}
-
-Seance& Seance::operator=(const Seance& s)
-{
-    if(this != &s)
-    {
-        this->numeroManche     = s.numeroManche;
-        this->nbPaniersEquipeA = s.nbPaniersEquipeA;
-        this->nbPaniersEquipeB = s.nbPaniersEquipeB;
-        this->debutTemps       = s.debutTemps;
-        this->finTemps         = s.finTemps;
-    }
-    return *this;
 }
 
 int Seance::getNumeroManche() const
@@ -46,24 +26,24 @@ void Seance::setNumeroManche(const int& numeroManche)
     this->numeroManche = numeroManche;
 }
 
-int Seance::getNbPaniersEquipeA() const
+int Seance::getNbPaniersEquipeJaune() const
 {
-    return nbPaniersEquipeA;
+    return nbPaniersEquipeJaune;
 }
 
-void Seance::setNbPaniersEquipeA(const int& NbPaniersEquipeA)
+void Seance::setNbPaniersEquipeJaune(const int& nbPaniersEquipeJaune)
 {
-    this->nbPaniersEquipeA = NbPaniersEquipeA;
+    this->nbPaniersEquipeJaune = nbPaniersEquipeJaune;
 }
 
-int Seance::getNbPaniersEquipeB() const
+int Seance::getNbPaniersEquipeRouge() const
 {
-    return nbPaniersEquipeB;
+    return nbPaniersEquipeRouge;
 }
 
-void Seance::setNbPaniersEquipeB(const int& NbPaniersEquipeB)
+void Seance::setNbPaniersEquipeRouge(const int& NbPaniersEquipeRouge)
 {
-    this->nbPaniersEquipeB = NbPaniersEquipeB;
+    this->nbPaniersEquipeRouge = NbPaniersEquipeRouge;
 }
 
 QTime Seance::getDebutTemps() const
@@ -88,18 +68,38 @@ void Seance::setFinTemps(const QTime& finTemps)
 
 void Seance::marquerUnPointEquipeJaune()
 {
-    nbPaniersEquipeB = this->nbPaniersEquipeA + 1;
+    nbPaniersEquipeJaune = this->nbPaniersEquipeJaune + 1;
 }
 
 void Seance::marquerUnPointEquipeRouge()
 {
-    nbPaniersEquipeB = this->nbPaniersEquipeB + 1;
+    nbPaniersEquipeRouge = this->nbPaniersEquipeRouge + 1;
+}
+
+QString Seance::getNomEquipeJaune() const
+{
+    return equipeJaune->getNomEquipe();
+}
+
+void Seance::setNomEquipeJaune(const QString& nomEquipeJaune)
+{
+    this->equipeJaune->setNomEquipe(nomEquipeJaune);
+}
+
+QString Seance::getNomEquipeRouge() const
+{
+    return equipeRouge->getNomEquipe();
+}
+
+void Seance::setNomEquipeRouge(const QString& nomEquipeRouge)
+{
+    this->equipeRouge->setNomEquipe(nomEquipeRouge);
 }
 
 bool Seance::estFinie()
 {
-    if((getNbPaniersEquipeA() == POINT_POUR_VICTOIRE) ||
-       (getNbPaniersEquipeB() == POINT_POUR_VICTOIRE))
+    if((getNbPaniersEquipeJaune() == POINT_POUR_VICTOIRE) ||
+       (getNbPaniersEquipeRouge() == POINT_POUR_VICTOIRE))
     {
         return true;
     }

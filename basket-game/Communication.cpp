@@ -1,6 +1,7 @@
 #include "Communication.h"
 #include "Seance.h"
 #include <QDebug>
+
 Communication::Communication(QObject* parent) :
     QObject(parent), socket(nullptr), discoveryAgent(nullptr),
     peripheriqueTrouve(false)
