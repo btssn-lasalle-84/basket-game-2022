@@ -1,8 +1,8 @@
 #ifndef SEANCE_H
 #define SEANCE_H
 
+#include <QObject>
 #include <QTime>
-#include <QTimer>
 
 class Equipe;
 
@@ -11,6 +11,12 @@ class Equipe;
  * @brief Constante des points pour une victoire
  */
 #define POINT_POUR_VICTOIRE 4
+
+/**
+ * @def TEMPS_PAR_TOUR_DEFAUT
+ * @brief Le temps pour un tour
+ */
+#define TEMPS_PAR_TOUR_DEFAUT 30 // en s
 
 class Seance : public QObject
 {
@@ -23,10 +29,13 @@ class Seance : public QObject
     int     nbPaniersEquipeRouge;
     QTime   debutTemps;
     QTime   finTemps;
-    QTimer* timer;
+    QTime   debutTempsTour;
+    int     dureeTempsTour;
 
   public:
-    Seance(Equipe* equipeJaune = nullptr, Equipe* equipeRouge = nullptr);
+    Seance(Equipe*  equipeJaune = nullptr,
+           Equipe*  equipeRouge = nullptr,
+           QObject* parent      = nullptr);
     ~Seance();
 
     int     getNumeroManche() const;
@@ -39,6 +48,10 @@ class Seance : public QObject
     void    setDebutTemps(const QTime&);
     QTime   getFinTemps() const;
     void    setFinTemps(const QTime&);
+    QTime   getDebutTempsTour() const;
+    void    setDebutTempsTour(const QTime&);
+    int     getDureeTempsTour() const;
+    void    setDureeTempsTour(int);
     void    marquerUnPointEquipeJaune();
     void    marquerUnPointEquipeRouge();
     QString getNomEquipeJaune() const;

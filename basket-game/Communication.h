@@ -96,7 +96,6 @@ class Communication : public QObject
     void peripheriqueConnecte();
     void peripheriqueDeconnecte();
     void nouveauPanier(QString numeroPanier, QString equipe);
-    void gererHorloge();
 };
 
 #endif // COMMUNICATION_H

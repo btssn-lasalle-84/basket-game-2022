@@ -10,7 +10,7 @@
  * @file ihm.cpp
  *
  * @brief Définition de la classe IHM
- * @author
+ * @author Guillaume LAMBERT
  * @version 1.0
  *
  */
@@ -25,7 +25,7 @@
 IHM::IHM(QWidget* parent) :
     QMainWindow(parent), ui(new Ui::IHM), bdd(nullptr), communication(nullptr),
     idEquipeRougeSelectionnee(-1), idEquipeJauneSelectionnee(-1),
-    seance(nullptr)
+    seance(nullptr), timerSeance(nullptr), chronometrePartie(nullptr)
 {
     ui->setupUi(this);
     qDebug() << Q_FUNC_INFO;
@@ -43,10 +43,13 @@ IHM::IHM(QWidget* parent) :
     equipes.push_back(new Equipe);
     equipes.push_back(new Equipe);
 
+    timerSeance = new QTimer(this);
+
     connecterSignalSlot();
 
     communication->rechercher();
 
+    ui->boutonDemarrerPageConfiguration->setEnabled(false);
     afficherFenetre(IHM::PagePrincipale);
 
 #ifdef PLEIN_ECRAN
@@ -75,6 +78,13 @@ void IHM::demarrerNouvellePartie()
 {
     qDebug() << Q_FUNC_INFO;
     recupererEquipes();
+    /**
+     * @todo Récupérer les temps dans la base de données
+     */
+    ui->tempsParTourEnSecondes->setValue(TEMPS_PAR_TOUR_DEFAUT);
+    /**
+     * @todo Fixer le temps par défaut pour une partie
+     */
     afficherPageConfiguration();
 }
 
@@ -87,6 +97,7 @@ void IHM::selectionnerEquipeRouge(int numeroEquipe)
         equipes[CouleurEquipe::Rouge]->supprimerJoueurs();
         idEquipeRougeSelectionnee = -1;
         ui->lineEditNomEquipeRouge->setEnabled(true);
+        ui->boutonDemarrerPageConfiguration->setEnabled(false);
         return;
     }
     qDebug() << Q_FUNC_INFO << ui->listeEquipesRouges->currentIndex() - 1
@@ -102,6 +113,10 @@ void IHM::selectionnerEquipeRouge(int numeroEquipe)
                    (int)Rouge);
     ui->lineEditNomEquipeRouge->setText("");
     ui->lineEditNomEquipeRouge->setEnabled(false);
+    if(idEquipeRougeSelectionnee != -1 && idEquipeJauneSelectionnee != -1)
+    {
+        ui->boutonDemarrerPageConfiguration->setEnabled(true);
+    }
 }
 
 void IHM::selectionnerEquipeJaune(int numeroEquipe)
@@ -113,6 +128,7 @@ void IHM::selectionnerEquipeJaune(int numeroEquipe)
         equipes[CouleurEquipe::Jaune]->supprimerJoueurs();
         idEquipeJauneSelectionnee = -1;
         ui->lineEditNomEquipeJaune->setEnabled(true);
+        ui->boutonDemarrerPageConfiguration->setEnabled(false);
         return;
     }
     qDebug() << Q_FUNC_INFO << ui->listeEquipesJaunes->currentIndex() - 1
@@ -128,6 +144,10 @@ void IHM::selectionnerEquipeJaune(int numeroEquipe)
                    (int)Jaune);
     ui->lineEditNomEquipeJaune->setText("");
     ui->lineEditNomEquipeJaune->setEnabled(false);
+    if(idEquipeRougeSelectionnee != -1 && idEquipeJauneSelectionnee != -1)
+    {
+        ui->boutonDemarrerPageConfiguration->setEnabled(true);
+    }
 }
 
 void IHM::saisirNouvelleEquipeRouge()
@@ -188,28 +208,131 @@ void IHM::validerDemarragePartie()
         }
         // Il faut instancier une nouvelle séance
         seance = new Seance(equipes[CouleurEquipe::Jaune],
-                            equipes[CouleurEquipe::Rouge]);
-        ui->boutonGererPartiePagePartie->setEnabled(true);
+                            equipes[CouleurEquipe::Rouge],
+                            this);
         ui->nomEquipeRouge_2->setText(
           equipes[CouleurEquipe::Rouge]->getNomEquipe());
         ui->nomEquipeJaune_2->setText(
           equipes[CouleurEquipe::Jaune]->getNomEquipe());
+        ui->labelEquipeEnCours->setText(
+          equipes[CouleurEquipe::Rouge]->getNomEquipe());
+        qDebug() << Q_FUNC_INFO << "tempsParTour"
+                 << ui->tempsParTour->checkState();
+        qDebug() << Q_FUNC_INFO << "tempsParTourEnSecondes"
+                 << ui->tempsParTourEnSecondes->value();
+        if(ui->tempsParTour->checkState() == Qt::Checked)
+        {
+            ui->tempsTour->setText(
+              QString::number(ui->tempsParTourEnSecondes->value()) +
+              QString(" s"));
+            seance->setDureeTempsTour(ui->tempsParTourEnSecondes->value());
+        }
+        else
+        {
+            ui->labelTempsTour->hide();
+            ui->tempsTour->setText(QString(""));
+            ui->tempsTour->hide();
+            seance->setDureeTempsTour(0);
+        }
         /**
          * @todo Initialiser le reste de la page Partie
          */
-        ui->tempsTour->setText("Temps restant du tour : 20 s");
-        ui->tempsPartie->setText("Temps restant de la partie : 5 min");
+        qDebug() << Q_FUNC_INFO << "tempsParPartieEnMinutes"
+                 << ui->tempsParPartieEnMinutes->value();
+        // ui->tempsPartie->setText("");
+
+        // Il faut être connecté
+        if(communication->estConnecte())
+            ui->boutonGererPartiePagePartie->setEnabled(true);
+        else
+            ui->boutonGererPartiePagePartie->setEnabled(false);
+        ui->messageVictoireEquipe->hide();
         afficherPagePartie();
     }
 }
 
+/**
+ * @brief Démarre une partie de basket
+ *
+ */
 void IHM::gererPartie()
 {
     qDebug() << Q_FUNC_INFO;
-    /**
-     * @todo Envoyer trame START
-     */
+    communication->envoyer("$basket;STT;\r");
     ui->boutonGererPartiePagePartie->setEnabled(false);
+    seance->setDebutTemps(QTime::currentTime());
+    seance->setDebutTempsTour(QTime::currentTime());
+    timerSeance->start(500);
+    demarrerChronometrePartie();
+}
+
+/**
+ * @brief Arrête une partie de basket
+ *
+ */
+void IHM::arreterPartie()
+{
+    qDebug() << Q_FUNC_INFO;
+    if(communication != nullptr)
+        communication->envoyer("$basket;STP;\r");
+    ui->boutonGererPartiePagePartie->setEnabled(true);
+    if(seance != nullptr)
+        seance->setFinTemps(QTime::currentTime());
+    if(timerSeance != nullptr && timerSeance->isActive())
+        timerSeance->stop();
+    arreterChronometrePartie();
+}
+
+void IHM::gererHorlogePartie()
+{
+    qDebug() << Q_FUNC_INFO;
+    if(seance != nullptr && !seance->estFinie())
+    {
+        QTime heureCourante = QTime::currentTime();
+        int   tempsRestantTour =
+          heureCourante.secsTo(seance->getDebutTempsTour());
+        if(tempsRestantTour > 0)
+        {
+            ui->tempsTour->setText(QString::number(tempsRestantTour) +
+                                   QString(" s"));
+        }
+        else
+        {
+            emit tempsTourExpiree();
+        }
+        /**
+         * @todo Gérer le temps restant pour une partie
+         */
+    }
+}
+
+void IHM::demarrerChronometrePartie()
+{
+    if(chronometrePartie == nullptr)
+    {
+        chronometrePartie = new QTimer(this);
+        connect(chronometrePartie,
+                SIGNAL(timeout()),
+                this,
+                SLOT(afficherChronometrePartie()));
+    }
+    if(chronometrePartie->isActive())
+        arreterChronometrePartie();
+    chronometrePartie->start(500);
+    tempsEcoulePartie.start();
+}
+
+void IHM::arreterChronometrePartie()
+{
+    if(chronometrePartie != nullptr && chronometrePartie->isActive())
+        chronometrePartie->stop();
+}
+
+void IHM::afficherChronometrePartie()
+{
+    QTime tempsChronometre(0, 0);
+    tempsChronometre = tempsChronometre.addMSecs(tempsEcoulePartie.elapsed());
+    ui->labelDuree->setText(tempsChronometre.toString("mm:ss"));
 }
 
 /**
@@ -255,6 +378,7 @@ void IHM::afficherFenetrePrecedente()
 
 void IHM::afficherPagePrincipale()
 {
+    arreterPartie();
     afficherFenetre(IHM::PagePrincipale);
 }
 
@@ -265,6 +389,7 @@ void IHM::afficherPageRegles()
 
 void IHM::afficherPageConfiguration()
 {
+    arreterPartie();
     afficherFenetre(IHM::PageConfiguration);
 }
 
@@ -293,8 +418,6 @@ void IHM::gererPeripherique(QString nom, QString adresseMAC)
 void IHM::afficherEtatConnexion()
 {
     qDebug() << Q_FUNC_INFO;
-    // Test l'envoi d'une trame
-    communication->envoyer("$basket;STT;\r");
 }
 
 void IHM::afficherEtatDeconnexion()
@@ -378,6 +501,7 @@ void IHM::connecterSignalSlot()
             SIGNAL(clicked(bool)),
             this,
             SLOT(gererPartie()));
+    connect(timerSeance, SIGNAL(timeout()), this, SLOT(gererHorlogePartie()));
     // Communication
     connect(communication,
             SIGNAL(peripheriqueDetecte(QString, QString)),

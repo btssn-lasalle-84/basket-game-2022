@@ -5,7 +5,7 @@
  * @file ihm.h
  *
  * @brief Déclaration de la classe IHM
- * @author
+ * @author Guillaume LAMBERT
  * @version 1.0
  *
  */
@@ -57,7 +57,10 @@ class IHM : public QMainWindow
     QVector<Equipe*>     equipes;      //!< Les deux équipes
     int                  idEquipeRougeSelectionnee; //!< L'id de l'équipe rouge
     int                  idEquipeJauneSelectionnee; //!< L'id de l'équipe jaune
-    Seance*              seance;
+    Seance*              seance;      //!< La séance entre deux équipes
+    QTimer*              timerSeance; //!< Pour gérer les temps restants
+    QTimer*              chronometrePartie;
+    QElapsedTimer        tempsEcoulePartie;
 
     void connecterSignalSlot();
     void recupererEquipes();
@@ -122,6 +125,11 @@ class IHM : public QMainWindow
     void saisirTempsParPartieEnMinutes(int tempsParPartieEnMinutes);
     void validerDemarragePartie();
     void gererPartie();
+    void arreterPartie();
+    void gererHorlogePartie();
+    void demarrerChronometrePartie();
+    void arreterChronometrePartie();
+    void afficherChronometrePartie();
     void afficherFenetre(IHM::Fenetre fenetre);
     void afficherFenetrePrecedente();
     void afficherFenetreSuivante();
@@ -134,6 +142,9 @@ class IHM : public QMainWindow
     void afficherEtatConnexion();
     void afficherEtatDeconnexion();
     void terminerRecherche();
+
+  signals:
+    void tempsTourExpiree();
 };
 
 #endif // IHM_H

@@ -3,13 +3,13 @@
 #include "QDebug"
 #include "IHM.h"
 
-Seance::Seance(Equipe* equipeJaune /*= nullptr*/,
-               Equipe* equipeRouge /*= nullptr*/) :
-    numeroManche(0),
-    equipeJaune(equipeJaune), equipeRouge(equipeRouge), nbPaniersEquipeJaune(0),
-    nbPaniersEquipeRouge(0), debutTemps(QTime::currentTime()),
-    finTemps(QTime()), timer(QTimer(this))
-
+Seance::Seance(Equipe*  equipeJaune /*= nullptr*/,
+               Equipe*  equipeRouge /*= nullptr*/,
+               QObject* parent /*= nullptr*/) :
+    QObject(parent),
+    numeroManche(0), equipeJaune(equipeJaune), equipeRouge(equipeRouge),
+    nbPaniersEquipeJaune(0), nbPaniersEquipeRouge(0),
+    debutTemps(QTime::currentTime()), finTemps(QTime())
 {
 }
 
@@ -65,6 +65,27 @@ QTime Seance::getFinTemps() const
 void Seance::setFinTemps(const QTime& finTemps)
 {
     this->finTemps = finTemps;
+}
+
+QTime Seance::getDebutTempsTour() const
+{
+    return debutTempsTour;
+}
+
+void Seance::setDebutTempsTour(const QTime& debutTempsTour)
+{
+    QTime nouveauDebutTempsTour = debutTempsTour.addSecs(dureeTempsTour);
+    this->debutTempsTour        = nouveauDebutTempsTour;
+}
+
+int Seance::getDureeTempsTour() const
+{
+    return dureeTempsTour;
+}
+
+void Seance::setDureeTempsTour(int dureeTempsTour)
+{
+    this->dureeTempsTour = dureeTempsTour;
 }
 
 void Seance::marquerUnPointEquipeJaune()
