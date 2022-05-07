@@ -1,3 +1,25 @@
 class Joueur
-!!!131095.cpp!!!	Joueur()
-
+!!!131095.cpp!!!	Joueur(in pseudo : QString = "", in nom : QString = "", in prenom : QString = "")
+    qDebug() << Q_FUNC_INFO << this;
+!!!144919.cpp!!!	~Joueur()
+    qDebug() << Q_FUNC_INFO << this;
+!!!145047.cpp!!!	operator =(in j : Joueur) : Joueur
+    if(this != &j)
+    {
+        pseudo = j.pseudo;
+        nom    = j.nom;
+        prenom = j.prenom;
+    }
+    return *this;
+!!!145175.cpp!!!	getPseudo() : QString
+    return pseudo;
+!!!145303.cpp!!!	setPseudo(in pseudo : QString) : void
+    this->pseudo = pseudo;
+!!!145431.cpp!!!	getNom() : QString
+    return nom;
+!!!145559.cpp!!!	setNom(in nom : QString) : void
+    this->nom = nom;
+!!!145687.cpp!!!	getPrenom() : QString
+    return prenom;
+!!!145815.cpp!!!	setPrenom(in prenom : QString) : void
+    this->prenom = prenom;
