@@ -79,11 +79,11 @@ void IHM::demarrerNouvellePartie()
     qDebug() << Q_FUNC_INFO;
     recupererEquipes();
     /**
-     * @todo Récupérer les temps dans la base de données
+     * @todo TODO Récupérer les temps dans la base de données
      */
     ui->tempsParTourEnSecondes->setValue(TEMPS_PAR_TOUR_DEFAUT);
     /**
-     * @todo Fixer le temps par défaut pour une partie
+     * @todo TODO Fixer le temps par défaut pour une partie
      */
     afficherPageConfiguration();
 }
@@ -154,7 +154,8 @@ void IHM::saisirNouvelleEquipeRouge()
 {
     qDebug() << Q_FUNC_INFO << ui->lineEditNomEquipeRouge->text();
     /**
-     * @todo insérer la nouvelle équipe dans la base de données et dans la liste
+     * @todo TODO insérer la nouvelle équipe dans la base de données et dans la
+     * liste
      */
 }
 
@@ -162,7 +163,8 @@ void IHM::saisirNouvelleEquipeJaune()
 {
     qDebug() << Q_FUNC_INFO << ui->lineEditNomEquipeJaune->text();
     /**
-     * @todo insérer la nouvelle équipe dans la base de données et dans la liste
+     * @todo TODO insérer la nouvelle équipe dans la base de données et dans la
+     * liste
      */
 }
 
@@ -172,7 +174,7 @@ void IHM::saisirTempsParTourEnSecondes(int tempsParTourEnSecondes)
     if(tempsParTourEnSecondes != 0)
     {
         /**
-         * @todo modifier les paramètres dans la base de données
+         * @todo  TODO modifier les paramètres dans la base de données
          */
         ui->tempsParTour->setChecked(true);
     }
@@ -186,7 +188,7 @@ void IHM::saisirTempsParPartieEnMinutes(int tempsParPartieEnMinutes)
     if(tempsParPartieEnMinutes != 0)
     {
         /**
-         * @todo modifier les paramètres dans la base de données
+         * @todo TODO modifier les paramètres dans la base de données
          */
         ui->tempsParPartie->setChecked(true);
     }
@@ -235,7 +237,7 @@ void IHM::validerDemarragePartie()
             seance->setDureeTempsTour(0);
         }
         /**
-         * @todo Initialiser le reste de la page Partie
+         * @todo TODO Initialiser le reste de la page Partie
          */
         qDebug() << Q_FUNC_INFO << "tempsParPartieEnMinutes"
                  << ui->tempsParPartieEnMinutes->value();
@@ -260,16 +262,38 @@ void IHM::gererPartie()
     qDebug() << Q_FUNC_INFO;
     communication->envoyer("$basket;STT;\r");
     ui->boutonGererPartiePagePartie->setEnabled(false);
+    seance->setNbPaniersEquipeJaune(0);
+    seance->setNbPaniersEquipeRouge(0);
     seance->setDebutTemps(QTime::currentTime());
     seance->setDebutTempsTour(QTime::currentTime());
     timerSeance->start(500);
     demarrerChronometrePartie();
 }
 
-/**
- * @brief Arrête une partie de basket
- *
- */
+void IHM::ajouterPanier(QString numeroPanier, QString equipe)
+{
+    qDebug() << Q_FUNC_INFO << numeroPanier << equipe;
+    ui->lcdNumberPointsEquipeRouge->display(seance->getNbPaniersEquipeRouge());
+    ui->lcdNumberPointsEquipeJaune->display(seance->getNbPaniersEquipeJaune());
+    if(numeroPanier != "0" & seance->estFinie() == false)
+    {
+        if(equipe == "J")
+        {
+            seance->marquerUnPointEquipeJaune();
+            qDebug() << Q_FUNC_INFO << seance->getNbPaniersEquipeJaune();
+            ui->lcdNumberPointsEquipeJaune->display(
+              seance->getNbPaniersEquipeJaune());
+        }
+        else if(equipe == "R")
+        {
+            seance->marquerUnPointEquipeRouge();
+            qDebug() << Q_FUNC_INFO << seance->getNbPaniersEquipeRouge();
+            ui->lcdNumberPointsEquipeRouge->display(
+              seance->getNbPaniersEquipeRouge());
+        }
+    }
+}
+
 void IHM::arreterPartie()
 {
     qDebug() << Q_FUNC_INFO;
@@ -285,7 +309,7 @@ void IHM::arreterPartie()
 
 void IHM::gererHorlogePartie()
 {
-    qDebug() << Q_FUNC_INFO;
+    // qDebug() << Q_FUNC_INFO;
     if(seance != nullptr && !seance->estFinie())
     {
         QTime heureCourante = QTime::currentTime();
@@ -301,7 +325,7 @@ void IHM::gererHorlogePartie()
             emit tempsTourExpiree();
         }
         /**
-         * @todo Gérer le temps restant pour une partie
+         * @todo TODO Gérer le temps restant pour une partie
          */
     }
 }
@@ -399,7 +423,8 @@ void IHM::afficherPagePartie()
 }
 
 /**
- * @brief Méthode qui permet de quitter la fenêtre principale de l'application
+ * @brief Méthode qui permet de quitter la fenêtre principale de
+ * l'application
  *
  * @fn IHM::quitter
  */
@@ -502,6 +527,11 @@ void IHM::connecterSignalSlot()
             this,
             SLOT(gererPartie()));
     connect(timerSeance, SIGNAL(timeout()), this, SLOT(gererHorlogePartie()));
+    // Ajout d'un point pour une équipe
+    connect(communication,
+            SIGNAL(nouveauPanier(QString, QString)),
+            this,
+            SLOT(ajouterPanier(QString, QString)));
     // Communication
     connect(communication,
             SIGNAL(peripheriqueDetecte(QString, QString)),

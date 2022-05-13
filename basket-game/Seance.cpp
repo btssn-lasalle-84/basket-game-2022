@@ -9,7 +9,8 @@ Seance::Seance(Equipe*  equipeJaune /*= nullptr*/,
     QObject(parent),
     numeroManche(0), equipeJaune(equipeJaune), equipeRouge(equipeRouge),
     nbPaniersEquipeJaune(0), nbPaniersEquipeRouge(0),
-    debutTemps(QTime::currentTime()), finTemps(QTime())
+    debutTemps(QTime::currentTime()), finTemps(QTime()),
+    debutTempsTour(QTime()), dureeTempsTour(5)
 {
 }
 

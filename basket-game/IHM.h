@@ -125,6 +125,7 @@ class IHM : public QMainWindow
     void saisirTempsParPartieEnMinutes(int tempsParPartieEnMinutes);
     void validerDemarragePartie();
     void gererPartie();
+    void ajouterPanier(QString numeroPanier, QString equipe);
     void arreterPartie();
     void gererHorlogePartie();
     void demarrerChronometrePartie();
