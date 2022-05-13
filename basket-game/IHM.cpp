@@ -34,17 +34,8 @@ IHM::IHM(QWidget* parent) :
     fixerRaccourcisClavier();
 #endif
 
-    bdd = BaseDeDonnees::getInstance();
-    bdd->ouvrir("basket-game.sqlite");
-
-    communication = new Communication(this);
-
-    // crée les deux équipes
-    equipes.push_back(new Equipe);
-    equipes.push_back(new Equipe);
-
-    timerSeance = new QTimer(this);
-
+    initialiserRessources();
+    initialiserEquipes();
     connecterSignalSlot();
 
     communication->rechercher();
@@ -90,6 +81,7 @@ void IHM::demarrerNouvellePartie()
 
 void IHM::selectionnerEquipeRouge(int numeroEquipe)
 {
+    Q_UNUSED(numeroEquipe)
     // Aucune équipe sélecionnée ?
     if(ui->listeEquipesRouges->currentIndex() <= 0)
     {
@@ -121,6 +113,7 @@ void IHM::selectionnerEquipeRouge(int numeroEquipe)
 
 void IHM::selectionnerEquipeJaune(int numeroEquipe)
 {
+    Q_UNUSED(numeroEquipe)
     // Aucune équipe sélecionnée ?
     if(ui->listeEquipesJaunes->currentIndex() <= 0)
     {
@@ -262,11 +255,7 @@ void IHM::gererPartie()
     qDebug() << Q_FUNC_INFO;
     communication->envoyer("$basket;STT;\r");
     ui->boutonGererPartiePagePartie->setEnabled(false);
-    seance->setNbPaniersEquipeJaune(0);
-    seance->setNbPaniersEquipeRouge(0);
-    seance->setDebutTemps(QTime::currentTime());
-    seance->setDebutTempsTour(QTime::currentTime());
-    timerSeance->start(500);
+    initialiserPartie();
     demarrerChronometrePartie();
 }
 
@@ -275,7 +264,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
     qDebug() << Q_FUNC_INFO << numeroPanier << equipe;
     ui->lcdNumberPointsEquipeRouge->display(seance->getNbPaniersEquipeRouge());
     ui->lcdNumberPointsEquipeJaune->display(seance->getNbPaniersEquipeJaune());
-    if(numeroPanier != "0" & seance->estFinie() == false)
+    if(numeroPanier != "0" && !seance->estFinie())
     {
         if(equipe == "J")
         {
@@ -291,6 +280,18 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
             ui->lcdNumberPointsEquipeRouge->display(
               seance->getNbPaniersEquipeRouge());
         }
+    }
+    else if(numeroPanier == "0")
+    {
+        /**
+         * @todo Gérer le tir loupé par une équipe
+         */
+    }
+    else if(seance->estFinie())
+    {
+        /**
+         * @todo Gérer la fin de la fin de la partie
+         */
     }
 }
 
@@ -338,7 +339,7 @@ void IHM::demarrerChronometrePartie()
         connect(chronometrePartie,
                 SIGNAL(timeout()),
                 this,
-                SLOT(afficherChronometrePartie()));
+                SLOT(gererChronometrePartie()));
     }
     if(chronometrePartie->isActive())
         arreterChronometrePartie();
@@ -352,11 +353,19 @@ void IHM::arreterChronometrePartie()
         chronometrePartie->stop();
 }
 
-void IHM::afficherChronometrePartie()
+void IHM::gererChronometrePartie()
 {
     QTime tempsChronometre(0, 0);
     tempsChronometre = tempsChronometre.addMSecs(tempsEcoulePartie.elapsed());
-    ui->labelDuree->setText(tempsChronometre.toString("mm:ss"));
+    /**
+     * @todo Gérer le temps d'une partie et d'un tir
+     */
+    afficherChronometrePartie(tempsChronometre.toString("mm:ss"));
+}
+
+void IHM::afficherChronometrePartie(QString temps)
+{
+    ui->labelDuree->setText(temps);
 }
 
 /**
@@ -453,6 +462,29 @@ void IHM::afficherEtatDeconnexion()
 void IHM::terminerRecherche()
 {
     qDebug() << Q_FUNC_INFO;
+}
+
+/**
+ * @brief Initialise les ressources
+ */
+void IHM::initialiserRessources()
+{
+    bdd = BaseDeDonnees::getInstance();
+    bdd->ouvrir(BDD);
+
+    communication = new Communication(this);
+
+    timerSeance = new QTimer(this);
+}
+
+/**
+ * @brief Initialise les deux équipes
+ */
+void IHM::initialiserEquipes()
+{
+    // crée les deux équipes
+    equipes.push_back(new Equipe);
+    equipes.push_back(new Equipe);
 }
 
 /**
@@ -640,4 +672,13 @@ void IHM::afficherListeEquipe(QStringList equipe)
         ui->listeEquipesRouges->addItem(equipe.at(ChampsEquipe::PSEUDO_JOUEUR));
         ui->listeEquipesJaunes->addItem(equipe.at(ChampsEquipe::PSEUDO_JOUEUR));
     }
+}
+
+void IHM::initialiserPartie()
+{
+    seance->setNbPaniersEquipeJaune(0);
+    seance->setNbPaniersEquipeRouge(0);
+    seance->setDebutTemps(QTime::currentTime());
+    seance->setDebutTempsTour(QTime::currentTime());
+    timerSeance->start(500);
 }

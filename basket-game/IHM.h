@@ -13,6 +13,12 @@
 #include <QtWidgets>
 
 /**
+ * @def BDD
+ * @brief Définit le nom de la base de données
+ */
+#define BDD "basket-game.sqlite"
+
+/**
  * @def TEST_IHM
  * @brief Pour le mode test (raccourcis clavier)
  */
@@ -24,12 +30,10 @@
  */
 #define PLEIN_ECRAN
 
-// QT_BEGIN_NAMESPACE
 namespace Ui
 {
 class IHM;
 }
-// QT_END_NAMESPACE
 
 class BaseDeDonnees;
 class Communication;
@@ -62,10 +66,13 @@ class IHM : public QMainWindow
     QTimer*              chronometrePartie;
     QElapsedTimer        tempsEcoulePartie;
 
+    void initialiserRessources();
+    void initialiserEquipes();
     void connecterSignalSlot();
     void recupererEquipes();
     void ajouterJoueurs(QString idEquipe, int couleurEquipe);
     void afficherListeEquipe(QStringList equipe);
+    void initialiserPartie();
 
     /**
      * @enum Fenetre
@@ -130,7 +137,8 @@ class IHM : public QMainWindow
     void gererHorlogePartie();
     void demarrerChronometrePartie();
     void arreterChronometrePartie();
-    void afficherChronometrePartie();
+    void gererChronometrePartie();
+    void afficherChronometrePartie(QString temps);
     void afficherFenetre(IHM::Fenetre fenetre);
     void afficherFenetrePrecedente();
     void afficherFenetreSuivante();
