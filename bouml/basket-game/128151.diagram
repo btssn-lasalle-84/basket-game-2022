@@ -2,7 +2,7 @@ format 224
 
 classcanvas 128023 class_ref 128407 // IHM
   classdiagramsettings member_max_width 0 end
-  xyz 17.5 16.5 2000
+  xyz 18 17 2000
 end
 classcanvas 128151 class_ref 128151 // BaseDeDonnees
   classdiagramsettings member_max_width 0 end
@@ -25,47 +25,47 @@ classcanvas 129687 class_ref 135959 // Seance
   xyz 1621 1507 3016
 end
 relationcanvas 128279 relation_ref 128279 // <unidirectional association>
-  from ref 128151 z 3006 to point 1834 94.5
-  line 128407 z 3006 to point 1834 124.5
+  from ref 128151 z 3006 to point 1834 94
+  line 128407 z 3006 to point 1834 124
   line 128535 z 3006 to ref 128151
   role_a_pos 1623 96 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 128791 relation_ref 135191 // <unidirectional association>
   from ref 128023 z 3006 to ref 128151
-  role_a_pos 1792 344 3000 no_role_b
+  role_a_pos 1792 366 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 129175 relation_ref 135319 // <unidirectional association>
   from ref 128023 z 3006 to ref 129047
-  role_a_pos 1688 894 3000 no_role_b
+  role_a_pos 1688 916 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 129431 relation_ref 135063 // <unidirectional association>
-  from ref 129303 z 3011 stereotype "<<QList>>" xyz 634.5 2386 3011 to ref 128663
+  from ref 129303 z 3011 stereotype "<<QList>>" xyz 634 2386 3011 to ref 128663
   role_a_pos 726 2478 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 129559 relation_ref 135447 // <unidirectional association>
-  from ref 128023 z 3011 stereotype "<<QVector>>" xyz 553.5 1562.5 3011 to ref 129303
-  role_a_pos 687 1720 3000 no_role_b
+  from ref 128023 z 3011 stereotype "<<QVector>>" xyz 559 1642 3011 to ref 129303
+  role_a_pos 683 1720 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 129815 relation_ref 135831 // <unidirectional association>
-  from ref 129687 z 3017 to point 1513 2091
+  from ref 129687 z 3017 to point 1513.5 2091.5
   line 130199 z 3017 to ref 129303
   role_a_pos 1419 2040 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 129943 relation_ref 135959 // <unidirectional association>
-  from ref 129687 z 3017 to point 1505 1963
+  from ref 129687 z 3017 to point 1505.5 1963.5
   line 130327 z 3017 to ref 129303
   role_a_pos 1419 1928 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 130071 relation_ref 135575 // <unidirectional association>
   from ref 128023 z 3017 to ref 129687
-  role_a_pos 1559 1478 3000 no_role_b
+  role_a_pos 1515 1476 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 end
