@@ -1,7 +1,7 @@
 format 224
 "version 0.1" // version 0.1
-  revision 1
-  modified_by 23 "tv"
+  revision 2
+  modified_by 2 "btssn2"
   // class settings
   
   classdiagramsettings member_max_width 0 end
@@ -221,6 +221,11 @@ ${inlines}
       
       activitydiagramsettings
        end
+    end
+
+    sequencediagram 128002 "Créer une nouvelle partie"
+      sequencediagramsettings end
+      overlapping_bars size A0
     end
   end
 end

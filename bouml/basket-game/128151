@@ -1,7 +1,7 @@
 format 224
 "basket-game" // basket-game
-  revision 3
-  modified_by 23 "tv"
+  revision 4
+  modified_by 2 "btssn2"
   // class settings
   
   classdiagramsettings member_max_width 0 end
@@ -481,7 +481,26 @@ ${inlines}
 //fenêtre principale de l'application
 //
 
+//@file ihm.cpp
+//
+//@brief Définition de la classe IHM
+//@author Guillaume LAMBERT
+//@version 1.0
+//
+//
+//
+//@brief Constructeur de la classe IHM
+//
+//@fn IHM::IHM
+//@param parent L'adresse de l'objet parent, si nullptr IHM sera la
+//fenêtre principale de l'application
+//
+
 ${inline}${typeprefix}${class}::${name}${(}${t0} * ${p0}${)} :
+    QMainWindow(parent), ui(new Ui::IHM), bdd(nullptr), communication(nullptr),
+    idEquipeRougeSelectionnee(-1), idEquipeJauneSelectionnee(-1),
+    seance(nullptr), timerSeance(nullptr), chronometrePartie(nullptr)
+ :
     QMainWindow(parent), ui(new Ui::IHM), bdd(nullptr), communication(nullptr),
     idEquipeRougeSelectionnee(-1), idEquipeJauneSelectionnee(-1),
     seance(nullptr), timerSeance(nullptr), chronometrePartie(nullptr)
@@ -500,6 +519,12 @@ ${body}}
 	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw}${abstract};
 "
 	cpp_def "//@brief Destructeur de la classe IHM
+//
+//@fn IHM::~IHM
+//@details Libère les ressources de l'application
+//
+
+//@brief Destructeur de la classe IHM
 //
 //@fn IHM::~IHM
 //@details Libère les ressources de l'application
@@ -653,6 +678,9 @@ ${body}}
 	cpp_def "//@brief Initialise les ressources
 //
 
+//@brief Initialise les ressources
+//
+
 ${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
 ${body}}
 "
@@ -670,6 +698,9 @@ ${body}}
 	cpp_def "//@brief Initialise les deux équipes
 //
 
+//@brief Initialise les deux équipes
+//
+
 ${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
 ${body}}
 "
@@ -685,6 +716,11 @@ ${body}}
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
 "
 	cpp_def "//@brief Assure la connexion des signaux aux slots
+//
+//@fn IHM::connecterSignalSlot
+//
+
+//@brief Assure la connexion des signaux aux slots
 //
 //@fn IHM::connecterSignalSlot
 //
@@ -1006,6 +1042,11 @@ ${items}};
 //@fn IHMArbitre::fixerRaccourcisClavier
 //
 
+//@brief Méthode qui initialise les raccourcis clavier
+//
+//@fn IHMArbitre::fixerRaccourcisClavier
+//
+
 ${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
 ${body}}
 "
@@ -1150,6 +1191,10 @@ ${body}}
 //
 //
 
+//@brief Démarre une partie de basket
+//
+//
+
 ${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
 ${body}}
 "
@@ -1273,6 +1318,13 @@ ${body}}
 //@param fenetre le numéro de fenêtre à afficher
 //
 
+//@brief Méthode qui permet d'afficher un numéro de fenêtre de la pile
+//QStackedWidget
+//
+//@fn IHM::afficherFenetre
+//@param fenetre le numéro de fenêtre à afficher
+//
+
 ${inline}${typeprefix}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
 ${body}}
 "
@@ -1293,6 +1345,12 @@ ${body}}
 //@fn IHM::afficherFenetrePrecedente
 //
 
+//@brief Méthode qui permet d'afficher la fenêtre précédente dans la pile
+//QStackedWidget
+//
+//@fn IHM::afficherFenetrePrecedente
+//
+
 ${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
 ${body}}
 "
@@ -1308,6 +1366,12 @@ ${body}}
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
 "
 	cpp_def "//@brief Méthode qui permet d'afficher la fenêtre suivante dans la pile
+//QStackedWidget
+//
+//@fn IHM::afficherFenetreSuivante
+//
+
+//@brief Méthode qui permet d'afficher la fenêtre suivante dans la pile
 //QStackedWidget
 //
 //@fn IHM::afficherFenetreSuivante
@@ -1384,6 +1448,12 @@ ${body}}
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
 "
 	cpp_def "//@brief Méthode qui permet de quitter la fenêtre principale de
+//l'application
+//
+//@fn IHM::quitter
+//
+
+//@brief Méthode qui permet de quitter la fenêtre principale de
 //l'application
 //
 //@fn IHM::quitter
@@ -1552,6 +1622,9 @@ ${inlines}
 	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}${)}${volatile}${throw}${abstract};
 "
 	cpp_def "${comment}${inline}${typeprefix}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)} :
+    pseudo(pseudo),
+    nom(nom), prenom(prenom)
+ :
     pseudo(pseudo),
     nom(nom), prenom(prenom)
 ${throw}{
