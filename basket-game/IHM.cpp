@@ -73,9 +73,7 @@ void IHM::demarrerNouvellePartie()
      * @todo TODO Récupérer les temps dans la base de données
      */
     ui->tempsParTourEnSecondes->setValue(TEMPS_PAR_TOUR_DEFAUT);
-    /**
-     * @todo TODO Fixer le temps par défaut pour une partie
-     */
+    ui->tempsParPartieEnMinutes->setValue(TEMPS_PAR_PARTIE_DEFAUT);
     afficherPageConfiguration();
 }
 
@@ -229,6 +227,20 @@ void IHM::validerDemarragePartie()
             ui->tempsTour->hide();
             seance->setDureeTempsTour(0);
         }
+        if(ui->tempsParPartie->checkState() == Qt::Checked)
+        {
+            ui->tempsPartie->setText(
+              QString::number(ui->tempsParPartieEnMinutes->value()) +
+              QString(" m"));
+            seance->setDureeTempsPartie(ui->tempsParPartieEnMinutes->value());
+        }
+        else
+        {
+            ui->labelTempsTour->hide();
+            ui->tempsTour->setText(QString(""));
+            ui->tempsTour->hide();
+            seance->setDureeTempsTour(0);
+        }
         /**
          * @todo TODO Initialiser le reste de la page Partie
          */
@@ -272,6 +284,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
             qDebug() << Q_FUNC_INFO << seance->getNbPaniersEquipeJaune();
             ui->lcdNumberPointsEquipeJaune->display(
               seance->getNbPaniersEquipeJaune());
+            ui->labelEquipeEnCours->setText(seance->getNomEquipeRouge());
         }
         else if(equipe == "R")
         {
@@ -279,19 +292,31 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
             qDebug() << Q_FUNC_INFO << seance->getNbPaniersEquipeRouge();
             ui->lcdNumberPointsEquipeRouge->display(
               seance->getNbPaniersEquipeRouge());
+            ui->labelEquipeEnCours->setText(seance->getNomEquipeJaune());
         }
     }
-    else if(numeroPanier == "0")
+
+    else if(numeroPanier == "0" && equipe == "R" && !seance->estFinie())
     {
-        /**
-         * @todo Gérer le tir loupé par une équipe
-         */
+        ui->labelEquipeEnCours->setText("Tir raté pour l'équipe " +
+                                        seance->getNomEquipeRouge() + "!");
     }
-    else if(seance->estFinie())
+    else if(numeroPanier == "0" && equipe == "J" && !seance->estFinie())
     {
-        /**
-         * @todo Gérer la fin de la fin de la partie
-         */
+        ui->labelEquipeEnCours->setText("Tir raté équipe " +
+                                        seance->getNomEquipeJaune() + "!");
+    }
+    else if(seance->estFinie() &&
+            seance->getNbPaniersEquipeJaune() == POINT_POUR_VICTOIRE)
+    {
+        ui->labelEquipeEnCours->setText("Bravo à l'équipe " +
+                                        seance->getNomEquipeJaune() + " !");
+    }
+    else if(seance->estFinie() &&
+            seance->getNbPaniersEquipeRouge() == POINT_POUR_VICTOIRE)
+    {
+        ui->labelEquipeEnCours->setText("Bravo à l'équipe " +
+                                        seance->getNomEquipeRouge() + " !");
     }
 }
 
@@ -325,9 +350,13 @@ void IHM::gererHorlogePartie()
         {
             emit tempsTourExpiree();
         }
-        /**
-         * @todo TODO Gérer le temps restant pour une partie
-         */
+
+        int tempsRestantPartie = heureCourante.minute();
+        if(tempsRestantPartie > 0)
+        {
+            ui->tempsPartie->setText(QString::number(tempsRestantPartie) +
+                                     QString(" m"));
+        }
     }
 }
 
@@ -358,7 +387,7 @@ void IHM::gererChronometrePartie()
     QTime tempsChronometre(0, 0);
     tempsChronometre = tempsChronometre.addMSecs(tempsEcoulePartie.elapsed());
     /**
-     * @todo Gérer le temps d'une partie et d'un tir
+     * @todo TODO Gérer le temps d'une partie et d'un tir
      */
     afficherChronometrePartie(tempsChronometre.toString("mm:ss"));
 }
@@ -422,7 +451,8 @@ void IHM::afficherPageRegles()
 
 void IHM::afficherPageConfiguration()
 {
-    arreterPartie();
+    if(seance != nullptr)
+        arreterPartie();
     afficherFenetre(IHM::PageConfiguration);
 }
 

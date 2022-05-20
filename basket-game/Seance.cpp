@@ -89,6 +89,16 @@ void Seance::setDureeTempsTour(int dureeTempsTour)
     this->dureeTempsTour = dureeTempsTour;
 }
 
+int Seance::getDureeTempsPartie() const
+{
+    return dureeTempsTour;
+}
+
+void Seance::setDureeTempsPartie(int dureeTempsPartie)
+{
+    this->dureeTempsPartie = dureeTempsPartie;
+}
+
 void Seance::marquerUnPointEquipeJaune()
 {
     nbPaniersEquipeJaune = this->nbPaniersEquipeJaune + 1;
