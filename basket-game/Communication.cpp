@@ -173,13 +173,13 @@ void Communication::receptionnerTrame()
 
     // ajoute les données reçues
     trameReception += QString(donnees.data());
-    qDebug() << Q_FUNC_INFO << trameReception;
+    // qDebug() << Q_FUNC_INFO << trameReception;
 
     // vérifie si la trame est valide
     if(trameReception.startsWith(ENTETE_TRAME) &&
        trameReception.endsWith(DELIMITEUR_FIN))
     {
-        qDebug() << Q_FUNC_INFO << trameReception;
+        // qDebug() << Q_FUNC_INFO << trameReception;
         decomposerTrame();
         trameReception.clear();
     }

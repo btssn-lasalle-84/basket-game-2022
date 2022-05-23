@@ -276,7 +276,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
     qDebug() << Q_FUNC_INFO << numeroPanier << equipe;
     ui->lcdNumberPointsEquipeRouge->display(seance->getNbPaniersEquipeRouge());
     ui->lcdNumberPointsEquipeJaune->display(seance->getNbPaniersEquipeJaune());
-    if(numeroPanier != "0" && !seance->estFinie())
+    if(numeroPanier != "0")
     {
         if(equipe == "J")
         {
@@ -296,7 +296,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
         }
     }
 
-    else if(numeroPanier == "0" && equipe == "R" && !seance->estFinie())
+    else if(numeroPanier == "0" && equipe == "R")
     {
         ui->labelEquipeEnCours->setText("Tir raté pour l'équipe " +
                                         seance->getNomEquipeRouge() + "!");
@@ -351,7 +351,7 @@ void IHM::gererHorlogePartie()
             emit tempsTourExpiree();
         }
 
-        int tempsRestantPartie = heureCourante.minute();
+        int tempsRestantPartie = seance->getDureeTempsPartie();
         if(tempsRestantPartie > 0)
         {
             ui->tempsPartie->setText(QString::number(tempsRestantPartie) +

@@ -91,7 +91,7 @@ void Seance::setDureeTempsTour(int dureeTempsTour)
 
 int Seance::getDureeTempsPartie() const
 {
-    return dureeTempsTour;
+    return dureeTempsPartie;
 }
 
 void Seance::setDureeTempsPartie(int dureeTempsPartie)

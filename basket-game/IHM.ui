@@ -654,6 +654,9 @@ color: rgb(186, 189, 182);</string>
               </property>
               <item>
                <widget class="QCheckBox" name="tempsParTour">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -690,7 +693,7 @@ color: rgb(186, 189, 182);</string>
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item alignment="Qt::AlignVCenter">
+                <item>
                  <widget class="QSpinBox" name="tempsParTourEnSecondes">
                   <property name="font">
                    <font>
@@ -702,7 +705,7 @@ color: rgb(186, 189, 182);</string>
                   </property>
                  </widget>
                 </item>
-                <item alignment="Qt::AlignVCenter">
+                <item>
                  <widget class="QLabel" name="labelTempsEnSecondes">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -789,8 +792,11 @@ color: rgb(186, 189, 182);</string>
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item alignment="Qt::AlignVCenter">
+                <item>
                  <widget class="QSpinBox" name="tempsParPartieEnMinutes">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
                   <property name="font">
                    <font>
                     <pointsize>22</pointsize>
@@ -801,7 +807,7 @@ color: rgb(186, 189, 182);</string>
                   </property>
                  </widget>
                 </item>
-                <item alignment="Qt::AlignVCenter">
+                <item>
                  <widget class="QLabel" name="labelTempsEnMinutes">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -940,7 +946,7 @@ color: rgb(186, 189, 182);</string>
       </widget>
       <widget class="QWidget" name="pagePartie">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(149, 225, 211);</string>
+        <string notr="true">background-color: rgb(46, 52, 54);</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_11">
         <item>
@@ -1027,10 +1033,7 @@ color: rgb(186, 189, 182);</string>
            </layout>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayoutInfosPartie">
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
+           <layout class="QVBoxLayout" name="verticalLayoutPuissance4">
             <item>
              <layout class="QHBoxLayout" name="horizontalLayoutInfosEquipe">
               <property name="rightMargin">
@@ -1052,6 +1055,9 @@ color: rgb(186, 189, 182);</string>
                   <pointsize>29</pointsize>
                  </font>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(238, 238, 236);</string>
+                </property>
                 <property name="text">
                  <string>Équipe : </string>
                 </property>
@@ -1067,6 +1073,9 @@ color: rgb(186, 189, 182);</string>
                   <pointsize>29</pointsize>
                  </font>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(238, 238, 236);</string>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -1074,6 +1083,13 @@ color: rgb(186, 189, 182);</string>
               </item>
              </layout>
             </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayoutInfosPartie">
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayoutInfosTour">
               <property name="bottomMargin">
@@ -1081,6 +1097,9 @@ color: rgb(186, 189, 182);</string>
               </property>
               <item>
                <widget class="QLabel" name="labelTempsTour">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                   <horstretch>0</horstretch>
@@ -1092,6 +1111,9 @@ color: rgb(186, 189, 182);</string>
                   <pointsize>29</pointsize>
                  </font>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(238, 238, 236);</string>
+                </property>
                 <property name="text">
                  <string>Temps restant du tour : </string>
                 </property>
@@ -1102,6 +1124,9 @@ color: rgb(186, 189, 182);</string>
               </item>
               <item>
                <widget class="QLabel" name="tempsTour">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="font">
                  <font>
                   <pointsize>29</pointsize>
@@ -1121,6 +1146,9 @@ color: rgb(186, 189, 182);</string>
               </property>
               <item>
                <widget class="QLabel" name="labelTempsPartie">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                   <horstretch>0</horstretch>
@@ -1132,6 +1160,9 @@ color: rgb(186, 189, 182);</string>
                   <pointsize>29</pointsize>
                  </font>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(238, 238, 236);</string>
+                </property>
                 <property name="text">
                  <string>Temps restant de la partie : </string>
                 </property>
@@ -1142,6 +1173,9 @@ color: rgb(186, 189, 182);</string>
               </item>
               <item>
                <widget class="QLabel" name="tempsPartie">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="font">
                  <font>
                   <pointsize>29</pointsize>
@@ -1215,34 +1249,6 @@ color: rgb(186, 189, 182);</string>
                 </property>
                 <property name="digitCount">
                  <number>2</number>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayoutPuissance4">
-              <item alignment="Qt::AlignHCenter">
-               <widget class="QLabel" name="puissance4">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>20</pointsize>
-                 </font>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="pixmap">
-                 <pixmap resource="ressources.qrc">:/puissance4.png</pixmap>
-                </property>
-                <property name="scaledContents">
-                 <bool>false</bool>
                 </property>
                </widget>
               </item>
@@ -1334,6 +1340,9 @@ color: rgb(186, 189, 182);</string>
                 <pointsize>40</pointsize>
                </font>
               </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgb(238, 238, 236);</string>
+              </property>
               <property name="text">
                <string>Retour</string>
               </property>
@@ -1359,6 +1368,9 @@ color: rgb(186, 189, 182);</string>
                 <pointsize>30</pointsize>
                </font>
               </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgb(238, 238, 236);</string>
+              </property>
               <property name="text">
                <string>Menu principal</string>
               </property>
@@ -1383,6 +1395,9 @@ color: rgb(186, 189, 182);</string>
                <font>
                 <pointsize>35</pointsize>
                </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgb(238, 238, 236);</string>
               </property>
               <property name="text">
                <string>Démarrer</string>
