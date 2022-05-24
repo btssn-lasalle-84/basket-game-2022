@@ -4,16 +4,38 @@
 
 ## Fonctionnalités
 
-- [ ] Paramétrer une partie ainsi que le nom des équipes
+- Démarrer une nouvelle partie
+- Gérer le déroulement d'une partie
+- Afficher le score d'une partie
+- Afficher le vainqueur d'une partie
+- Afficher les règles
+- Communiquer avec le module de détection
+
+## TODO
+
 - [ ] Paramétrer le temps de la partie et des tours
-- [ ] Communiquer avec le module de détection
 - [ ] Afficher le puissance 4
 - [ ] Afficher les jetons en fonction des tirs
 - [ ] Option : Effectuer des sons par rapport à un tir réussi ou non
 
 ## Historique des versions
 
+- Version 0.2 : 24/05/2022
 - Version 0.1 : 02/04/2022
+
+## Captures d'écran
+
+La page d'accueil :
+
+![](images/capture-ecran-accueil-v0.2.png)
+
+La page de configuration d'une nouvelle partie :
+
+![](images/capture-ecran-configuration-v0.2.png)
+
+## Base de données
+
+![](images/schema-bdd-basket-game-v0.2.png)
 
 ## Auteur
 

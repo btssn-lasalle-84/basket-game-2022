@@ -1,0 +1,11 @@
+class Club
+!!!137879.cpp!!!	operator =(in c : Club) : Club
+    if(this != &c)
+    {
+        nomClub = c.nomClub;
+    }
+    return *this;
+!!!138007.cpp!!!	getNomClub() : QString
+    return nomClub;
+!!!138135.cpp!!!	setNomClub(in nomClub : QString) : void
+    this->nomClub = nomClub;

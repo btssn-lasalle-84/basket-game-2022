@@ -1,0 +1,39 @@
+class Equipe
+!!!140695.cpp!!!	Equipe(in nomEquipe : QString = "", in nbrPointEquipeRouge : int = 0, in nbrPointEquipeJaune : int = 0)
+    qDebug() << Q_FUNC_INFO << this;
+!!!140823.cpp!!!	~Equipe()
+    for(int i = 0; i < joueurs.size(); ++i)
+        delete joueurs[i];
+    qDebug() << Q_FUNC_INFO << this;
+!!!140951.cpp!!!	operator =(in e : Equipe) : Equipe
+    if(this != &e)
+    {
+        nomEquipe           = e.nomEquipe;
+        nbrPointEquipeRouge = e.nbrPointEquipeRouge;
+        nbrPointEquipeJaune = e.nbrPointEquipeJaune;
+    }
+    return *this;
+!!!141079.cpp!!!	getNomEquipe() : QString
+    return nomEquipe;
+!!!141207.cpp!!!	setNomEquipe(in nomEquipe : QString) : void
+    this->nomEquipe = nomEquipe;
+    qDebug() << Q_FUNC_INFO << nomEquipe;
+!!!141335.cpp!!!	getNbrPointEquipeRouge() : int
+    return nbrPointEquipeRouge;
+!!!141463.cpp!!!	setNbrPointEquipeRouge(in nbrPointEquipeRouge : int) : void
+    this->nbrPointEquipeRouge = getNbrPointEquipeRouge();
+!!!141591.cpp!!!	getNbrPointEquipeJaune() : int
+    return nbrPointEquipeJaune;
+!!!141719.cpp!!!	setNbrPointEquipeJaune(in nbrPointEquipeJaune : int) : void
+    this->nbrPointEquipeJaune = nbrPointEquipeJaune;
+!!!141847.cpp!!!	supprimerJoueurs() : void
+    for(int i = 0; i < joueurs.size(); ++i)
+        delete joueurs[i];
+    joueurs.clear();
+!!!141975.cpp!!!	ajouterJoueur(in idJoueur : QString) : void
+    qDebug() << Q_FUNC_INFO << "idJoueur" << idJoueur;
+    /**
+     * @todo récupérer le joueur dans la base de données, instancier un nouveau
+     * Joueur et l'ajouter au conteneur
+     */
+    joueurs.push_back(new Joueur);

@@ -1,7 +1,7 @@
 format 224
 "version 0.1" // version 0.1
-  revision 1
-  modified_by 23 "tv"
+  revision 3
+  modified_by 2 "btssn2"
   // class settings
   
   classdiagramsettings member_max_width 0 end
@@ -86,7 +86,7 @@ ${inlines}
       
     end
 
-    usecase 128151 "Gérer le deroulement d'une séance"
+    usecase 128151 "Crée une nouvelle partie"
       
       usecasediagramsettings end
       
@@ -172,7 +172,7 @@ ${inlines}
        end
     end
 
-    usecase 128535 "Produire des sons"
+    usecase 128535 "Configuer une partie"
       
       usecasediagramsettings end
       
@@ -196,7 +196,7 @@ ${inlines}
       simplerelation 128279
 	-_->
 	  stereotype "extend"
-	  on usecase_ref 128151 // Gérer le deroulement d'une séance
+	  on usecase_ref 128151 // Crée une nouvelle partie
       end
     end
 
@@ -221,6 +221,78 @@ ${inlines}
       
       activitydiagramsettings
        end
+    end
+
+    sequencediagram 128002 "Créer une nouvelle partie"
+      sequencediagramsettings end
+      overlapping_bars size A0
+    end
+
+    sequencediagram 134530 "Visualiser les règles"
+      sequencediagramsettings end
+      overlapping_bars size A0
+    end
+
+    usecase 128002 "Démarrer une partie"
+      
+      usecasediagramsettings end
+      
+      sequencediagramsettings end
+      
+      collaborationdiagramsettings end
+      
+      classdiagramsettings member_max_width 0 end
+      
+      classcompositediagramsettings end
+      
+      objectdiagramsettings end
+      
+      objectcompositediagramsettings end
+      
+      statediagramsettings
+       end
+      
+      activitydiagramsettings
+       end
+      simplerelation 128002
+	-_->
+	  stereotype "extend"
+	  on usecase_ref 128151 // Crée une nouvelle partie
+      end
+    end
+
+    usecase 128130 "Gérer le déroulement de la partie"
+      
+      usecasediagramsettings end
+      
+      sequencediagramsettings end
+      
+      collaborationdiagramsettings end
+      
+      classdiagramsettings member_max_width 0 end
+      
+      classcompositediagramsettings end
+      
+      objectdiagramsettings end
+      
+      objectcompositediagramsettings end
+      
+      statediagramsettings
+       end
+      
+      activitydiagramsettings
+       end
+      simplerelation 128130
+	-_->
+	  stereotype "include"
+	  on usecase_ref 128002 // Démarrer une partie
+      end
+
+      simplerelation 128258
+	-_->
+	  stereotype "include"
+	  on usecase_ref 128663 // Visualiser le plateau de jeu et les informations
+      end
     end
   end
 end

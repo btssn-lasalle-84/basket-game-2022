@@ -1,23 +1,31 @@
 QT       += core gui widgets sql
-
+QT       += bluetooth
 CONFIG += c++11
 
 DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    BaseDeDonnees.cpp \
+    Club.cpp \
+    Communication.cpp \
+    Equipe.cpp \
+    IHM.cpp \
     Joueur.cpp \
-    basededonnees.cpp \
-    main.cpp \
-    ihm.cpp
+    Seance.cpp \
+    main.cpp
 
 HEADERS += \
+    BaseDeDonnees.h \
+    Club.h \
+    Communication.h \
+    Equipe.h \
+    IHM.h \
     Joueur.h \
-    basededonnees.h \
-    ihm.h
+    Seance.h
 
 FORMS += \
-    ihm.ui
+    IHM.ui
 
 RESOURCES += \
     ressources.qrc
