@@ -19,12 +19,6 @@
 #define BDD "basket-game.sqlite"
 
 /**
- * @def TEST_IHM
- * @brief Pour le mode test (raccourcis clavier)
- */
-#define TEST_IHM
-
-/**
  * @def PLEIN_ECRAN
  * @brief Pour le mode kiosque de la télévision
  */
@@ -55,16 +49,16 @@ class IHM : public QMainWindow
 
   private:
     Ui::IHM*       ui;  //!< la fenêtre graphique associée à cette classe
-    BaseDeDonnees* bdd; //!< Base de donnes
+    BaseDeDonnees* bdd; //!< base de donnes
     Communication* communication;      //!< pour la communication bluetooth
-    QVector<QStringList> listeEquipes; //!< La liste des équipes
-    QVector<Equipe*>     equipes;      //!< Les deux équipes
-    int                  idEquipeRougeSelectionnee; //!< L'id de l'équipe rouge
-    int                  idEquipeJauneSelectionnee; //!< L'id de l'équipe jaune
-    Seance*              seance;      //!< La séance entre deux équipes
-    QTimer*              timerSeance; //!< Pour gérer les temps restants
-    QTimer*              chronometrePartie;
-    QElapsedTimer        tempsEcoulePartie;
+    QVector<QStringList> listeEquipes; //!< la liste des équipes
+    QVector<Equipe*>     equipes;      //!< les deux équipes
+    int                  idEquipeRougeSelectionnee; //!< l'id de l'équipe rouge
+    int                  idEquipeJauneSelectionnee; //!< l'id de l'équipe jaune
+    Seance*              seance;      //!< la séance entre deux équipes
+    QTimer*              timerSeance; //!< pour gérer les temps restants
+    QTimer*       chronometrePartie;  //!< pour le chronmétrage d'une partie
+    QElapsedTimer tempsEcoulePartie;  //!< pour gérer le temps écoulé
 
     void initialiserRessources();
     void initialiserEquipes();
@@ -117,10 +111,6 @@ class IHM : public QMainWindow
         PRENOM_JOUEUR, //!< le prénom du joueur
         NbChampsEquipe
     };
-
-#ifdef TEST_IHM
-    void fixerRaccourcisClavier();
-#endif
 
   public slots:
     void demarrerNouvellePartie();

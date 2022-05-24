@@ -2,6 +2,18 @@
 #include "Seance.h"
 #include <QDebug>
 
+/**
+ * @file Communication.cpp
+ *
+ * @brief Définition de la classe Communication
+ * @author Guillaume LAMBERT
+ * @version 1.0
+ *
+ */
+
+/**
+ * @brief Constructeur de la classe Communication
+ */
 Communication::Communication(QObject* parent) :
     QObject(parent), socket(nullptr), discoveryAgent(nullptr),
     peripheriqueTrouve(false)
@@ -11,6 +23,9 @@ Communication::Communication(QObject* parent) :
     initialiser();
 }
 
+/**
+ * @brief Destructeur de la classe Communication
+ */
 Communication::~Communication()
 {
     qDebug() << Q_FUNC_INFO;
@@ -230,22 +245,23 @@ bool Communication::estBluetoothPresent() const
  */
 void Communication::decomposerTrame()
 {
-    // $basket;P;{NUMERO};{EQUIPE};\r
-    /* Exemples :
-        Panier n°1 par joueur Rouge
-        $basket;P;1;R;\r
-        Panier n°4 par joueur Jaune
-        $basket;P;4;J;\r
-     */
     QStringList champs =
       trameReception.split(DELIMITEUR_CHAMP, QString::KeepEmptyParts);
-    qDebug() << Q_FUNC_INFO << champs;
-    // "$basket" "P" "4" "J" "\r"
-    //  0        1   2   3   4
+
     if(champs.at(CHAMP_TYPE_TRAME) == TYPE_TRAME_PANIER)
     {
-        qDebug() << Q_FUNC_INFO << champs.at(CHAMP_NUMERO_PANIER)
-                 << champs.at(CHAMP_COULEUR_EQUIPE);
+        /*
+            Format : $basket;P;{NUMERO};{EQUIPE};\r
+            Exemples :
+               Panier n°1 par joueur Rouge
+               $basket;P;1;R;\r
+               Panier n°4 par joueur Jaune
+               $basket;P;4;J;\r
+            Décomposition :
+                "$basket" "P" "4" "J" "\r"
+                0        1   2   3   4
+        */
+        qDebug() << Q_FUNC_INFO << champs;
         emit nouveauPanier(champs.at(CHAMP_NUMERO_PANIER),
                            champs.at(CHAMP_COULEUR_EQUIPE));
     }

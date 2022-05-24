@@ -1,6 +1,15 @@
 #ifndef COMMUNICATION_H
 #define COMMUNICATION_H
 
+/**
+ * @file Communication.h
+ *
+ * @brief Déclaration de la classe Communication
+ * @author Guillaume LAMBERT
+ * @version 1.0
+ *
+ */
+
 #include <QString>
 #include <QtBluetooth>
 
