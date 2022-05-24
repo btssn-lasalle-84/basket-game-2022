@@ -1,48 +1,68 @@
 #ifndef SEANCE_H
 #define SEANCE_H
 
+#include <QObject>
 #include <QTime>
+
+class Equipe;
 
 /**
  * @def POINT_POUR_VICTOIRE
  * @brief Constante des points pour une victoire
-
  */
-#define POINT_POUR_VICTOIRE 4
+#define POINT_POUR_VICTOIRE 5
 
-class Seance
+/**
+ * @def TEMPS_PAR_TOUR_DEFAUT
+ * @brief Le temps pour un tour
+ */
+#define TEMPS_PAR_TOUR_DEFAUT   30 // en s
+#define TEMPS_PAR_PARTIE_DEFAUT 3  // en m
+
+class Seance : public QObject
 {
+    Q_OBJECT
   private:
-    int   numeroManche;
-    int   nbPaniersEquipeA;
-    int   nbPaniersEquipeB;
-    QTime debutTemps;
-    QTime finTemps;
+    int     numeroManche;
+    Equipe* equipeJaune;
+    Equipe* equipeRouge;
+    int     nbPaniersEquipeJaune;
+    int     nbPaniersEquipeRouge;
+    QTime   debutTemps;
+    QTime   finTemps;
+    QTime   debutTempsTour;
+    int     dureeTempsTour;
+    int     dureeTempsPartie;
 
   public:
-    Seance(int   numeroManche     = 0,
-           int   nbPaniersEquipeA = 0,
-           int   nbPaniersEquipeB = 0,
-           QTime debutTemps       = QTime(),
-           QTime finTemps         = QTime());
-    Seance(const Seance&);
+    Seance(Equipe*  equipeJaune = nullptr,
+           Equipe*  equipeRouge = nullptr,
+           QObject* parent      = nullptr);
     ~Seance();
-    Seance& operator=(const Seance&);
 
-    int   getNumeroManche() const;
-    void  setNumeroManche(const int&);
-    int   getNbPaniersEquipeA() const;
-    void  setNbPaniersEquipeA(const int&);
-    int   getNbPaniersEquipeB() const;
-    void  setNbPaniersEquipeB(const int&);
-    QTime getDebutTemps() const;
-    void  setDebutTemps(const QTime&);
-    QTime getFinTemps() const;
-    void  setFinTemps(const QTime&);
-    void  marquerUnPointEquipeJaune();
-    void  marquerUnPointEquipeRouge();
-
-    bool estFinie();
+    int     getNumeroManche() const;
+    void    setNumeroManche(const int&);
+    int     getNbPaniersEquipeJaune() const;
+    void    setNbPaniersEquipeJaune(const int&);
+    int     getNbPaniersEquipeRouge() const;
+    void    setNbPaniersEquipeRouge(const int&);
+    QTime   getDebutTemps() const;
+    void    setDebutTemps(const QTime&);
+    QTime   getFinTemps() const;
+    void    setFinTemps(const QTime&);
+    QTime   getDebutTempsTour() const;
+    void    setDebutTempsTour(const QTime&);
+    int     getDureeTempsTour() const;
+    void    setDureeTempsTour(int);
+    int     getDureeTempsPartie() const;
+    void    setDureeTempsPartie(int);
+    void    marquerUnPointEquipeJaune();
+    void    marquerUnPointEquipeRouge();
+    QString getNomEquipeJaune() const;
+    void    setNomEquipeJaune(const QString&);
+    QString getNomEquipeRouge() const;
+    void    setNomEquipeRouge(const QString&);
+    bool    estFinie();
 };
 
 #endif // SEANCE_H

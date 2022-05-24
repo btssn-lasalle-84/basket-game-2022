@@ -7,8 +7,13 @@ class IHM
     fixerRaccourcisClavier();
 #endif
 
+    initialiserRessources();
+    initialiserEquipes();
     connecterSignalSlot();
 
+    communication->rechercher();
+
+    ui->boutonDemarrerPageConfiguration->setEnabled(false);
     afficherFenetre(IHM::PagePrincipale);
 
 #ifdef PLEIN_ECRAN
@@ -17,44 +22,164 @@ class IHM
 #endif
 !!!129687.cpp!!!	~IHM()
     delete ui;
+    communication->deconnecter();
+    BaseDeDonnees::detruireInstance();
+    for(int i = 0; i < equipes.size(); ++i)
+        delete equipes[i];
     qDebug() << Q_FUNC_INFO;
+!!!155287.cpp!!!	initialiserRessources() : void
+    bdd = BaseDeDonnees::getInstance();
+    bdd->ouvrir(BDD);
+
+    communication = new Communication(this);
+
+    timerSeance = new QTimer(this);
+!!!155415.cpp!!!	initialiserEquipes() : void
+    // crée les deux équipes
+    equipes.push_back(new Equipe);
+    equipes.push_back(new Equipe);
 !!!129815.cpp!!!	connecterSignalSlot() : void
     // PagePrincipale
-    connect(ui->nouvellePartieBouton,
+    connect(ui->boutonNouvellePartiePagePrincipale,
             SIGNAL(clicked(bool)),
             this,
-            SLOT(afficherPageConfiguration()));
-    connect(ui->reglesBouton,
+            SLOT(demarrerNouvellePartie()));
+    connect(ui->boutonReglesPagePrincipale,
             SIGNAL(clicked(bool)),
             this,
             SLOT(afficherPageRegles()));
-    connect(this->ui->quitterBouton,
+    connect(ui->boutonQuitterPagePrincipale,
             SIGNAL(clicked(bool)),
             this,
             SLOT(quitter()));
     // PageRegles
-    connect(ui->retourReglesBouton,
+    connect(ui->boutonRetourPageRegles,
             SIGNAL(clicked(bool)),
             this,
             SLOT(afficherPagePrincipale()));
     // PageConfiguration
-    connect(ui->retourConfigurationBouton,
+    connect(ui->boutonRetourPageConfiguration,
             SIGNAL(clicked(bool)),
             this,
             SLOT(afficherPagePrincipale()));
-    connect(ui->continuerBouton,
+    connect(ui->boutonDemarrerPageConfiguration,
             SIGNAL(clicked(bool)),
             this,
-            SLOT(afficherPagePartie()));
+            SLOT(validerDemarragePartie()));
+    connect(ui->listeEquipesRouges,
+            SIGNAL(currentIndexChanged(int)),
+            this,
+            SLOT(selectionnerEquipeRouge(int)));
+    connect(ui->listeEquipesJaunes,
+            SIGNAL(currentIndexChanged(int)),
+            this,
+            SLOT(selectionnerEquipeJaune(int)));
+    connect(ui->lineEditNomEquipeRouge,
+            SIGNAL(editingFinished()),
+            this,
+            SLOT(saisirNouvelleEquipeRouge()));
+    connect(ui->lineEditNomEquipeJaune,
+            SIGNAL(editingFinished()),
+            this,
+            SLOT(saisirNouvelleEquipeJaune()));
+    connect(ui->tempsParTourEnSecondes,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(saisirTempsParTourEnSecondes(int)));
+    connect(ui->tempsParPartieEnMinutes,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(saisirTempsParPartieEnMinutes(int)));
     // PagePartie
-    connect(ui->retourPartieBouton1,
+    connect(ui->boutonRetourPagePartie,
             SIGNAL(clicked(bool)),
             this,
             SLOT(afficherPageConfiguration()));
-    connect(ui->retourPartieBouton2,
+    connect(ui->boutonRetourPrincipalePagePartie,
             SIGNAL(clicked(bool)),
             this,
             SLOT(afficherPagePrincipale()));
+    connect(ui->boutonGererPartiePagePartie,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(gererPartie()));
+    connect(timerSeance, SIGNAL(timeout()), this, SLOT(gererHorlogePartie()));
+    // Ajout d'un point pour une équipe
+    connect(communication,
+            SIGNAL(nouveauPanier(QString, QString)),
+            this,
+            SLOT(ajouterPanier(QString, QString)));
+    // Communication
+    connect(communication,
+            SIGNAL(peripheriqueDetecte(QString, QString)),
+            this,
+            SLOT(gererPeripherique(QString, QString)));
+    connect(communication,
+            SIGNAL(peripheriqueConnecte()),
+            this,
+            SLOT(afficherEtatConnexion()));
+    connect(communication,
+            SIGNAL(peripheriqueDeconnecte()),
+            this,
+            SLOT(afficherEtatDeconnexion()));
+!!!142103.cpp!!!	recupererEquipes() : void
+    QString requete =
+      "SELECT Equipe.idEquipe, Equipe.idClub, Equipe.idJoueur, "
+      "Equipe.nomEquipe, Club.nom AS nomClub, Joueur.pseudo, Joueur.nom, "
+      "Joueur.prenom FROM Equipe "
+      "INNER JOIN Club ON Equipe.idClub=Club.idClub "
+      "INNER JOIN Joueur ON Equipe.idJoueur=Joueur.idJoueur;";
+
+    listeEquipes.clear();
+    bool retour = bdd->recuperer(requete, listeEquipes);
+    qDebug() << Q_FUNC_INFO << listeEquipes;
+    if(retour)
+    {
+        ui->listeEquipesRouges->clear();
+        ui->listeEquipesJaunes->clear();
+        ui->listeEquipesRouges->addItem("");
+        ui->listeEquipesJaunes->addItem("");
+        for(int i = 0; i < listeEquipes.size(); ++i)
+            afficherListeEquipe(listeEquipes.at(i));
+    }
+!!!142231.cpp!!!	ajouterJoueurs(in idEquipe : QString, in couleurEquipe : int) : void
+    if(idEquipe.isEmpty())
+        return;
+    qDebug() << Q_FUNC_INFO << idEquipe;
+    QString requete = "SELECT Equipe.idEquipe, Equipe.idClub, Equipe.idJoueur, "
+                      "Equipe.nomEquipe, Club.nom AS nomClub, Joueur.pseudo, "
+                      "Joueur.nom, Joueur.prenom FROM Equipe "
+                      "INNER JOIN Club ON Equipe.idClub=Club.idClub "
+                      "INNER JOIN Joueur ON Equipe.idJoueur=Joueur.idJoueur "
+                      "WHERE Equipe.idEquipe = '" +
+                      idEquipe + "';";
+
+    QVector<QStringList> listeJoueurs;
+    bool                 retour = bdd->recuperer(requete, listeJoueurs);
+    qDebug() << Q_FUNC_INFO << listeJoueurs;
+    if(retour)
+    {
+        equipes[couleurEquipe]->supprimerJoueurs();
+        for(int i = 0; i < listeJoueurs.size(); ++i)
+            equipes[couleurEquipe]->ajouterJoueur(listeJoueurs.at(i).at(0));
+    }
+!!!142359.cpp!!!	afficherListeEquipe(in equipe : QStringList) : void
+    if(!equipe.at(ChampsEquipe::NOM_EQUIPE).isEmpty())
+    {
+        ui->listeEquipesRouges->addItem(equipe.at(ChampsEquipe::NOM_EQUIPE));
+        ui->listeEquipesJaunes->addItem(equipe.at(ChampsEquipe::NOM_EQUIPE));
+    }
+    else if(!equipe.at(ChampsEquipe::PSEUDO_JOUEUR).isEmpty())
+    {
+        ui->listeEquipesRouges->addItem(equipe.at(ChampsEquipe::PSEUDO_JOUEUR));
+        ui->listeEquipesJaunes->addItem(equipe.at(ChampsEquipe::PSEUDO_JOUEUR));
+    }
+!!!155543.cpp!!!	initialiserPartie() : void
+    seance->setNbPaniersEquipeJaune(0);
+    seance->setNbPaniersEquipeRouge(0);
+    seance->setDebutTemps(QTime::currentTime());
+    seance->setDebutTempsTour(QTime::currentTime());
+    timerSeance->start(500);
 !!!129943.cpp!!!	fixerRaccourcisClavier() : void
     // Ctrl-Q pour quitter
     QAction* quitter = new QAction(this);
@@ -79,6 +204,257 @@ class IHM
             SIGNAL(triggered()),
             this,
             SLOT(afficherFenetrePrecedente()));
+!!!142487.cpp!!!	demarrerNouvellePartie() : void
+    qDebug() << Q_FUNC_INFO;
+    recupererEquipes();
+    /**
+     * @todo TODO Récupérer les temps dans la base de données
+     */
+    ui->tempsParTourEnSecondes->setValue(TEMPS_PAR_TOUR_DEFAUT);
+    /**
+     * @todo TODO Fixer le temps par défaut pour une partie
+     */
+    afficherPageConfiguration();
+!!!142615.cpp!!!	selectionnerEquipeRouge(in numeroEquipe : int) : void
+    Q_UNUSED(numeroEquipe)
+    // Aucune équipe sélecionnée ?
+    if(ui->listeEquipesRouges->currentIndex() <= 0)
+    {
+        equipes[CouleurEquipe::Rouge]->setNomEquipe("");
+        equipes[CouleurEquipe::Rouge]->supprimerJoueurs();
+        idEquipeRougeSelectionnee = -1;
+        ui->lineEditNomEquipeRouge->setEnabled(true);
+        ui->boutonDemarrerPageConfiguration->setEnabled(false);
+        return;
+    }
+    qDebug() << Q_FUNC_INFO << ui->listeEquipesRouges->currentIndex() - 1
+             << listeEquipes.at(ui->listeEquipesRouges->currentIndex() - 1);
+    idEquipeRougeSelectionnee = ui->listeEquipesRouges->currentIndex() - 1;
+    equipes[CouleurEquipe::Rouge]->setNomEquipe(
+      listeEquipes.at(ui->listeEquipesRouges->currentIndex() - 1)
+        .at(ChampsEquipe::NOM_EQUIPE));
+    equipes[CouleurEquipe::Rouge]->setNbrPointEquipeRouge(0);
+    equipes[CouleurEquipe::Rouge]->setNbrPointEquipeJaune(0);
+    ajouterJoueurs(listeEquipes.at(ui->listeEquipesRouges->currentIndex() - 1)
+                     .at(ChampsEquipe::ID_EQUIPE),
+                   (int)Rouge);
+    ui->lineEditNomEquipeRouge->setText("");
+    ui->lineEditNomEquipeRouge->setEnabled(false);
+    if(idEquipeRougeSelectionnee != -1 && idEquipeJauneSelectionnee != -1)
+    {
+        ui->boutonDemarrerPageConfiguration->setEnabled(true);
+    }
+!!!142743.cpp!!!	selectionnerEquipeJaune(in numeroEquipe : int) : void
+    Q_UNUSED(numeroEquipe)
+    // Aucune équipe sélecionnée ?
+    if(ui->listeEquipesJaunes->currentIndex() <= 0)
+    {
+        equipes[CouleurEquipe::Jaune]->setNomEquipe("");
+        equipes[CouleurEquipe::Jaune]->supprimerJoueurs();
+        idEquipeJauneSelectionnee = -1;
+        ui->lineEditNomEquipeJaune->setEnabled(true);
+        ui->boutonDemarrerPageConfiguration->setEnabled(false);
+        return;
+    }
+    qDebug() << Q_FUNC_INFO << ui->listeEquipesJaunes->currentIndex() - 1
+             << listeEquipes.at(ui->listeEquipesJaunes->currentIndex() - 1);
+    idEquipeJauneSelectionnee = ui->listeEquipesJaunes->currentIndex() - 1;
+    equipes[CouleurEquipe::Jaune]->setNomEquipe(
+      listeEquipes.at(ui->listeEquipesJaunes->currentIndex() - 1)
+        .at(ChampsEquipe::NOM_EQUIPE));
+    equipes[CouleurEquipe::Rouge]->setNbrPointEquipeRouge(0);
+    equipes[CouleurEquipe::Rouge]->setNbrPointEquipeJaune(0);
+    ajouterJoueurs(listeEquipes.at(ui->listeEquipesJaunes->currentIndex() - 1)
+                     .at(ChampsEquipe::ID_EQUIPE),
+                   (int)Jaune);
+    ui->lineEditNomEquipeJaune->setText("");
+    ui->lineEditNomEquipeJaune->setEnabled(false);
+    if(idEquipeRougeSelectionnee != -1 && idEquipeJauneSelectionnee != -1)
+    {
+        ui->boutonDemarrerPageConfiguration->setEnabled(true);
+    }
+!!!142871.cpp!!!	saisirNouvelleEquipeRouge() : void
+    qDebug() << Q_FUNC_INFO << ui->lineEditNomEquipeRouge->text();
+    /**
+     * @todo TODO insérer la nouvelle équipe dans la base de données et dans la
+     * liste
+     */
+!!!142999.cpp!!!	saisirNouvelleEquipeJaune() : void
+    qDebug() << Q_FUNC_INFO << ui->lineEditNomEquipeJaune->text();
+    /**
+     * @todo TODO insérer la nouvelle équipe dans la base de données et dans la
+     * liste
+     */
+!!!143127.cpp!!!	saisirTempsParTourEnSecondes(in tempsParTourEnSecondes : int) : void
+    qDebug() << Q_FUNC_INFO << tempsParTourEnSecondes;
+    if(tempsParTourEnSecondes != 0)
+    {
+        /**
+         * @todo  TODO modifier les paramètres dans la base de données
+         */
+        ui->tempsParTour->setChecked(true);
+    }
+    else
+        ui->tempsParTour->setChecked(false);
+!!!143255.cpp!!!	saisirTempsParPartieEnMinutes(in tempsParPartieEnMinutes : int) : void
+    qDebug() << Q_FUNC_INFO << tempsParPartieEnMinutes;
+    if(tempsParPartieEnMinutes != 0)
+    {
+        /**
+         * @todo TODO modifier les paramètres dans la base de données
+         */
+        ui->tempsParPartie->setChecked(true);
+    }
+    else
+        ui->tempsParPartie->setChecked(false);
+!!!143383.cpp!!!	validerDemarragePartie() : void
+    if(idEquipeRougeSelectionnee != -1 && idEquipeJauneSelectionnee != -1)
+    {
+        qDebug() << Q_FUNC_INFO << equipes[CouleurEquipe::Rouge]->getNomEquipe()
+                 << equipes[CouleurEquipe::Jaune]->getNomEquipe();
+        // séance déjà en cours ?!
+        if(seance != nullptr)
+        {
+            delete seance;
+            seance = nullptr;
+        }
+        // Il faut instancier une nouvelle séance
+        seance = new Seance(equipes[CouleurEquipe::Jaune],
+                            equipes[CouleurEquipe::Rouge],
+                            this);
+        ui->nomEquipeRouge_2->setText(
+          equipes[CouleurEquipe::Rouge]->getNomEquipe());
+        ui->nomEquipeJaune_2->setText(
+          equipes[CouleurEquipe::Jaune]->getNomEquipe());
+        ui->labelEquipeEnCours->setText(
+          equipes[CouleurEquipe::Rouge]->getNomEquipe());
+        qDebug() << Q_FUNC_INFO << "tempsParTour"
+                 << ui->tempsParTour->checkState();
+        qDebug() << Q_FUNC_INFO << "tempsParTourEnSecondes"
+                 << ui->tempsParTourEnSecondes->value();
+        if(ui->tempsParTour->checkState() == Qt::Checked)
+        {
+            ui->tempsTour->setText(
+              QString::number(ui->tempsParTourEnSecondes->value()) +
+              QString(" s"));
+            seance->setDureeTempsTour(ui->tempsParTourEnSecondes->value());
+        }
+        else
+        {
+            ui->labelTempsTour->hide();
+            ui->tempsTour->setText(QString(""));
+            ui->tempsTour->hide();
+            seance->setDureeTempsTour(0);
+        }
+        /**
+         * @todo TODO Initialiser le reste de la page Partie
+         */
+        qDebug() << Q_FUNC_INFO << "tempsParPartieEnMinutes"
+                 << ui->tempsParPartieEnMinutes->value();
+        // ui->tempsPartie->setText("");
+
+        // Il faut être connecté
+        if(communication->estConnecte())
+            ui->boutonGererPartiePagePartie->setEnabled(true);
+        else
+            ui->boutonGererPartiePagePartie->setEnabled(false);
+        ui->messageVictoireEquipe->hide();
+        afficherPagePartie();
+    }
+!!!143511.cpp!!!	gererPartie() : void
+    qDebug() << Q_FUNC_INFO;
+    communication->envoyer("$basket;STT;\r");
+    ui->boutonGererPartiePagePartie->setEnabled(false);
+    initialiserPartie();
+    demarrerChronometrePartie();
+!!!155671.cpp!!!	ajouterPanier(in numeroPanier : QString, in equipe : QString) : void
+    qDebug() << Q_FUNC_INFO << numeroPanier << equipe;
+    ui->lcdNumberPointsEquipeRouge->display(seance->getNbPaniersEquipeRouge());
+    ui->lcdNumberPointsEquipeJaune->display(seance->getNbPaniersEquipeJaune());
+    if(numeroPanier != "0" && !seance->estFinie())
+    {
+        if(equipe == "J")
+        {
+            seance->marquerUnPointEquipeJaune();
+            qDebug() << Q_FUNC_INFO << seance->getNbPaniersEquipeJaune();
+            ui->lcdNumberPointsEquipeJaune->display(
+              seance->getNbPaniersEquipeJaune());
+        }
+        else if(equipe == "R")
+        {
+            seance->marquerUnPointEquipeRouge();
+            qDebug() << Q_FUNC_INFO << seance->getNbPaniersEquipeRouge();
+            ui->lcdNumberPointsEquipeRouge->display(
+              seance->getNbPaniersEquipeRouge());
+        }
+    }
+    else if(numeroPanier == "0")
+    {
+        /**
+         * @todo Gérer le tir loupé par une équipe
+         */
+    }
+    else if(seance->estFinie())
+    {
+        /**
+         * @todo Gérer la fin de la fin de la partie
+         */
+    }
+!!!143639.cpp!!!	arreterPartie() : void
+    qDebug() << Q_FUNC_INFO;
+    if(communication != nullptr)
+        communication->envoyer("$basket;STP;\r");
+    ui->boutonGererPartiePagePartie->setEnabled(true);
+    if(seance != nullptr)
+        seance->setFinTemps(QTime::currentTime());
+    if(timerSeance != nullptr && timerSeance->isActive())
+        timerSeance->stop();
+    arreterChronometrePartie();
+!!!143767.cpp!!!	gererHorlogePartie() : void
+    // qDebug() << Q_FUNC_INFO;
+    if(seance != nullptr && !seance->estFinie())
+    {
+        QTime heureCourante = QTime::currentTime();
+        int   tempsRestantTour =
+          heureCourante.secsTo(seance->getDebutTempsTour());
+        if(tempsRestantTour > 0)
+        {
+            ui->tempsTour->setText(QString::number(tempsRestantTour) +
+                                   QString(" s"));
+        }
+        else
+        {
+            emit tempsTourExpiree();
+        }
+        /**
+         * @todo TODO Gérer le temps restant pour une partie
+         */
+    }
+!!!143895.cpp!!!	demarrerChronometrePartie() : void
+    if(chronometrePartie == nullptr)
+    {
+        chronometrePartie = new QTimer(this);
+        connect(chronometrePartie,
+                SIGNAL(timeout()),
+                this,
+                SLOT(gererChronometrePartie()));
+    }
+    if(chronometrePartie->isActive())
+        arreterChronometrePartie();
+    chronometrePartie->start(500);
+    tempsEcoulePartie.start();
+!!!144023.cpp!!!	arreterChronometrePartie() : void
+    if(chronometrePartie != nullptr && chronometrePartie->isActive())
+        chronometrePartie->stop();
+!!!155799.cpp!!!	gererChronometrePartie() : void
+    QTime tempsChronometre(0, 0);
+    tempsChronometre = tempsChronometre.addMSecs(tempsEcoulePartie.elapsed());
+    /**
+     * @todo Gérer le temps d'une partie et d'un tir
+     */
+    afficherChronometrePartie(tempsChronometre.toString("mm:ss"));
+!!!144151.cpp!!!	afficherChronometrePartie(in temps : QString) : void
+    ui->labelDuree->setText(temps);
 !!!130071.cpp!!!	afficherFenetre(in fenetre : IHM::Fenetre) : void
     qDebug() << Q_FUNC_INFO << "fenetre" << fenetre;
     ui->fenetres->setCurrentIndex(fenetre);
@@ -93,13 +469,24 @@ class IHM
     int fenetreSuivante = (fenetreCourante + 1) % int(IHM::NbFenetres);
     afficherFenetre(IHM::Fenetre(fenetreSuivante));
 !!!130455.cpp!!!	afficherPagePrincipale() : void
+    arreterPartie();
     afficherFenetre(IHM::PagePrincipale);
 !!!130583.cpp!!!	afficherPageRegles() : void
     afficherFenetre(IHM::PageRegles);
 !!!130711.cpp!!!	afficherPageConfiguration() : void
+    arreterPartie();
     afficherFenetre(IHM::PageConfiguration);
 !!!130839.cpp!!!	afficherPagePartie() : void
     afficherFenetre(IHM::PagePartie);
 !!!130967.cpp!!!	quitter() : void
     this->close();
+    qDebug() << Q_FUNC_INFO;
+!!!144279.cpp!!!	gererPeripherique(in nom : QString, in adresseMAC : QString) : void
+    qDebug() << Q_FUNC_INFO << nom << adresseMAC;
+    communication->connecter();
+!!!144407.cpp!!!	afficherEtatConnexion() : void
+    qDebug() << Q_FUNC_INFO;
+!!!144535.cpp!!!	afficherEtatDeconnexion() : void
+    qDebug() << Q_FUNC_INFO;
+!!!144663.cpp!!!	terminerRecherche() : void
     qDebug() << Q_FUNC_INFO;

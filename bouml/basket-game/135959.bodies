@@ -1,0 +1,49 @@
+class Seance
+!!!146199.cpp!!!	getNumeroManche() : int
+    return numeroManche;
+!!!146327.cpp!!!	setNumeroManche(in numeroManche : int) : void
+    this->numeroManche = numeroManche;
+!!!146455.cpp!!!	getNbPaniersEquipeJaune() : int
+    return nbPaniersEquipeJaune;
+!!!146583.cpp!!!	setNbPaniersEquipeJaune(in nbPaniersEquipeJaune : int) : void
+    this->nbPaniersEquipeJaune = nbPaniersEquipeJaune;
+!!!146711.cpp!!!	getNbPaniersEquipeRouge() : int
+    return nbPaniersEquipeRouge;
+!!!146839.cpp!!!	setNbPaniersEquipeRouge(in NbPaniersEquipeRouge : int) : void
+    this->nbPaniersEquipeRouge = NbPaniersEquipeRouge;
+!!!146967.cpp!!!	getDebutTemps() : QTime
+    return debutTemps;
+!!!147095.cpp!!!	setDebutTemps(in debutTemps : QTime) : void
+    this->debutTemps = debutTemps;
+!!!147223.cpp!!!	getFinTemps() : QTime
+    return finTemps;
+!!!147351.cpp!!!	setFinTemps(in finTemps : QTime) : void
+    this->finTemps = finTemps;
+!!!147479.cpp!!!	getDebutTempsTour() : QTime
+    return debutTempsTour;
+!!!147607.cpp!!!	setDebutTempsTour(in debutTempsTour : QTime) : void
+    QTime nouveauDebutTempsTour = debutTempsTour.addSecs(dureeTempsTour);
+    this->debutTempsTour        = nouveauDebutTempsTour;
+!!!147735.cpp!!!	getDureeTempsTour() : int
+    return dureeTempsTour;
+!!!147863.cpp!!!	setDureeTempsTour(in dureeTempsTour : int) : void
+    this->dureeTempsTour = dureeTempsTour;
+!!!147991.cpp!!!	marquerUnPointEquipeJaune() : void
+    nbPaniersEquipeJaune = this->nbPaniersEquipeJaune + 1;
+!!!148119.cpp!!!	marquerUnPointEquipeRouge() : void
+    nbPaniersEquipeRouge = this->nbPaniersEquipeRouge + 1;
+!!!148247.cpp!!!	getNomEquipeJaune() : QString
+    return equipeJaune->getNomEquipe();
+!!!148375.cpp!!!	setNomEquipeJaune(in nomEquipeJaune : QString) : void
+    this->equipeJaune->setNomEquipe(nomEquipeJaune);
+!!!148503.cpp!!!	getNomEquipeRouge() : QString
+    return equipeRouge->getNomEquipe();
+!!!148631.cpp!!!	setNomEquipeRouge(in nomEquipeRouge : QString) : void
+    this->equipeRouge->setNomEquipe(nomEquipeRouge);
+!!!148759.cpp!!!	estFinie() : bool
+    if((getNbPaniersEquipeJaune() == POINT_POUR_VICTOIRE) ||
+       (getNbPaniersEquipeRouge() == POINT_POUR_VICTOIRE))
+    {
+        return true;
+    }
+    return false;

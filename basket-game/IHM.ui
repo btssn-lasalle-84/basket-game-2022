@@ -66,7 +66,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="pagePrincipale">
        <property name="maximumSize">
@@ -654,6 +654,9 @@ color: rgb(186, 189, 182);</string>
               </property>
               <item>
                <widget class="QCheckBox" name="tempsParTour">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -690,7 +693,7 @@ color: rgb(186, 189, 182);</string>
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item alignment="Qt::AlignVCenter">
+                <item>
                  <widget class="QSpinBox" name="tempsParTourEnSecondes">
                   <property name="font">
                    <font>
@@ -702,7 +705,7 @@ color: rgb(186, 189, 182);</string>
                   </property>
                  </widget>
                 </item>
-                <item alignment="Qt::AlignVCenter">
+                <item>
                  <widget class="QLabel" name="labelTempsEnSecondes">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -789,8 +792,11 @@ color: rgb(186, 189, 182);</string>
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item alignment="Qt::AlignVCenter">
+                <item>
                  <widget class="QSpinBox" name="tempsParPartieEnMinutes">
+                  <property name="enabled">
+                   <bool>true</bool>
+                  </property>
                   <property name="font">
                    <font>
                     <pointsize>22</pointsize>
@@ -801,7 +807,7 @@ color: rgb(186, 189, 182);</string>
                   </property>
                  </widget>
                 </item>
-                <item alignment="Qt::AlignVCenter">
+                <item>
                  <widget class="QLabel" name="labelTempsEnMinutes">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -940,13 +946,16 @@ color: rgb(186, 189, 182);</string>
       </widget>
       <widget class="QWidget" name="pagePartie">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(149, 225, 211);</string>
+        <string notr="true">background-color: rgb(46, 52, 54);</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_11">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_10">
+         <layout class="QVBoxLayout" name="verticalLayoutPrincipalPartie">
+          <property name="spacing">
+           <number>25</number>
+          </property>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_9">
+           <layout class="QHBoxLayout" name="horizontalLayoutEquipesPartie">
             <item>
              <widget class="QLabel" name="nomEquipeRouge_2">
               <property name="font">
@@ -954,8 +963,36 @@ color: rgb(186, 189, 182);</string>
                 <pointsize>35</pointsize>
                </font>
               </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgb(164, 0, 0);</string>
+              </property>
               <property name="text">
                <string>Nom Equipe Rouge</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_9">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelDuree">
+              <property name="font">
+               <font>
+                <pointsize>25</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string/>
               </property>
              </widget>
             </item>
@@ -985,6 +1022,9 @@ color: rgb(186, 189, 182);</string>
                 <pointsize>35</pointsize>
                </font>
               </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgb(196, 160, 0);</string>
+              </property>
               <property name="text">
                <string>Nom Equipe Jaune</string>
               </property>
@@ -993,97 +1033,160 @@ color: rgb(186, 189, 182);</string>
            </layout>
           </item>
           <item>
-           <widget class="QLabel" name="equipeJoueur">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>29</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Equipe ____</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="tempsPartie">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>29</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Temps restant du tour___</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="tempsTour">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>29</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Temps restant de la partie___</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_14">
+           <layout class="QVBoxLayout" name="verticalLayoutPuissance4">
             <item>
-             <spacer name="verticalSpacer_5">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
+             <layout class="QHBoxLayout" name="horizontalLayoutInfosEquipe">
+              <property name="rightMargin">
+               <number>0</number>
               </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
+              <property name="bottomMargin">
+               <number>0</number>
               </property>
-             </spacer>
+              <item>
+               <widget class="QLabel" name="labelNomEquipeEnCours">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>29</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(238, 238, 236);</string>
+                </property>
+                <property name="text">
+                 <string>Équipe : </string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="labelEquipeEnCours">
+                <property name="font">
+                 <font>
+                  <pointsize>29</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(238, 238, 236);</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
-            <item alignment="Qt::AlignHCenter">
-             <widget class="QLabel" name="puissance4">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayoutInfosPartie">
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayoutInfosTour">
+              <property name="bottomMargin">
+               <number>0</number>
               </property>
-              <property name="font">
-               <font>
-                <pointsize>20</pointsize>
-               </font>
+              <item>
+               <widget class="QLabel" name="labelTempsTour">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>29</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(238, 238, 236);</string>
+                </property>
+                <property name="text">
+                 <string>Temps restant du tour : </string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="tempsTour">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>29</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayoutInosPartie">
+              <property name="bottomMargin">
+               <number>0</number>
               </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="pixmap">
-               <pixmap resource="ressources.qrc">:/puissance4.png</pixmap>
-              </property>
-              <property name="scaledContents">
-               <bool>false</bool>
-              </property>
-             </widget>
+              <item>
+               <widget class="QLabel" name="labelTempsPartie">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>29</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(238, 238, 236);</string>
+                </property>
+                <property name="text">
+                 <string>Temps restant de la partie : </string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="tempsPartie">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>29</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
@@ -1092,8 +1195,109 @@ color: rgb(186, 189, 182);</string>
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::MinimumExpanding</enum>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayoutAffichagePartie">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayoutAffichageEquipeRouge">
+              <item>
+               <widget class="QLabel" name="labelPanierEquipeRouge">
+                <property name="font">
+                 <font>
+                  <pointsize>20</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(204, 0, 0);</string>
+                </property>
+                <property name="text">
+                 <string>Panier Rouge</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLCDNumber" name="lcdNumberPointsEquipeRouge">
+                <property name="font">
+                 <font>
+                  <pointsize>18</pointsize>
+                 </font>
+                </property>
+                <property name="lineWidth">
+                 <number>0</number>
+                </property>
+                <property name="midLineWidth">
+                 <number>0</number>
+                </property>
+                <property name="digitCount">
+                 <number>2</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayoutAffichageEquipeJaune">
+              <item>
+               <widget class="QLabel" name="labelPanierEquipeJaune">
+                <property name="font">
+                 <font>
+                  <pointsize>20</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(143, 89, 2);</string>
+                </property>
+                <property name="text">
+                 <string>Panier Jaune</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLCDNumber" name="lcdNumberPointsEquipeJaune">
+                <property name="frameShape">
+                 <enum>QFrame::Box</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <property name="lineWidth">
+                 <number>0</number>
+                </property>
+                <property name="digitCount">
+                 <number>2</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1109,7 +1313,7 @@ color: rgb(186, 189, 182);</string>
              <bool>false</bool>
             </property>
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -1120,7 +1324,7 @@ color: rgb(186, 189, 182);</string>
              </font>
             </property>
             <property name="text">
-             <string>Bravo à l'équipe ___ !</string>
+             <string/>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -1135,6 +1339,9 @@ color: rgb(186, 189, 182);</string>
                <font>
                 <pointsize>40</pointsize>
                </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgb(238, 238, 236);</string>
               </property>
               <property name="text">
                <string>Retour</string>
@@ -1161,8 +1368,11 @@ color: rgb(186, 189, 182);</string>
                 <pointsize>30</pointsize>
                </font>
               </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgb(238, 238, 236);</string>
+              </property>
               <property name="text">
-               <string>Retour au menu principal</string>
+               <string>Menu principal</string>
               </property>
              </widget>
             </item>
@@ -1185,6 +1395,9 @@ color: rgb(186, 189, 182);</string>
                <font>
                 <pointsize>35</pointsize>
                </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgb(238, 238, 236);</string>
               </property>
               <property name="text">
                <string>Démarrer</string>

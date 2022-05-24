@@ -5,7 +5,7 @@
  * @file ihm.h
  *
  * @brief Déclaration de la classe IHM
- * @author
+ * @author Guillaume LAMBERT
  * @version 1.0
  *
  */
@@ -13,10 +13,10 @@
 #include <QtWidgets>
 
 /**
- * @def TEST_IHM
- * @brief Pour le mode test (raccourcis clavier)
+ * @def BDD
+ * @brief Définit le nom de la base de données
  */
-#define TEST_IHM
+#define BDD "basket-game.sqlite"
 
 /**
  * @def PLEIN_ECRAN
@@ -24,16 +24,15 @@
  */
 #define PLEIN_ECRAN
 
-// QT_BEGIN_NAMESPACE
 namespace Ui
 {
 class IHM;
 }
-// QT_END_NAMESPACE
 
 class BaseDeDonnees;
-class Equipe;
 class Communication;
+class Equipe;
+class Seance;
 
 /**
  * @class IHM
@@ -50,17 +49,24 @@ class IHM : public QMainWindow
 
   private:
     Ui::IHM*       ui;  //!< la fenêtre graphique associée à cette classe
-    BaseDeDonnees* bdd; //!< Base de donnes
+    BaseDeDonnees* bdd; //!< base de donnes
     Communication* communication;      //!< pour la communication bluetooth
-    QVector<QStringList> listeEquipes; //!< La liste des équipes
-    QVector<Equipe*>     equipes;      //!< Les deux équipes
-    int                  idEquipeRougeSelectionnee; //!< L'id de l'équipe rouge
-    int                  idEquipeJauneSelectionnee; //!< L'id de l'équipe jaune
+    QVector<QStringList> listeEquipes; //!< la liste des équipes
+    QVector<Equipe*>     equipes;      //!< les deux équipes
+    int                  idEquipeRougeSelectionnee; //!< l'id de l'équipe rouge
+    int                  idEquipeJauneSelectionnee; //!< l'id de l'équipe jaune
+    Seance*              seance;      //!< la séance entre deux équipes
+    QTimer*              timerSeance; //!< pour gérer les temps restants
+    QTimer*       chronometrePartie;  //!< pour le chronmétrage d'une partie
+    QElapsedTimer tempsEcoulePartie;  //!< pour gérer le temps écoulé
 
+    void initialiserRessources();
+    void initialiserEquipes();
     void connecterSignalSlot();
     void recupererEquipes();
     void ajouterJoueurs(QString idEquipe, int couleurEquipe);
     void afficherListeEquipe(QStringList equipe);
+    void initialiserPartie();
 
     /**
      * @enum Fenetre
@@ -90,8 +96,8 @@ class IHM : public QMainWindow
     };
 
     /**
-     * @enum ChampsTableSalle
-     * @brief Définit les différents champs de la table Salle
+     * @enum ChampsEquipe
+     * @brief Définit les différents champs d'e la table Salle'une équipe
      */
     enum ChampsEquipe
     {
@@ -106,10 +112,6 @@ class IHM : public QMainWindow
         NbChampsEquipe
     };
 
-#ifdef TEST_IHM
-    void fixerRaccourcisClavier();
-#endif
-
   public slots:
     void demarrerNouvellePartie();
     void selectionnerEquipeRouge(int numeroEquipe);
@@ -119,6 +121,14 @@ class IHM : public QMainWindow
     void saisirTempsParTourEnSecondes(int tempsParTourEnSecondes);
     void saisirTempsParPartieEnMinutes(int tempsParPartieEnMinutes);
     void validerDemarragePartie();
+    void gererPartie();
+    void ajouterPanier(QString numeroPanier, QString equipe);
+    void arreterPartie();
+    void gererHorlogePartie();
+    void demarrerChronometrePartie();
+    void arreterChronometrePartie();
+    void gererChronometrePartie();
+    void afficherChronometrePartie(QString temps);
     void afficherFenetre(IHM::Fenetre fenetre);
     void afficherFenetrePrecedente();
     void afficherFenetreSuivante();
@@ -131,6 +141,9 @@ class IHM : public QMainWindow
     void afficherEtatConnexion();
     void afficherEtatDeconnexion();
     void terminerRecherche();
+
+  signals:
+    void tempsTourExpiree();
 };
 
 #endif // IHM_H
