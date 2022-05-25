@@ -16,8 +16,8 @@ class Equipe;
  * @def TEMPS_PAR_TOUR_DEFAUT
  * @brief Le temps pour un tour
  */
-#define TEMPS_PAR_TOUR_DEFAUT   30 // en s
-#define TEMPS_PAR_PARTIE_DEFAUT 3  // en m
+#define TEMPS_PAR_TOUR_DEFAUT   3 // en s
+#define TEMPS_PAR_PARTIE_DEFAUT 3 // en m
 
 class Seance : public QObject
 {
