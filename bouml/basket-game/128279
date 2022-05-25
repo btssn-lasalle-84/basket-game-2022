@@ -1,6 +1,6 @@
 format 224
 "version 0.1" // version 0.1
-  revision 3
+  revision 5
   modified_by 2 "btssn2"
   // class settings
   
@@ -293,6 +293,11 @@ ${inlines}
 	  stereotype "include"
 	  on usecase_ref 128663 // Visualiser le plateau de jeu et les informations
       end
+    end
+
+    sequencediagram 141058 "Jouer une partie"
+      sequencediagramsettings end
+      overlapping_bars size A0
     end
   end
 end

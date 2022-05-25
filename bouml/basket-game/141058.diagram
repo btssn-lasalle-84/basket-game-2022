@@ -1,0 +1,154 @@
+format 224
+
+classinstance 130434 class_ref 129047 // Entraineur
+  name ""   xyz 95 4 2000 life_line_z 2000
+classinstance 130562 class_ref 128407 // IHM
+  name ""   xyz 508 4 2000 life_line_z 2000
+fragment 132098 "alt"
+  xyzwh 487 203 2000 262 116
+end
+textcanvas 132226 "Si le chronometre est null"
+  xyzwh 555 205 2005 166 15
+classinstance 132866 class_ref 128919 // Joueur
+  name ""   xyz 33 4 2000 life_line_z 2000
+classinstance 133378 class_ref 135959 // Seance
+  name ""   xyz 792 5 2000 life_line_z 2000
+fragment 134018 "alt"
+  xyzwh 440 440 2030 345 170
+end
+textcanvas 134274 "Si la séance n'est pas finie
+"
+  xyzwh 499 445 2035 175 33
+fragment 134402 "alt"
+  xyzwh 466 465 2040 291 130
+end
+textcanvas 134530 "Si le numéro de panier n'est pas \"0\""
+  xyzwh 511 476 2045 234 15
+fragment 134658 "alt"
+  xyzwh 487 493 2045 241 92
+end
+textcanvas 134786 "Si l'équipe est \"J\""
+  xyzwh 578 494 2050 114 15
+fragment 136322 "alt"
+  xyzwh 692 637 2020 261 116
+end
+textcanvas 136450 "Si la partie est finie
+"
+  xyzwh 768 645 2025 125 33
+durationcanvas 130690 classinstance_ref 130434 // :Entraineur
+  xyzwh 127 82 2010 11 40
+end
+durationcanvas 130818 classinstance_ref 130562 // :IHM
+  xyzwh 527 86 2010 11 294
+  overlappingdurationcanvas 131074
+    xyzwh 533 97 2020 11 247
+    overlappingdurationcanvas 131330
+      xyzwh 539 135 2030 11 33
+    end
+    overlappingdurationcanvas 131842
+      xyzwh 539 190 2030 11 41
+    end
+    overlappingdurationcanvas 132354
+      xyzwh 539 255 2030 11 25
+    end
+    overlappingdurationcanvas 132610
+      xyzwh 539 288 2030 11 25
+    end
+  end
+end
+durationcanvas 132994 classinstance_ref 132866 // :Joueur
+  xyzwh 54 424 2010 11 42
+end
+durationcanvas 133122 classinstance_ref 130562 // :IHM
+  xyzwh 527 424 2010 11 196
+  overlappingdurationcanvas 133506
+    xyzwh 533 432 2020 11 166
+  end
+end
+durationcanvas 134914 classinstance_ref 133378 // :Seance
+  xyzwh 819 492 2010 11 92
+  overlappingdurationcanvas 135170
+    xyzwh 825 503 2020 11 25
+  end
+  overlappingdurationcanvas 135426
+    xyzwh 825 547 2020 11 30
+  end
+end
+durationcanvas 135682 classinstance_ref 133378 // :Seance
+  xyzwh 819 676 2010 11 40
+  overlappingdurationcanvas 136066
+    xyzwh 825 682 2020 11 25
+  end
+end
+durationcanvas 135810 classinstance_ref 130562 // :IHM
+  xyzwh 527 678 2010 11 44
+end
+msg 130946 synchronous
+  from durationcanvas_ref 130690
+  to durationcanvas_ref 130818
+  yz 86 2015 explicitmsg "clic sur le bouton \"Demarrer\""
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 262 71
+reflexivemsg 131202 synchronous
+  to durationcanvas_ref 131074
+  yz 97 2025 msg operation_ref 143511 // "gererPartie() : void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 546 79
+reflexivemsg 131458 synchronous
+  to durationcanvas_ref 131330
+  yz 135 2035 msg operation_ref 155543 // "initialiserPartie() : void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 549 120
+reflexivemsg 131970 synchronous
+  to durationcanvas_ref 131842
+  yz 190 2035 msg operation_ref 143895 // "demarrerChronometrePartie() : void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 547 176
+reflexivemsg 132482 synchronous
+  to durationcanvas_ref 132354
+  yz 255 2035 msg operation_ref 155799 // "gererChronometrePartie() : void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 547 238
+reflexivemsg 132738 synchronous
+  to durationcanvas_ref 132610
+  yz 288 2035 msg operation_ref 144151 // "afficherChronometrePartie(in temps : QString) : void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 552 271
+msg 133250 synchronous
+  from durationcanvas_ref 132994
+  to durationcanvas_ref 133122
+  yz 424 2015 explicitmsg "marque un panier"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 238 409
+reflexivemsg 133634 synchronous
+  to durationcanvas_ref 133506
+  yz 432 2025 msg operation_ref 155671 // "ajouterPanier(in numeroPanier : QString, in equipe : QString) : void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 540 420
+msg 135042 synchronous
+  from durationcanvas_ref 133506
+  to durationcanvas_ref 134914
+  yz 504 2025 unspecifiedmsg
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+reflexivemsg 135298 synchronous
+  to durationcanvas_ref 135170
+  yz 503 2025 msg operation_ref 147991 // "marquerUnPointEquipeJaune() : void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 833 488
+reflexivemsg 135554 synchronous
+  to durationcanvas_ref 135426
+  yz 547 2025 msg operation_ref 146455 // "getNbPaniersEquipeJaune() : int"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 833 533
+msg 135938 synchronous
+  from durationcanvas_ref 135682
+  to durationcanvas_ref 135810
+  yz 678 2015 explicitmsg "Message aux vainqueurs"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 596 663
+reflexivemsg 136194 synchronous
+  to durationcanvas_ref 136066
+  yz 682 2025 msg operation_ref 148759 // "estFinie() : bool"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 833 667
+end

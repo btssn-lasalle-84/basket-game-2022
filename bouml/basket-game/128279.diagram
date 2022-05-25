@@ -20,9 +20,6 @@ end
 usecasecanvas 128407 usecase_ref 128279 // Dialoguer avec le module de détection
   xyzwh 647 500 3005 64 32 label_xy 432 533
 end
-usecasecanvas 128535 usecase_ref 128407 // Paramétrer une séance
-  xyzwh 354 495 3005 64 32 label_xy 234 528
-end
 usecasecanvas 128663 usecase_ref 128535 // Configuer une partie
   xyzwh 746 402 3005 64 32 label_xy 708 451
 end
@@ -30,7 +27,7 @@ usecasecanvas 128791 usecase_ref 128663 // Visualiser le plateau de jeu et les i
   xyzwh 392 64 3005 64 32 label_xy 126 97
 end
 simplerelationcanvas 128130 simplerelation_ref 128002
-  from ref 128002 z 3006 stereotype "<<extend>>" xyz 469.5 267 3000 to ref 128279
+  from ref 128002 z 3006 stereotype "<<extend>>" xyz 469 267 3000 to ref 128279
 end
 simplerelationcanvas 128386 simplerelation_ref 128130
   from ref 128258 z 3006 stereotype "<<include>>" xyz 631 176 3000 to ref 128002
@@ -46,13 +43,10 @@ simplerelationcanvas 129047 simplerelation_ref 128151
   from ref 128279 z 3006 stereotype "<<include>>" xyz 310 184 3000 to ref 128791
 end
 simplerelationcanvas 129175 simplerelation_ref 128279
-  from ref 128663 z 3006 stereotype "<<extend>>" xyz 503.5 352 3000 to ref 128279
-end
-simplerelationcanvas 129303 simplerelation_ref 128407
-  from ref 128279 z 3006 stereotype "<<include>>" xyz 304 399 3000 to ref 128535
+  from ref 128663 z 3006 stereotype "<<extend>>" xyz 503 352 3000 to ref 128279
 end
 simplerelationcanvas 129431 simplerelation_ref 128535
-  from ref 128279 z 3006 stereotype "<<include>>" xyz 451.5 372 3000 to ref 128407
+  from ref 128279 z 3006 stereotype "<<include>>" xyz 451 372 3000 to ref 128407
 end
 line 129687 ----
   from ref 128151 z 3006 to ref 128279
