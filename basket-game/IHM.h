@@ -67,6 +67,9 @@ class IHM : public QMainWindow
     void ajouterJoueurs(QString idEquipe, int couleurEquipe);
     void afficherListeEquipe(QStringList equipe);
     void initialiserPartie();
+    void gererTempsTour();
+    void gererTempsPartie();
+    void finirPartie();
 
     /**
      * @enum Fenetre
@@ -141,9 +144,10 @@ class IHM : public QMainWindow
     void afficherEtatConnexion();
     void afficherEtatDeconnexion();
     void terminerRecherche();
+    void changerTourEquipe();
 
   signals:
-    void tempsTourExpiree();
+    void tempsTourExpire();
 };
 
 #endif // IHM_H
