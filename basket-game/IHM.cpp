@@ -5,6 +5,7 @@
 #include "Equipe.h"
 #include "Seance.h"
 #include <QDebug>
+#include <QPainter>
 
 /**
  * @file ihm.cpp
@@ -266,9 +267,6 @@ void IHM::validerDemarragePartie()
             seance->setDureeTempsTour(0);
         }
 
-        /**
-         * @todo TODO Initialiser le reste de la page Partie
-         */
         qDebug() << Q_FUNC_INFO << "tempsParPartieEnMinutes"
                  << ui->tempsParPartieEnMinutes->value();
         // ui->tempsPartie->setText("");
@@ -673,6 +671,11 @@ void IHM::connecterSignalSlot()
             SIGNAL(nouveauPanier(QString, QString)),
             this,
             SLOT(ajouterPanier(QString, QString)));
+    // ajout d'un jeton dans le puissance 4
+    connect(communication,
+            SIGNAL(nouveauPanier(QString, QString)),
+            this,
+            SLOT(afficherPuissance4(QString, QString)));
     // Communication
     connect(communication,
             SIGNAL(peripheriqueDetecte(QString, QString)),
@@ -768,4 +771,93 @@ void IHM::initialiserPartie()
     seance->setDebutTemps(QTime::currentTime());
     seance->setDebutTempsTour(QTime::currentTime());
     timerSeance->start(500);
+}
+
+void IHM::afficherPuissance4(QString numeroPanier, QString equipe)
+{
+    QImage  pionRouge(":images/jetonRouge.png");
+    QImage  pionJaune(":images/jetonJaune.png");
+    QPixmap plateau = ui->labelVisualisationPuissance4->pixmap()
+                        ->copy(); // on récupère l'image précédente
+    QPainter p(&plateau);
+
+    if(!seance->estFinie() && equipe == "R" || equipe == "J")
+    {
+        if(numeroPanier == "1" || "2" || "3" || "4" || "5" || "6" || "7")
+        {
+            seance->setColonne(0);
+        }
+
+        if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() == 3)
+        {
+            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
+                               DEPLACEMENT_COLONNE - (3 * 60)),
+                        pionJaune);
+            qDebug() << Q_FUNC_INFO << seance->getColonne()
+                     << "Numéro de colonne";
+            qDebug() << Q_FUNC_INFO << equipe << "Couleur équipe";
+            qDebug() << Q_FUNC_INFO << seance->getNbrJetonColonne0()
+                     << "Nbr jeton colonne 0";
+            seance->augmenterNbrJetonColonne0();
+        }
+        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() == 2)
+        {
+            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
+                               DEPLACEMENT_COLONNE - (2 * 60)),
+                        pionJaune);
+            qDebug() << Q_FUNC_INFO << seance->getColonne()
+                     << "Numéro de colonne";
+            qDebug() << Q_FUNC_INFO << equipe << "Couleur équipe";
+            qDebug() << Q_FUNC_INFO << seance->getNbrJetonColonne0()
+                     << "Nbr jeton colonne 0";
+            seance->augmenterNbrJetonColonne0();
+        }
+
+        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() == 1)
+        {
+            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
+                               DEPLACEMENT_COLONNE - (1 * 60)),
+                        pionJaune);
+            qDebug() << Q_FUNC_INFO << seance->getColonne()
+                     << "Numéro de colonne";
+            qDebug() << Q_FUNC_INFO << equipe << "Couleur équipe";
+            qDebug() << Q_FUNC_INFO << seance->getNbrJetonColonne0()
+                     << "Nbr jeton colonne 0";
+            seance->augmenterNbrJetonColonne0();
+        }
+        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() == 0)
+        {
+            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
+                               DEPLACEMENT_COLONNE - (0 * 60)),
+                        pionRouge);
+            qDebug() << Q_FUNC_INFO << seance->getColonne()
+                     << "Numéro de colonne";
+            qDebug() << Q_FUNC_INFO << equipe << "Couleur équipe";
+            qDebug() << Q_FUNC_INFO << seance->getNbrJetonColonne0()
+                     << "Nbr jeton colonne 0";
+            seance->augmenterNbrJetonColonne0();
+        }
+
+        // rangée la plus basse
+        // p.drawImage(QPoint(42 + (0 * 60), 321 - (0 * 60)), pionRouge);
+        // p.drawImage(QPoint(42 + (1 * 60), 321 - (0 * 60)), pionJaune);
+        // p.drawImage(QPoint(42 + (2 * 60), 321 - (0 * 60)), pionRouge);
+        // p.drawImage(QPoint(42 + (3 * 60), 321 - (0 * 60)), pionJaune);
+
+        // autre rangées
+        // p.drawImage(QPoint(42 + (2 * 60), 321 - (3 * 60)), pionRouge);
+        // p.drawImage(QPoint(42 + (2 * 60), 321 - (4 * 60)), pionJaune);
+        else
+        {
+            return;
+        }
+        p.end();
+
+        ui->labelVisualisationPuissance4->setPixmap(plateau);
+    }
+}
+void IHM::afficherPlateau()
+{
+    ui->labelVisualisationPuissance4->setPixmap(
+      QPixmap(":images/puissance4.png"));
 }

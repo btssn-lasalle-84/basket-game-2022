@@ -18,6 +18,17 @@
  */
 #define BDD "basket-game.sqlite"
 
+#define DEPLACEMENT_LIGNE 42
+/**
+ * @def DEPLACEMENT_LIGNE
+ * @brief Définit la constante de déplacement en ligne
+ */
+#define DEPLACEMENT_COLONNE 321
+/**
+ * @def DEPLACEMENT_COLONNE
+ * @brief Définit la constante de déplacement en colonne
+ */
+
 /**
  * @def PLEIN_ECRAN
  * @brief Pour le mode kiosque de la télévision
@@ -67,7 +78,7 @@ class IHM : public QMainWindow
     void ajouterJoueurs(QString idEquipe, int couleurEquipe);
     void afficherListeEquipe(QStringList equipe);
     void initialiserPartie();
-
+    void afficherPlateau();
     /**
      * @enum Fenetre
      * @brief Définit les différents fenêtres de l'IHM
@@ -123,6 +134,7 @@ class IHM : public QMainWindow
     void validerDemarragePartie();
     void gererPartie();
     void ajouterPanier(QString numeroPanier, QString equipe);
+    void afficherPuissance4(QString numeroPanier, QString equipe);
     void arreterPartie();
     void gererHorlogePartie();
     void demarrerChronometrePartie();

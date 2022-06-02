@@ -10,7 +10,8 @@ Seance::Seance(Equipe*  equipeJaune /*= nullptr*/,
     numeroManche(0), equipeJaune(equipeJaune), equipeRouge(equipeRouge),
     nbPaniersEquipeJaune(0), nbPaniersEquipeRouge(0),
     debutTemps(QTime::currentTime()), finTemps(QTime()),
-    debutTempsTour(QTime()), dureeTempsTour(5)
+    debutTempsTour(QTime()), dureeTempsTour(5), colonne(0), ligne(0),
+    nbrJetonColonne0(0)
 {
 }
 
@@ -127,6 +128,36 @@ QString Seance::getNomEquipeRouge() const
 void Seance::setNomEquipeRouge(const QString& nomEquipeRouge)
 {
     this->equipeRouge->setNomEquipe(nomEquipeRouge);
+}
+
+int Seance::getColonne() const
+{
+    return colonne;
+}
+
+void Seance::setColonne(const int& colonne)
+{
+    this->colonne = colonne;
+}
+
+int Seance::getLigne() const
+{
+    return ligne;
+}
+
+void Seance::setLigne(const int& ligne)
+{
+    this->ligne = ligne;
+}
+
+int Seance::getNbrJetonColonne0() const
+{
+    return nbrJetonColonne0;
+}
+
+void Seance::augmenterNbrJetonColonne0()
+{
+    nbrJetonColonne0 = nbrJetonColonne0 + 1;
 }
 
 bool Seance::estFinie()
