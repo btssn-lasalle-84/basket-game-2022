@@ -11,7 +11,8 @@ Seance::Seance(Equipe*  equipeJaune /*= nullptr*/,
     nbPaniersEquipeJaune(0), nbPaniersEquipeRouge(0),
     debutTemps(QTime::currentTime()), finTemps(QTime()),
     debutTempsTour(QTime()), dureeTempsTour(5), colonne(0), ligne(0),
-    nbrJetonColonne0(0)
+    nbrJetonColonne0(0), nbrJetonColonne1(0), nbrJetonColonne2(0),
+    nbrJetonColonne3(0)
 {
 }
 
@@ -158,6 +159,35 @@ int Seance::getNbrJetonColonne0() const
 void Seance::augmenterNbrJetonColonne0()
 {
     nbrJetonColonne0 = nbrJetonColonne0 + 1;
+}
+
+int Seance::getNbrJetonColonne1() const
+{
+    return nbrJetonColonne1;
+}
+
+void Seance::augmenterNbrJetonColonne1()
+{
+    nbrJetonColonne1 = nbrJetonColonne1 + 1;
+}
+int Seance::getNbrJetonColonne2() const
+{
+    return nbrJetonColonne2;
+}
+
+void Seance::augmenterNbrJetonColonne2()
+{
+    nbrJetonColonne2 = nbrJetonColonne2 + 1;
+}
+
+int Seance::getNbrJetonColonne3() const
+{
+    return nbrJetonColonne3;
+}
+
+void Seance::augmenterNbrJetonColonne3()
+{
+    nbrJetonColonne3 = nbrJetonColonne3 + 1;
 }
 
 bool Seance::estFinie()

@@ -36,6 +36,9 @@ class Seance : public QObject
     int     colonne;
     int     ligne;
     int     nbrJetonColonne0;
+    int     nbrJetonColonne1;
+    int     nbrJetonColonne2;
+    int     nbrJetonColonne3;
 
   public:
     Seance(Equipe*  equipeJaune = nullptr,
@@ -71,6 +74,12 @@ class Seance : public QObject
     void    setLigne(const int&);
     int     getNbrJetonColonne0() const;
     void    augmenterNbrJetonColonne0();
+    int     getNbrJetonColonne1() const;
+    void    augmenterNbrJetonColonne1();
+    int     getNbrJetonColonne2() const;
+    void    augmenterNbrJetonColonne2();
+    int     getNbrJetonColonne3() const;
+    void    augmenterNbrJetonColonne3();
     bool    estFinie();
 };
 

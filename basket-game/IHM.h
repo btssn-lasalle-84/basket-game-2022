@@ -58,7 +58,9 @@ class IHM : public QMainWindow
     IHM(QWidget* parent = nullptr);
     ~IHM();
 
-  private:
+    void ajouterJetonColonne1();
+    
+private:
     Ui::IHM*       ui;  //!< la fenêtre graphique associée à cette classe
     BaseDeDonnees* bdd; //!< base de donnes
     Communication* communication;      //!< pour la communication bluetooth
