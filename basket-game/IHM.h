@@ -60,6 +60,8 @@ class IHM : public QMainWindow
 
     void ajouterJetonColonne1();
     
+    void ajouterJetonColonne0(QImage pionRouge, QString numeroPanier, QString equipe, QPainter p);
+    
 private:
     Ui::IHM*       ui;  //!< la fenêtre graphique associée à cette classe
     BaseDeDonnees* bdd; //!< base de donnes
