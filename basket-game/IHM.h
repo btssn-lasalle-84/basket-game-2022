@@ -35,6 +35,19 @@
  */
 #define PLEIN_ECRAN
 
+#define NB_PANIERS 7 // colonnes
+/**
+ * @def NB_PANIERS
+ * @brief Définit la constante du nombre de panier
+ */
+
+#define NB_LIGNES 6 // rangées
+/**
+ * @def NB_LIGNES
+ * @brief Définit la constante du nombre de ligne
+ */
+#define NB_PIONS_ALIGNES 4
+
 namespace Ui
 {
 class IHM;
@@ -58,31 +71,14 @@ class IHM : public QMainWindow
     IHM(QWidget* parent = nullptr);
     ~IHM();
 
-    void ajouterJetonColonne1();
-    
-    void ajouterJetonColonne0(QImage pionRouge, QString numeroPanier, QString equipe, QPainter p);
-    
-private:
-    Ui::IHM*       ui;  //!< la fenêtre graphique associée à cette classe
-    BaseDeDonnees* bdd; //!< base de donnes
-    Communication* communication;      //!< pour la communication bluetooth
-    QVector<QStringList> listeEquipes; //!< la liste des équipes
-    QVector<Equipe*>     equipes;      //!< les deux équipes
-    int                  idEquipeRougeSelectionnee; //!< l'id de l'équipe rouge
-    int                  idEquipeJauneSelectionnee; //!< l'id de l'équipe jaune
-    Seance*              seance;      //!< la séance entre deux équipes
-    QTimer*              timerSeance; //!< pour gérer les temps restants
-    QTimer*       chronometrePartie;  //!< pour le chronmétrage d'une partie
-    QElapsedTimer tempsEcoulePartie;  //!< pour gérer le temps écoulé
+    /*void ajouterJetonColonne1();
 
-    void initialiserRessources();
-    void initialiserEquipes();
-    void connecterSignalSlot();
-    void recupererEquipes();
-    void ajouterJoueurs(QString idEquipe, int couleurEquipe);
-    void afficherListeEquipe(QStringList equipe);
-    void initialiserPartie();
-    void afficherPlateau();
+    void ajouterJetonColonne0(QImage   pionRouge,
+                              QString  numeroPanier,
+                              QString  equipe,
+                              QPainter p);*/
+
+  private:
     /**
      * @enum Fenetre
      * @brief Définit les différents fenêtres de l'IHM
@@ -111,6 +107,18 @@ private:
     };
 
     /**
+     * @enum CouleurJeton
+     * @brief Définit les différentes couleurs d'un jeton
+     */
+    enum CouleurJeton
+    {
+        ROUGE = -1,
+        AUCUN = 0,
+        JAUNE = 1,
+        NbJeton /* = 2 */
+    };
+
+    /**
      * @enum ChampsEquipe
      * @brief Définit les différents champs d'e la table Salle'une équipe
      */
@@ -127,6 +135,33 @@ private:
         NbChampsEquipe
     };
 
+    Ui::IHM*       ui;  //!< la fenêtre graphique associée à cette classe
+    BaseDeDonnees* bdd; //!< base de donnes
+    Communication* communication;      //!< pour la communication bluetooth
+    QVector<QStringList> listeEquipes; //!< la liste des équipes
+    QVector<Equipe*>     equipes;      //!< les deux équipes
+    int                  idEquipeRougeSelectionnee; //!< l'id de l'équipe rouge
+    int                  idEquipeJauneSelectionnee; //!< l'id de l'équipe jaune
+    Seance*              seance;      //!< la séance entre deux équipes
+    QTimer*              timerSeance; //!< pour gérer les temps restants
+    QTimer*       chronometrePartie;  //!< pour le chronmétrage d'une partie
+    QElapsedTimer tempsEcoulePartie;  //!< pour gérer le temps écoulé
+    QVector<QVector<CouleurJeton> > plateau; //! QVector<QVector<int> > plateau
+
+    void         initialiserRessources();
+    void         initialiserEquipes();
+    void         connecterSignalSlot();
+    void         recupererEquipes();
+    void         ajouterJoueurs(QString idEquipe, int couleurEquipe);
+    void         afficherListeEquipe(QStringList equipe);
+    void         initialiserPartie();
+    void         afficherPlateau();
+    void         initialiserPlateau();
+    CouleurJeton verifierLigne(int ligne);
+    CouleurJeton verifierDiagonales();
+    bool         aGagne(CouleurJeton couleurEquipe);
+    bool         estRempli();
+
   public slots:
     void demarrerNouvellePartie();
     void selectionnerEquipeRouge(int numeroEquipe);
@@ -138,6 +173,7 @@ private:
     void validerDemarragePartie();
     void gererPartie();
     void ajouterPanier(QString numeroPanier, QString equipe);
+    int  jouerUnJeton(QString numeroPanier, QString equipe);
     void afficherPuissance4(QString numeroPanier, QString equipe);
     void arreterPartie();
     void gererHorlogePartie();
