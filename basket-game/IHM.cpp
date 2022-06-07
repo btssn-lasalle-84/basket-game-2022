@@ -27,7 +27,7 @@ IHM::IHM(QWidget* parent) :
     QMainWindow(parent), ui(new Ui::IHM), bdd(nullptr), communication(nullptr),
     idEquipeRougeSelectionnee(-1), idEquipeJauneSelectionnee(-1),
     seance(nullptr), timerSeance(nullptr), chronometrePartie(nullptr),
-    plateau(NB_PANIERS)
+    plateau(NB_PANIERS), etatPartie(false)
 {
     ui->setupUi(this);
     qDebug() << Q_FUNC_INFO;
@@ -284,22 +284,25 @@ void IHM::validerDemarragePartie()
         ui->lcdNumberPointsEquipeJaune->show();
         if(ui->entrainementAuTir->isChecked())
         {
-            ui->labelVisualisationPuissance4->hide();
+            ui->lcdNumberPointsEquipeRouge->show();
+            ui->lcdNumberPointsEquipeJaune->show();
+            ui->labelPanierEquipeRouge->show();
+            ui->labelPanierEquipeJaune->show();
         }
-        if(ui->puissance4->isChecked())
+        else
         {
             ui->lcdNumberPointsEquipeRouge->hide();
             ui->lcdNumberPointsEquipeJaune->hide();
             ui->labelPanierEquipeRouge->hide();
             ui->labelPanierEquipeJaune->hide();
         }
-        if(ui->puissance4->isChecked() && ui->entrainementAuTir->isChecked())
+        if(ui->puissance4->isChecked())
         {
             ui->labelVisualisationPuissance4->show();
-            ui->lcdNumberPointsEquipeRouge->show();
-            ui->lcdNumberPointsEquipeJaune->show();
-            ui->labelPanierEquipeRouge->show();
-            ui->labelPanierEquipeJaune->show();
+        }
+        else
+        {
+            ui->labelVisualisationPuissance4->hide();
         }
     }
 }
@@ -311,10 +314,10 @@ void IHM::validerDemarragePartie()
 void IHM::gererPartie()
 {
     qDebug() << Q_FUNC_INFO;
+    initialiserPlateau();
     communication->envoyer("$basket;STT;\r");
     ui->boutonGererPartiePagePartie->setEnabled(false);
     initialiserPartie();
-    initialiserPlateau();
     demarrerChronometrePartie();
 }
 
@@ -376,48 +379,65 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
                                             seance->getNomEquipeRouge() + " !");
         }
     }
+
+    // puissance 4
+    int ligne = jouerUnJeton(numeroPanier, equipe);
+    qDebug() << Q_FUNC_INFO << "ligne" << ligne;
+    if(ligne == -1)
+        return;
+    afficherUnJeton(ligne, numeroPanier.toInt(), equipe);
+    if(equipe == "R")
+        etatPartie = aGagne(CouleurJeton::ROUGE);
+    else if(equipe == "J")
+        etatPartie = aGagne(CouleurJeton::JAUNE);
+    /*
+     * @todo Tester l'état de la partie ou si partie nulle (estRempli())
+     */
 }
 
-int IHM::jouerUnJeton(QString numeroPanier, QString equipe)
+void IHM::afficherUnJeton(int ligne, int colonne, QString equipe)
 {
-    qDebug() << Q_FUNC_INFO << plateau[numeroPanier.toInt()].size();
+    if(ui->labelVisualisationPuissance4->isHidden())
+        return;
+    qDebug() << Q_FUNC_INFO << ligne << colonne << equipe;
     QImage  jetonRouge(":images/jetonRouge.png");
     QImage  jetonJaune(":images/jetonJaune.png");
     QPixmap puissance4 = ui->labelVisualisationPuissance4->pixmap()
                            ->copy(); // on récupère l'image précédente
     QPainter p(&puissance4);
 
-    for(int ligne = 0; ligne < plateau[numeroPanier.toInt()].size(); ++ligne)
-    {
-        if(plateau[numeroPanier.toInt()][ligne] == CouleurJeton::AUCUN)
-        {
-            qDebug() << Q_FUNC_INFO << "Jeton verification" << equipe
-                     << numeroPanier;
+    if(equipe == "R")
+        p.drawImage(QPoint(DEPLACEMENT_X + (colonne * TAILLE_JETON),
+                           DEPLACEMENT_Y - (ligne * TAILLE_JETON)),
+                    jetonRouge);
+    else if(equipe == "J")
+        p.drawImage(QPoint(DEPLACEMENT_X + (colonne * TAILLE_JETON),
+                           DEPLACEMENT_Y - (ligne * TAILLE_JETON)),
+                    jetonJaune);
 
-            if(equipe == "R")
-            {
-                plateau[numeroPanier.toInt()][ligne] = CouleurJeton::ROUGE;
-                p.drawImage(QPoint(DEPLACEMENT_LIGNE + (ligne * 60),
-                                   DEPLACEMENT_COLONNE - (ligne * 60)),
-                            jetonRouge);
-                qDebug() << Q_FUNC_INFO << "Dessin sur le P4 rouge";
-            }
-            else if(equipe == "J")
-            {
-                plateau[numeroPanier.toInt()][ligne] = CouleurJeton::JAUNE;
-
-                p.drawImage(QPoint(DEPLACEMENT_LIGNE + (ligne * 60),
-                                   DEPLACEMENT_COLONNE - (ligne * 60)),
-                            jetonJaune);
-                qDebug() << Q_FUNC_INFO << "Dessin sur le P4 jaune";
-            }
-            // return ligne;
-        }
-    }
-    // return -1;
     p.end();
 
     ui->labelVisualisationPuissance4->setPixmap(puissance4);
+}
+
+int IHM::jouerUnJeton(QString numeroPanier, QString equipe)
+{
+    qDebug() << Q_FUNC_INFO << numeroPanier << equipe;
+    int tir = numeroPanier.toInt(); // numéro de colonne
+    // on recherche la ligne
+    for(int ligne = 0; ligne < plateau[tir].size(); ++ligne)
+    {
+        if(plateau[tir][ligne] == CouleurJeton::AUCUN)
+        {
+            if(equipe == "R")
+                plateau[tir][ligne] = CouleurJeton::ROUGE;
+            else if(equipe == "J")
+                plateau[tir][ligne] = CouleurJeton::JAUNE;
+            return ligne;
+        }
+    }
+
+    return -1; // aucune position trouvée
 }
 
 /**
@@ -647,6 +667,11 @@ void IHM::initialiserRessources()
     communication = new Communication(this);
 
     timerSeance = new QTimer(this);
+
+    for(int i = 0; i < plateau.size(); ++i)
+    {
+        plateau[i].resize(NB_LIGNES);
+    }
 }
 
 /**
@@ -736,17 +761,6 @@ void IHM::connecterSignalSlot()
             SIGNAL(nouveauPanier(QString, QString)),
             this,
             SLOT(ajouterPanier(QString, QString)));
-    // jouer une jeton dans le tableau
-    connect(communication,
-            SIGNAL(nouveauPanier(QString, QString)),
-            this,
-            SLOT(jouerUnJeton(QString, QString)));
-
-    // ajout d'un jeton dans le puissance 4
-    connect(communication,
-            SIGNAL(nouveauPanier(QString, QString)),
-            this,
-            SLOT(afficherPuissance4(QString, QString)));
     // Communication
     connect(communication,
             SIGNAL(peripheriqueDetecte(QString, QString)),
@@ -844,18 +858,19 @@ void IHM::initialiserPartie()
     timerSeance->start(500);
 }
 
+/*
 void IHM::afficherPuissance4(QString numeroPanier, QString equipe)
 {
-    /*QImage  jetonRouge(":images/jetonRouge.png");
+    QImage  jetonRouge(":images/jetonRouge.png");
     QImage  jetonJaune(":images/jetonJaune.png");
     QPixmap plateau = ui->labelVisualisationPuissance4->pixmap()
                         ->copy(); // on récupère l'image précédente
     QPainter p(&plateau);
-    /*p.drawImage(
+    p.drawImage(
       QPoint(DEPLACEMENT_LIGNE + (1 * 60), DEPLACEMENT_COLONNE - (1 * 60)),
       jetonJaune);
 
-    /*if(!seance->estFinie() && equipe == "R")
+    if(!seance->estFinie() && equipe == "R")
     {
         if(numeroPanier == "1")
         {
@@ -1418,25 +1433,21 @@ void IHM::afficherPuissance4(QString numeroPanier, QString equipe)
         seance->augmenterNbrJetonColonne3();
         qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
                  << "un jeton jaune colonne 4 ligne 0";
-    }*/
-    /*p.end();
+    }
+    p.end();
 
-    ui->labelVisualisationPuissance4->setPixmap(plateau);*/
+    ui->labelVisualisationPuissance4->setPixmap(plateau);
 }
+*/
+
 void IHM::afficherPlateau()
 {
-    ui->labelVisualisationPuissance4->setPixmap(
-      QPixmap(":images/puissance4.png"));
+    ui->labelVisualisationPuissance4->setPixmap(QPixmap(":/puissance4.png"));
 }
 
 void IHM::initialiserPlateau()
 {
-    qDebug() << Q_FUNC_INFO << plateau.size();
-
-    for(int i = 0; i < plateau.size(); ++i)
-    {
-        plateau[i].resize(NB_LIGNES);
-    }
+    qDebug() << Q_FUNC_INFO << plateau.size() << plateau[0].size();
 
     for(int colonne = 0; colonne < plateau.size(); ++colonne)
     {
@@ -1445,6 +1456,10 @@ void IHM::initialiserPlateau()
             plateau[colonne][ligne] = CouleurJeton::AUCUN;
         }
     }
+
+    etatPartie = false;
+
+    afficherPlateau();
 }
 
 IHM::CouleurJeton IHM::verifierLigne(int ligne)

@@ -18,16 +18,23 @@
  */
 #define BDD "basket-game.sqlite"
 
-#define DEPLACEMENT_LIGNE 42
 /**
- * @def DEPLACEMENT_LIGNE
- * @brief Définit la constante de déplacement en ligne
+ * @def TAILLE_JETON
+ * @brief Définit la constante de la taille d'un jeton
  */
-#define DEPLACEMENT_COLONNE 321
+#define TAILLE_JETON 60
+
 /**
- * @def DEPLACEMENT_COLONNE
- * @brief Définit la constante de déplacement en colonne
+ * @def DEPLACEMENT_X
+ * @brief Définit la constante de déplacement en x
  */
+#define DEPLACEMENT_X 42
+
+/**
+ * @def DEPLACEMENT_Y
+ * @brief Définit la constante de déplacement en y
+ */
+#define DEPLACEMENT_Y 321
 
 /**
  * @def PLEIN_ECRAN
@@ -70,13 +77,6 @@ class IHM : public QMainWindow
   public:
     IHM(QWidget* parent = nullptr);
     ~IHM();
-
-    /*void ajouterJetonColonne1();
-
-    void ajouterJetonColonne0(QImage   pionRouge,
-                              QString  numeroPanier,
-                              QString  equipe,
-                              QPainter p);*/
 
   private:
     /**
@@ -147,6 +147,7 @@ class IHM : public QMainWindow
     QTimer*       chronometrePartie;  //!< pour le chronmétrage d'une partie
     QElapsedTimer tempsEcoulePartie;  //!< pour gérer le temps écoulé
     QVector<QVector<CouleurJeton> > plateau; //! QVector<QVector<int> > plateau
+    bool                            etatPartie; //! true si un gagnant
 
     void         initialiserRessources();
     void         initialiserEquipes();
@@ -161,6 +162,8 @@ class IHM : public QMainWindow
     CouleurJeton verifierDiagonales();
     bool         aGagne(CouleurJeton couleurEquipe);
     bool         estRempli();
+    int          jouerUnJeton(QString numeroPanier, QString equipe);
+    void         afficherUnJeton(int ligne, int colonne, QString equipe);
 
   public slots:
     void demarrerNouvellePartie();
@@ -173,8 +176,7 @@ class IHM : public QMainWindow
     void validerDemarragePartie();
     void gererPartie();
     void ajouterPanier(QString numeroPanier, QString equipe);
-    int  jouerUnJeton(QString numeroPanier, QString equipe);
-    void afficherPuissance4(QString numeroPanier, QString equipe);
+    // void         afficherPuissance4(QString numeroPanier, QString equipe);
     void arreterPartie();
     void gererHorlogePartie();
     void demarrerChronometrePartie();
