@@ -10,7 +10,7 @@ class Equipe;
  * @def POINT_POUR_VICTOIRE
  * @brief Constante des points pour une victoire
  */
-#define POINT_POUR_VICTOIRE 15
+#define POINT_POUR_VICTOIRE 50
 
 /**
  * @def TEMPS_PAR_TOUR_DEFAUT
@@ -35,10 +35,6 @@ class Seance : public QObject
     int     dureeTempsPartie;
     int     colonne;
     int     ligne;
-    int     nbrJetonColonne0;
-    int     nbrJetonColonne1;
-    int     nbrJetonColonne2;
-    int     nbrJetonColonne3;
 
   public:
     Seance(Equipe*  equipeJaune = nullptr,
@@ -68,18 +64,6 @@ class Seance : public QObject
     void    setNomEquipeJaune(const QString&);
     QString getNomEquipeRouge() const;
     void    setNomEquipeRouge(const QString&);
-    int     getColonne() const;
-    void    setColonne(const int&);
-    int     getLigne() const;
-    void    setLigne(const int&);
-    int     getNbrJetonColonne0() const;
-    void    augmenterNbrJetonColonne0();
-    int     getNbrJetonColonne1() const;
-    void    augmenterNbrJetonColonne1();
-    int     getNbrJetonColonne2() const;
-    void    augmenterNbrJetonColonne2();
-    int     getNbrJetonColonne3() const;
-    void    augmenterNbrJetonColonne3();
     bool    estFinie();
 };
 

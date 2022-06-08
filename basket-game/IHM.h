@@ -158,6 +158,7 @@ class IHM : public QMainWindow
     void         afficherPlateau();
     void         initialiserPlateau();
     CouleurJeton verifierLigne(int ligne);
+    CouleurJeton verifierColonne(int colonne);
     CouleurJeton verifierDiagonales();
     bool         aGagne(CouleurJeton couleurEquipe);
     bool         estRempli();

@@ -285,6 +285,8 @@ void IHM::validerDemarragePartie()
         if(ui->entrainementAuTir->isChecked())
         {
             ui->labelVisualisationPuissance4->hide();
+            seance->setNbPaniersEquipeJaune(0);
+            seance->setNbPaniersEquipeRouge(0);
         }
         if(ui->puissance4->isChecked())
         {
@@ -323,7 +325,6 @@ void IHM::gererPartie()
  */
 void IHM::ajouterPanier(QString numeroPanier, QString equipe)
 {
-    qDebug() << Q_FUNC_INFO << numeroPanier << equipe;
     ui->lcdNumberPointsEquipeRouge->display(seance->getNbPaniersEquipeRouge());
     ui->lcdNumberPointsEquipeJaune->display(seance->getNbPaniersEquipeJaune());
     if(!seance->estFinie())
@@ -333,7 +334,6 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
             if(equipe == "J")
             {
                 seance->marquerUnPointEquipeJaune();
-                qDebug() << Q_FUNC_INFO << seance->getNbPaniersEquipeJaune();
                 ui->lcdNumberPointsEquipeJaune->display(
                   seance->getNbPaniersEquipeJaune());
                 ui->labelEquipeEnCours->setText(seance->getNomEquipeRouge());
@@ -341,7 +341,6 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
             else if(equipe == "R")
             {
                 seance->marquerUnPointEquipeRouge();
-                qDebug() << Q_FUNC_INFO << seance->getNbPaniersEquipeRouge();
                 ui->lcdNumberPointsEquipeRouge->display(
                   seance->getNbPaniersEquipeRouge());
                 ui->labelEquipeEnCours->setText(seance->getNomEquipeJaune());
@@ -380,44 +379,52 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
 
 int IHM::jouerUnJeton(QString numeroPanier, QString equipe)
 {
-    qDebug() << Q_FUNC_INFO << plateau[numeroPanier.toInt()].size();
     QImage  jetonRouge(":images/jetonRouge.png");
     QImage  jetonJaune(":images/jetonJaune.png");
     QPixmap puissance4 = ui->labelVisualisationPuissance4->pixmap()
                            ->copy(); // on récupère l'image précédente
     QPainter p(&puissance4);
-
     for(int ligne = 0; ligne < plateau[numeroPanier.toInt()].size(); ++ligne)
     {
         if(plateau[numeroPanier.toInt()][ligne] == CouleurJeton::AUCUN)
         {
-            qDebug() << Q_FUNC_INFO << "Jeton verification" << equipe
-                     << numeroPanier;
+            qDebug() << Q_FUNC_INFO << equipe << numeroPanier
+                     << "numero de la ligne :" << ligne
+                     << "vector du plateau :" << plateau;
 
             if(equipe == "R")
             {
                 plateau[numeroPanier.toInt()][ligne] = CouleurJeton::ROUGE;
-                p.drawImage(QPoint(DEPLACEMENT_LIGNE + (ligne * 60),
-                                   DEPLACEMENT_COLONNE - (ligne * 60)),
-                            jetonRouge);
-                qDebug() << Q_FUNC_INFO << "Dessin sur le P4 rouge";
+                p.drawImage(
+                  QPoint(DEPLACEMENT_LIGNE + (numeroPanier.toInt() * 60),
+                         DEPLACEMENT_COLONNE - (ligne * 60)),
+                  jetonRouge);
+                qDebug() << Q_FUNC_INFO << "Dessin sur le P4 rouge"
+                         << numeroPanier.toInt();
+                verifierLigne(ligne);
+                verifierColonne(numeroPanier.toInt());
+                break;
             }
             else if(equipe == "J")
             {
                 plateau[numeroPanier.toInt()][ligne] = CouleurJeton::JAUNE;
 
-                p.drawImage(QPoint(DEPLACEMENT_LIGNE + (ligne * 60),
-                                   DEPLACEMENT_COLONNE - (ligne * 60)),
-                            jetonJaune);
+                p.drawImage(
+                  QPoint(DEPLACEMENT_LIGNE + (numeroPanier.toInt() * 60),
+                         DEPLACEMENT_COLONNE - (ligne * 60)),
+                  jetonJaune);
                 qDebug() << Q_FUNC_INFO << "Dessin sur le P4 jaune";
+                verifierLigne(ligne);
+                verifierColonne(numeroPanier.toInt());
+                break;
             }
-            // return ligne;
+            return ligne;
         }
+        qDebug() << Q_FUNC_INFO << plateau[numeroPanier.toInt()].size();
     }
-    // return -1;
     p.end();
-
     ui->labelVisualisationPuissance4->setPixmap(puissance4);
+    return -1;
 }
 
 /**
@@ -747,6 +754,7 @@ void IHM::connecterSignalSlot()
             SIGNAL(nouveauPanier(QString, QString)),
             this,
             SLOT(afficherPuissance4(QString, QString)));
+    // Verification du l'alignement d'un jeton
     // Communication
     connect(communication,
             SIGNAL(peripheriqueDetecte(QString, QString)),
@@ -846,583 +854,13 @@ void IHM::initialiserPartie()
 
 void IHM::afficherPuissance4(QString numeroPanier, QString equipe)
 {
-    /*QImage  jetonRouge(":images/jetonRouge.png");
+    QImage  jetonRouge(":images/jetonRouge.png");
     QImage  jetonJaune(":images/jetonJaune.png");
     QPixmap plateau = ui->labelVisualisationPuissance4->pixmap()
                         ->copy(); // on récupère l'image précédente
     QPainter p(&plateau);
-    /*p.drawImage(
-      QPoint(DEPLACEMENT_LIGNE + (1 * 60), DEPLACEMENT_COLONNE - (1 * 60)),
-      jetonJaune);
-
-    /*if(!seance->estFinie() && equipe == "R")
-    {
-        if(numeroPanier == "1")
-        {
-            seance->setColonne(0);
-        }
-        // Si plus de place dans le puissance 4 dans la 1er colonne
-        if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() == 6)
-            return;
-
-        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() ==
-    5)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (5 * 60)), jetonRouge);
-            seance->augmenterNbrJetonColonne0();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton rouge colonne 0 ligne 5";
-        }
-
-        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() ==
-    4)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (4 * 60)), jetonRouge);
-            seance->augmenterNbrJetonColonne0();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton rouge colonne 0 ligne 4";
-        }
-        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() ==
-    3)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (3 * 60)), jetonRouge);
-            seance->augmenterNbrJetonColonne0();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton rouge colonne 0 ligne 3";
-        }
-        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() ==
-    2)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (2 * 60)), jetonRouge);
-            seance->augmenterNbrJetonColonne0();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton rouge colonne 0 ligne 2";
-        }
-
-        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() ==
-    1)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (1 * 60)), jetonRouge);
-            seance->augmenterNbrJetonColonne0();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton rouge colonne 0 ligne 1";
-        }
-        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() ==
-    0)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (0 * 60)), jetonRouge);
-            seance->augmenterNbrJetonColonne0();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton rouge colonne 0 ligne 0";
-        }
-
-        if(!seance->estFinie())
-        {
-            if(numeroPanier == "2")
-            {
-                seance->setColonne(1);
-            }
-            // Si plus de place dans le puissance 4 dans la 2eme colonne
-            if(seance->getColonne() == 1 && seance->getNbrJetonColonne1() ==
-    6) return;
-
-            else if(seance->getColonne() == 1 &&
-                    seance->getNbrJetonColonne1() == 5)
-            {
-                p.drawImage(
-                  QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                         DEPLACEMENT_COLONNE - (5 * 60)),
-                  jetonRouge);
-                seance->augmenterNbrJetonColonne1();
-                qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                         << "un jeton rouge colonne 1 ligne 5";
-            }
-
-            else if(seance->getColonne() == 1 &&
-                    seance->getNbrJetonColonne1() == 4)
-            {
-                p.drawImage(
-                  QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                         DEPLACEMENT_COLONNE - (4 * 60)),
-                  jetonRouge);
-                seance->augmenterNbrJetonColonne1();
-                qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                         << "un jeton rouge colonne 1 ligne 4";
-            }
-            else if(seance->getColonne() == 1 &&
-                    seance->getNbrJetonColonne1() == 3)
-            {
-                p.drawImage(
-                  QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                         DEPLACEMENT_COLONNE - (3 * 60)),
-                  jetonRouge);
-                seance->augmenterNbrJetonColonne1();
-                qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                         << "un jeton rouge colonne 1 ligne 3";
-            }
-            else if(seance->getColonne() == 1 &&
-                    seance->getNbrJetonColonne1() == 2)
-            {
-                p.drawImage(
-                  QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                         DEPLACEMENT_COLONNE - (2 * 60)),
-                  jetonRouge);
-                seance->augmenterNbrJetonColonne1();
-                qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                         << "un jeton rouge colonne 1 ligne 2";
-            }
-
-            else if(seance->getColonne() == 1 &&
-                    seance->getNbrJetonColonne1() == 1)
-            {
-                p.drawImage(
-                  QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                         DEPLACEMENT_COLONNE - (1 * 60)),
-                  jetonRouge);
-                seance->augmenterNbrJetonColonne1();
-                qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                         << "un jeton rouge colonne 1 ligne 1";
-            }
-            else if(seance->getColonne() == 1 &&
-                    seance->getNbrJetonColonne1() == 0)
-            {
-                p.drawImage(
-                  QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                         DEPLACEMENT_COLONNE - (0 * 60)),
-                  jetonRouge);
-                seance->augmenterNbrJetonColonne1();
-                qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                         << "un jeton rouge colonne 1 ligne 0";
-            }
-        }
-
-        if(numeroPanier == "3")
-        {
-            seance->setColonne(2);
-        }
-        // Si plus de place dans le puissance 4 dans la 3eme colonne
-        if(seance->getColonne() == 2 && seance->getNbrJetonColonne2() == 6)
-            return;
-
-        else if(seance->getColonne() == 2 && seance->getNbrJetonColonne2() ==
-    5)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (5 * 60)), jetonRouge);
-            seance->augmenterNbrJetonColonne2();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton rouge colonne 2 ligne 5";
-        }
-
-        else if(seance->getColonne() == 2 && seance->getNbrJetonColonne2() ==
-    4)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (4 * 60)), jetonRouge);
-            seance->augmenterNbrJetonColonne2();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton rouge colonne 2 ligne 4";
-        }
-        else if(seance->getColonne() == 2 && seance->getNbrJetonColonne2() ==
-    3)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (3 * 60)), jetonRouge);
-            seance->augmenterNbrJetonColonne2();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton rouge colonne 2 ligne 3";
-        }
-        else if(seance->getColonne() == 2 && seance->getNbrJetonColonne2() ==
-    2)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (2 * 60)), jetonRouge);
-            seance->augmenterNbrJetonColonne2();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton rouge colonne 2 ligne 2";
-        }
-
-        else if(seance->getColonne() == 2 && seance->getNbrJetonColonne2() ==
-    1)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (1 * 60)), jetonRouge);
-            seance->augmenterNbrJetonColonne2();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton rouge colonne 2 ligne 1";
-        }
-        else if(seance->getColonne() == 2 && seance->getNbrJetonColonne2() ==
-    0)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (0 * 60)), jetonRouge);
-            seance->augmenterNbrJetonColonne2();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton rouge colonne 2 ligne 0";
-        }
-    }
-
-    if(numeroPanier == "4")
-    {
-        seance->setColonne(3);
-    }
-    // Si plus de place dans le puissance 4 dans la 3eme colonne
-    if(seance->getColonne() == 3 && seance->getNbrJetonColonne3() == 6)
-        return;
-
-    else if(seance->getColonne() == 3 && seance->getNbrJetonColonne3() == 5)
-    {
-        p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                           DEPLACEMENT_COLONNE - (5 * 60)),
-                    jetonRouge);
-        seance->augmenterNbrJetonColonne3();
-        qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                 << "un jeton rouge colonne 3 ligne 5";
-    }
-
-    else if(seance->getColonne() == 3 && seance->getNbrJetonColonne3() == 4)
-    {
-        p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                           DEPLACEMENT_COLONNE - (4 * 60)),
-                    jetonRouge);
-        seance->augmenterNbrJetonColonne3();
-        qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                 << "un jeton rouge colonne 3 ligne 4";
-    }
-    else if(seance->getColonne() == 3 && seance->getNbrJetonColonne3() == 3)
-    {
-        p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                           DEPLACEMENT_COLONNE - (3 * 60)),
-                    jetonRouge);
-        seance->augmenterNbrJetonColonne3();
-        qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                 << "un jeton rouge colonne 3 ligne 3";
-    }
-    else if(seance->getColonne() == 3 && seance->getNbrJetonColonne3() == 2)
-    {
-        p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                           DEPLACEMENT_COLONNE - (2 * 60)),
-                    jetonRouge);
-        seance->augmenterNbrJetonColonne3();
-        qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                 << "un jeton rouge colonne 3 ligne 2";
-    }
-
-    else if(seance->getColonne() == 3 && seance->getNbrJetonColonne3() == 1)
-    {
-        p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                           DEPLACEMENT_COLONNE - (1 * 60)),
-                    jetonRouge);
-        seance->augmenterNbrJetonColonne3();
-        qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                 << "un jeton rouge colonne 3 ligne 1";
-    }
-    else if(seance->getColonne() == 3 && seance->getNbrJetonColonne3() == 0)
-    {
-        p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                           DEPLACEMENT_COLONNE - (0 * 60)),
-                    jetonRouge);
-        seance->augmenterNbrJetonColonne3();
-        qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                 << "un jeton rouge colonne 3 ligne 0";
-    }
-
-    if(!seance->estFinie() && equipe == "J")
-    {
-        if(numeroPanier == "1")
-        {
-            seance->setColonne(0);
-        }
-        // Si plus de place dans le puissance 4 dans la 1er colonne
-        if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() == 6)
-            return;
-
-        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() ==
-    5)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (5 * 60)), jetonJaune);
-            seance->augmenterNbrJetonColonne0();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton jaune colonne 4 ligne 5";
-        }
-
-        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() ==
-    4)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (4 * 60)), jetonJaune);
-            seance->augmenterNbrJetonColonne0();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton jaune colonne 4 ligne 4";
-        }
-        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() ==
-    3)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (3 * 60)), jetonJaune);
-            seance->augmenterNbrJetonColonne0();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton jaune colonne 4 ligne 3";
-        }
-        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() ==
-    2)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (2 * 60)), jetonJaune);
-            seance->augmenterNbrJetonColonne0();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton jaune colonne 4 ligne 2";
-        }
-
-        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() ==
-    1)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (1 * 60)), jetonJaune);
-            seance->augmenterNbrJetonColonne0();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton jaune colonne 4 ligne 1";
-        }
-        else if(seance->getColonne() == 0 && seance->getNbrJetonColonne0() ==
-    0)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (0 * 60)), jetonJaune);
-            seance->augmenterNbrJetonColonne0();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton jaune colonne 4 ligne 0";
-        }
-
-        {
-            if(numeroPanier == "2")
-            {
-                seance->setColonne(1);
-            }
-            // Si plus de place dans le puissance 4 dans la 2eme colonne
-            if(seance->getColonne() == 1 && seance->getNbrJetonColonne1() ==
-    6) return;
-            // Verification si 5 jeton dans la colonne 2
-            else if(seance->getColonne() == 1 &&
-                    seance->getNbrJetonColonne1() == 5)
-            {
-                p.drawImage(
-                  QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                         DEPLACEMENT_COLONNE - (5 * 60)),
-                  jetonJaune);
-                seance->augmenterNbrJetonColonne1();
-                qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                         << "un jeton jaune colonne 2 ligne 5";
-            }
-            // Verification si 5 jeton dans la colonne 2
-            else if(seance->getColonne() == 1 &&
-                    seance->getNbrJetonColonne1() == 4)
-            {
-                p.drawImage(
-                  QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                         DEPLACEMENT_COLONNE - (4 * 60)),
-                  jetonJaune);
-                seance->augmenterNbrJetonColonne1();
-                qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                         << "un jeton jaune colonne 3 ligne 4";
-            }
-            // Verification si 4 jeton dans la colonne 1
-            else if(seance->getColonne() == 1 &&
-                    seance->getNbrJetonColonne1() == 3)
-            {
-                p.drawImage(
-                  QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                         DEPLACEMENT_COLONNE - (3 * 60)),
-                  jetonJaune);
-                seance->augmenterNbrJetonColonne1();
-                qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                         << "un jeton jaune colonne 3 ligne 3";
-            }
-            // Verification si 3 jeton dans la colonne 1
-            else if(seance->getColonne() == 1 &&
-                    seance->getNbrJetonColonne1() == 2)
-            {
-                p.drawImage(
-                  QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                         DEPLACEMENT_COLONNE - (2 * 60)),
-                  jetonJaune);
-                seance->augmenterNbrJetonColonne1();
-                qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                         << "un jeton jaune colonne 3 ligne 2";
-            }
-
-            // Verification si 2 jeton dans la colonne 1
-            else if(seance->getColonne() == 1 &&
-                    seance->getNbrJetonColonne1() == 1)
-            {
-                p.drawImage(
-                  QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                         DEPLACEMENT_COLONNE - (1 * 60)),
-                  jetonJaune);
-                seance->augmenterNbrJetonColonne1();
-                qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                         << "un jeton jaune colonne 3 ligne 1";
-            }
-            // Verification si 0 jeton dans la colonne 1
-            else if(seance->getColonne() == 1 &&
-                    seance->getNbrJetonColonne1() == 0)
-            {
-                p.drawImage(
-                  QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                         DEPLACEMENT_COLONNE - (0 * 60)),
-                  jetonJaune);
-                seance->augmenterNbrJetonColonne1();
-                qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                         << "un jeton jaune colonne 3 ligne 0";
-            }
-        }
-
-        if(numeroPanier == "3")
-        {
-            seance->setColonne(2);
-        }
-        // Si plus de place dans le puissance 4 dans la colonne 2
-        if(seance->getColonne() == 2 && seance->getNbrJetonColonne2() == 6)
-            return;
-        // Verification si 4 jeton dans la colonne 2
-        else if(seance->getColonne() == 2 && seance->getNbrJetonColonne2() ==
-    5)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (5 * 60)), jetonJaune);
-            seance->augmenterNbrJetonColonne2();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton jaune colonne 2 ligne 5";
-        }
-        // Verification si 3 jeton dans la colonne 2
-        else if(seance->getColonne() == 2 && seance->getNbrJetonColonne2() ==
-    4)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (4 * 60)), jetonJaune);
-            seance->augmenterNbrJetonColonne2();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton jaune colonne 2 ligne 4";
-        }
-        // Verification si 3 jeton dans la colonne 2
-        else if(seance->getColonne() == 2 && seance->getNbrJetonColonne2() ==
-    3)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (3 * 60)), jetonJaune);
-            seance->augmenterNbrJetonColonne2();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton jaune colonne 2 ligne 3";
-        }
-        // Verification si 2 jeton dans la colonne 2
-        else if(seance->getColonne() == 2 && seance->getNbrJetonColonne2() ==
-    2)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (2 * 60)), jetonJaune);
-            seance->augmenterNbrJetonColonne2();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton jaune colonne 2 ligne 2";
-        }
-        // Verification si 1 jeton dans la colonne 2
-        else if(seance->getColonne() == 2 && seance->getNbrJetonColonne2() ==
-    1)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (1 * 60)), jetonJaune);
-            seance->augmenterNbrJetonColonne2();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton jaune colonne 2 ligne 1";
-        }
-        // Verification si 0 jeton dans la colonne 2
-        else if(seance->getColonne() == 2 && seance->getNbrJetonColonne2() ==
-    0)
-        {
-            p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() *
-    60), DEPLACEMENT_COLONNE - (0 * 60)), jetonJaune);
-            seance->augmenterNbrJetonColonne2();
-            qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                     << "un jeton jaune colonne 2 ligne 0";
-        }
-    }
-
-    if(numeroPanier == "4")
-    {
-        seance->setColonne(3);
-    }
-    // Si plus de place dans le puissance 4 dans la colonne 3
-    if(seance->getColonne() == 3 && seance->getNbrJetonColonne3() == 6)
-        return;
-    // Verification si 5 jeton dans la colonne 3
-    else if(seance->getColonne() == 3 && seance->getNbrJetonColonne3() == 5)
-    {
-        p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                           DEPLACEMENT_COLONNE - (5 * 60)),
-                    jetonJaune);
-        seance->augmenterNbrJetonColonne3();
-        qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                 << "un jeton jaune colonne 4 ligne 5";
-    }
-    // Verification si 4 jeton dans la colonne 3
-    else if(seance->getColonne() == 3 && seance->getNbrJetonColonne3() == 4)
-    {
-        p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                           DEPLACEMENT_COLONNE - (4 * 60)),
-                    jetonJaune);
-        seance->augmenterNbrJetonColonne3();
-        qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                 << "un jeton jaune colonne 4 ligne 4";
-    }
-    // Verification si 3 jeton dans la colonne 3
-    else if(seance->getColonne() == 3 && seance->getNbrJetonColonne3() == 3)
-    {
-        p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                           DEPLACEMENT_COLONNE - (3 * 60)),
-                    jetonJaune);
-        seance->augmenterNbrJetonColonne3();
-        qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                 << "un jeton jaune colonne 4 ligne 3";
-    }
-    // Verification si 2 jeton dans la colonne 3
-    else if(seance->getColonne() == 3 && seance->getNbrJetonColonne3() == 2)
-    {
-        p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                           DEPLACEMENT_COLONNE - (2 * 60)),
-                    jetonJaune);
-        seance->augmenterNbrJetonColonne3();
-        qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                 << "un jeton jaune colonne 4 ligne 2";
-    }
-    // Verification si 1 jeton dans la colonne 3
-    else if(seance->getColonne() == 3 && seance->getNbrJetonColonne3() == 1)
-    {
-        p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                           DEPLACEMENT_COLONNE - (1 * 60)),
-                    jetonJaune);
-        seance->augmenterNbrJetonColonne3();
-        qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                 << "un jeton jaune colonne 4 ligne 1";
-    }
-    // Verification si 0 jeton dans la colonne 3
-    else if(seance->getColonne() == 3 && seance->getNbrJetonColonne3() == 0)
-    {
-        p.drawImage(QPoint(DEPLACEMENT_LIGNE + (seance->getColonne() * 60),
-                           DEPLACEMENT_COLONNE - (0 * 60)),
-                    jetonJaune);
-        seance->augmenterNbrJetonColonne3();
-        qDebug() << Q_FUNC_INFO << "colonne" << seance->getColonne()
-                 << "un jeton jaune colonne 4 ligne 0";
-    }*/
-    /*p.end();
-
-    ui->labelVisualisationPuissance4->setPixmap(plateau);*/
 }
+
 void IHM::afficherPlateau()
 {
     ui->labelVisualisationPuissance4->setPixmap(
@@ -1449,22 +887,48 @@ void IHM::initialiserPlateau()
 
 IHM::CouleurJeton IHM::verifierLigne(int ligne)
 {
-    // horizontalement ?
+    // horizontalement
     int somme = 0;
     for(int colonne = 0; colonne <= (NB_PANIERS - NB_PIONS_ALIGNES); ++colonne)
     {
         somme = plateau[colonne][ligne] + plateau[colonne + 1][ligne] +
                 plateau[colonne + 2][ligne] + plateau[colonne + 3][ligne];
+        qDebug() << Q_FUNC_INFO << somme;
         if(somme == NB_PIONS_ALIGNES)
         {
             return CouleurJeton::JAUNE;
+            qDebug() << Q_FUNC_INFO << "victoire jaune horizon";
         }
         else if(somme == NB_PIONS_ALIGNES * -1)
         {
             return CouleurJeton::ROUGE;
+            qDebug() << Q_FUNC_INFO << "victoire rouge horizon";
         }
     }
 
+    return CouleurJeton::AUCUN;
+}
+
+IHM::CouleurJeton IHM::verifierColonne(int colonne)
+{
+    // verticalement
+    int somme = 0;
+    for(int ligne = 0; ligne <= (NB_LIGNES - NB_PIONS_ALIGNES); ++ligne)
+    {
+        somme = plateau[colonne][ligne] + plateau[colonne][ligne + 1] +
+                plateau[colonne][ligne + 2] + plateau[colonne][ligne + 3];
+        qDebug() << Q_FUNC_INFO << somme;
+        if(somme == NB_PIONS_ALIGNES)
+        {
+            qDebug() << Q_FUNC_INFO << "victoire jaune vertical";
+            return CouleurJeton::JAUNE;
+        }
+        else if(somme == NB_PIONS_ALIGNES * -1)
+        {
+            qDebug() << Q_FUNC_INFO << "victoire rouge vertical";
+            return CouleurJeton::ROUGE;
+        }
+    }
     return CouleurJeton::AUCUN;
 }
 
@@ -1505,14 +969,31 @@ bool IHM::aGagne(CouleurJeton couleurEquipe)
         }
     }
 
+    // verticalement
+
+    // diagonalement
+    for(int ligne = 0; ligne < NB_LIGNES; ++ligne)
+    {
+        CouleurJeton couleur = verifierDiagonales();
+        if(couleur == couleurEquipe)
+        {
+            return true;
+        }
+    }
     return false;
 }
 
 bool IHM::estRempli()
 {
-    // for()
-    if(CouleurJeton::AUCUN)
-        return false;
-
-    return true;
+    for(int ligne = 0; ligne < plateau[6].size(); ++ligne)
+    {
+        if(plateau[5][ligne] == CouleurJeton::AUCUN)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 }
