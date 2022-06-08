@@ -35,17 +35,18 @@
  */
 #define PLEIN_ECRAN
 
-#define NB_PANIERS 7 // colonnes
 /**
  * @def NB_PANIERS
  * @brief Définit la constante du nombre de panier
  */
+#define NB_PANIERS 7 // colonnes
 
-#define NB_LIGNES 6 // rangées
 /**
  * @def NB_LIGNES
  * @brief Définit la constante du nombre de ligne
  */
+#define NB_LIGNES 6 // rangées
+
 #define NB_PIONS_ALIGNES 4
 
 namespace Ui
@@ -147,6 +148,8 @@ class IHM : public QMainWindow
     QTimer*       chronometrePartie;  //!< pour le chronmétrage d'une partie
     QElapsedTimer tempsEcoulePartie;  //!< pour gérer le temps écoulé
     QVector<QVector<CouleurJeton> > plateau; //! QVector<QVector<int> > plateau
+    bool                            etatPartie; //! true si un gagnant
+    int                             nbPaniers;  //! nombre de paniers
 
     void         initialiserRessources();
     void         initialiserEquipes();

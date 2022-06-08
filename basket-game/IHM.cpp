@@ -290,10 +290,8 @@ void IHM::validerDemarragePartie()
         }
         if(ui->puissance4->isChecked())
         {
-            ui->lcdNumberPointsEquipeRouge->hide();
-            ui->lcdNumberPointsEquipeJaune->hide();
-            ui->labelPanierEquipeRouge->hide();
-            ui->labelPanierEquipeJaune->hide();
+            afficherPlateau();
+            ui->labelVisualisationPuissance4->show();
         }
         if(ui->puissance4->isChecked() && ui->entrainementAuTir->isChecked())
         {
@@ -864,7 +862,7 @@ void IHM::afficherPuissance4(QString numeroPanier, QString equipe)
 void IHM::afficherPlateau()
 {
     ui->labelVisualisationPuissance4->setPixmap(
-      QPixmap(":images/puissance4.png"));
+      QPixmap(":/puissance4_" + QString::number(nbPaniers) + QString(".png")));
 }
 
 void IHM::initialiserPlateau()
