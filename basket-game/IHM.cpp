@@ -27,7 +27,7 @@ IHM::IHM(QWidget* parent) :
     QMainWindow(parent), ui(new Ui::IHM), bdd(nullptr), communication(nullptr),
     idEquipeRougeSelectionnee(-1), idEquipeJauneSelectionnee(-1),
     seance(nullptr), timerSeance(nullptr), chronometrePartie(nullptr),
-    plateau(NB_PANIERS), etatPartie(false)
+    plateau(NB_PANIERS), etatPartie(false), nbPaniers(NB_PANIERS)
 {
     ui->setupUi(this);
     qDebug() << Q_FUNC_INFO;
@@ -298,6 +298,7 @@ void IHM::validerDemarragePartie()
         }
         if(ui->puissance4->isChecked())
         {
+            afficherPlateau();
             ui->labelVisualisationPuissance4->show();
         }
         else
@@ -1442,7 +1443,8 @@ void IHM::afficherPuissance4(QString numeroPanier, QString equipe)
 
 void IHM::afficherPlateau()
 {
-    ui->labelVisualisationPuissance4->setPixmap(QPixmap(":/puissance4.png"));
+    ui->labelVisualisationPuissance4->setPixmap(
+      QPixmap(":/puissance4_" + QString::number(nbPaniers) + QString(".png")));
 }
 
 void IHM::initialiserPlateau()
