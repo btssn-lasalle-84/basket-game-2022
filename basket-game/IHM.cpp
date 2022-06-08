@@ -399,9 +399,6 @@ int IHM::jouerUnJeton(QString numeroPanier, QString equipe)
                   jetonRouge);
                 qDebug() << Q_FUNC_INFO << "Dessin sur le P4 rouge"
                          << numeroPanier.toInt();
-                verifierLigne(ligne);
-                verifierColonne(numeroPanier.toInt());
-                break;
             }
             else if(equipe == "J")
             {
@@ -412,10 +409,10 @@ int IHM::jouerUnJeton(QString numeroPanier, QString equipe)
                          DEPLACEMENT_COLONNE - (ligne * 60)),
                   jetonJaune);
                 qDebug() << Q_FUNC_INFO << "Dessin sur le P4 jaune";
-                verifierLigne(ligne);
-                verifierColonne(numeroPanier.toInt());
-                break;
             }
+            verifierLigne(ligne);
+            verifierColonne(numeroPanier.toInt());
+            verifierDiagonales();
             return ligne;
         }
         qDebug() << Q_FUNC_INFO << plateau[numeroPanier.toInt()].size();
@@ -746,13 +743,6 @@ void IHM::connecterSignalSlot()
             SIGNAL(nouveauPanier(QString, QString)),
             this,
             SLOT(jouerUnJeton(QString, QString)));
-
-    // ajout d'un jeton dans le puissance 4
-    connect(communication,
-            SIGNAL(nouveauPanier(QString, QString)),
-            this,
-            SLOT(afficherPuissance4(QString, QString)));
-    // Verification du l'alignement d'un jeton
     // Communication
     connect(communication,
             SIGNAL(peripheriqueDetecte(QString, QString)),
@@ -850,19 +840,9 @@ void IHM::initialiserPartie()
     timerSeance->start(500);
 }
 
-void IHM::afficherPuissance4(QString numeroPanier, QString equipe)
-{
-    QImage  jetonRouge(":images/jetonRouge.png");
-    QImage  jetonJaune(":images/jetonJaune.png");
-    QPixmap plateau = ui->labelVisualisationPuissance4->pixmap()
-                        ->copy(); // on récupère l'image précédente
-    QPainter p(&plateau);
-}
-
 void IHM::afficherPlateau()
 {
-    ui->labelVisualisationPuissance4->setPixmap(
-      QPixmap(":/puissance4_" + QString::number(nbPaniers) + QString(".png")));
+    ui->labelVisualisationPuissance4->setPixmap(QPixmap(":/puissance4.png"));
 }
 
 void IHM::initialiserPlateau()
@@ -894,13 +874,13 @@ IHM::CouleurJeton IHM::verifierLigne(int ligne)
         qDebug() << Q_FUNC_INFO << somme;
         if(somme == NB_PIONS_ALIGNES)
         {
-            return CouleurJeton::JAUNE;
             qDebug() << Q_FUNC_INFO << "victoire jaune horizon";
+            return CouleurJeton::JAUNE;
         }
         else if(somme == NB_PIONS_ALIGNES * -1)
         {
-            return CouleurJeton::ROUGE;
             qDebug() << Q_FUNC_INFO << "victoire rouge horizon";
+            return CouleurJeton::ROUGE;
         }
     }
 
@@ -934,6 +914,7 @@ IHM::CouleurJeton IHM::verifierDiagonales()
 {
     // diagonalement
     int somme = 0;
+    qDebug() << Q_FUNC_INFO << somme;
     for(int ligne = 0; ligne <= (NB_LIGNES - NB_PIONS_ALIGNES); ++ligne)
     {
         for(int colonne = 0; colonne <= (NB_PANIERS - NB_PIONS_ALIGNES);
@@ -952,46 +933,74 @@ IHM::CouleurJeton IHM::verifierDiagonales()
             }
         }
     }
+    int sommeInverse = 0;
+    qDebug() << Q_FUNC_INFO << sommeInverse;
+    for(int ligne = 0; ligne >= (NB_LIGNES - NB_PIONS_ALIGNES); ++ligne)
+    {
+        for(int colonne = NB_PANIERS;
+            colonne <= (NB_PANIERS + NB_PIONS_ALIGNES);
+            --colonne)
+        {
+            sommeInverse =
+              plateau[colonne][ligne] + plateau[colonne + -1][ligne - 1] +
+              plateau[colonne - 2][ligne - 2] + plateau[colonne - 3][ligne - 3];
+            if(sommeInverse == NB_PIONS_ALIGNES)
+            {
+                return CouleurJeton::JAUNE;
+            }
+            else if(sommeInverse == NB_PIONS_ALIGNES * -1)
+            {
+                return CouleurJeton::ROUGE;
+            }
+        }
+    }
     return CouleurJeton::AUCUN;
 }
 
 bool IHM::aGagne(CouleurJeton couleurEquipe)
 {
     // horizontalement
+    qDebug() << Q_FUNC_INFO << "On rentre dans aGagne!!";
     for(int ligne = 0; ligne < NB_LIGNES; ++ligne)
     {
-        CouleurJeton couleur = verifierLigne(ligne);
+        CouleurJeton couleur = verifierLigne(IHM::CouleurJeton());
         if(couleur == couleurEquipe)
         {
+            qDebug() << Q_FUNC_INFO << "Verification";
             return true;
         }
     }
 
     // verticalement
-
-    // diagonalement
-    for(int ligne = 0; ligne < NB_LIGNES; ++ligne)
+    for(int colonne = 0; colonne < NB_PANIERS; ++colonne)
     {
-        CouleurJeton couleur = verifierDiagonales();
+        CouleurJeton couleur = verifierColonne(IHM::CouleurJeton());
         if(couleur == couleurEquipe)
         {
+            qDebug() << Q_FUNC_INFO << "Verification";
             return true;
         }
-    }
-    return false;
-}
 
+        // diagonalement
+        {
+            CouleurJeton couleur = verifierDiagonales();
+            if(couleur == couleurEquipe)
+            {
+                qDebug() << Q_FUNC_INFO << "Verification";
+                return true;
+            }
+        }
+        return false;
+    }
+}
 bool IHM::estRempli()
 {
-    for(int ligne = 0; ligne < plateau[6].size(); ++ligne)
+    for(int ligne = 0; ligne < plateau[NB_LIGNES].size(); ++ligne)
     {
-        if(plateau[5][ligne] == CouleurJeton::AUCUN)
+        if(plateau[NB_PANIERS][ligne] == CouleurJeton::AUCUN)
         {
             return false;
         }
-        else
-        {
-            return true;
-        }
     }
+    return true;
 }

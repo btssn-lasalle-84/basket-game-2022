@@ -18,16 +18,17 @@
  */
 #define BDD "basket-game.sqlite"
 
-#define DEPLACEMENT_LIGNE 42
 /**
  * @def DEPLACEMENT_LIGNE
- * @brief Définit la constante de déplacement en ligne
+ * @brief Définit la constante de déplacement en ligne sur l'axe X
  */
-#define DEPLACEMENT_COLONNE 321
+#define DEPLACEMENT_LIGNE 42
+
 /**
  * @def DEPLACEMENT_COLONNE
- * @brief Définit la constante de déplacement en colonne
+ * @brief Définit la constante de déplacement en colonne sur l'axe Y
  */
+#define DEPLACEMENT_COLONNE 321
 
 /**
  * @def PLEIN_ECRAN
@@ -45,6 +46,7 @@
  * @def NB_LIGNES
  * @brief Définit la constante du nombre de ligne
  */
+
 #define NB_LIGNES 6 // rangées
 
 #define NB_PIONS_ALIGNES 4
@@ -178,7 +180,6 @@ class IHM : public QMainWindow
     void gererPartie();
     void ajouterPanier(QString numeroPanier, QString equipe);
     int  jouerUnJeton(QString numeroPanier, QString equipe);
-    void afficherPuissance4(QString numeroPanier, QString equipe);
     void arreterPartie();
     void gererHorlogePartie();
     void demarrerChronometrePartie();
