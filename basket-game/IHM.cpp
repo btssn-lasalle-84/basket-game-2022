@@ -213,6 +213,7 @@ void IHM::saisirTempsParPartieEnMinutes(int tempsParPartieEnMinutes)
 /**
  * @brief Valide une partie à démarrer
  */
+
 void IHM::validerDemarragePartie()
 {
     if(idEquipeRougeSelectionnee != -1 && idEquipeJauneSelectionnee != -1)
@@ -301,7 +302,7 @@ void IHM::validerDemarragePartie()
         }
         if(ui->puissance4->isChecked())
         {
-            afficherPlateau();
+            initialiserPlateau();
             ui->labelVisualisationPuissance4->show();
         }
         else
@@ -317,12 +318,15 @@ void IHM::validerDemarragePartie()
  */
 void IHM::gererPartie()
 {
-    qDebug() << Q_FUNC_INFO;
-    initialiserPlateau();
     /**
-     * @todo Intégrer le nombre de paniers définis dans la trame
+     * @todo TODO Intégrer le nombre de paniers définis dans la trame
      */
-    communication->envoyer("$basket;STT;\r");
+    qDebug() << Q_FUNC_INFO << nbPaniers;
+    QString trame =
+      QString("$basket;STT;") + QString::number(nbPaniers) + QString(";\r");
+    qDebug() << Q_FUNC_INFO << trame;
+    communication->envoyer(trame);
+    // communication->envoyer("$basket;STT;\r");
     ui->boutonGererPartiePagePartie->setEnabled(false);
     initialiserPartie();
     demarrerChronometrePartie();
@@ -567,9 +571,6 @@ void IHM::gererChronometrePartie()
 {
     QTime tempsChronometre(0, 0);
     tempsChronometre = tempsChronometre.addMSecs(tempsEcoulePartie.elapsed());
-    /**
-     * @todo TODO Gérer le temps d'une partie et d'un tir
-     */
     afficherChronometrePartie(tempsChronometre.toString("mm:ss"));
 }
 

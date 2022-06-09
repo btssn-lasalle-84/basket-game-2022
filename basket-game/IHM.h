@@ -44,7 +44,7 @@
 
 /**
  * @def NB_PANIERS
- * @brief Définit la constante du nombre de panier
+ * @brief Définit la constante du nombre de paniers de 2 à 7 (7 par défaut)
  */
 #define NB_PANIERS 7 // colonnes
 
