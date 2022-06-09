@@ -194,7 +194,7 @@ void Communication::receptionnerTrame()
     if(trameReception.startsWith(ENTETE_TRAME) &&
        trameReception.endsWith(DELIMITEUR_FIN))
     {
-        // qDebug() << Q_FUNC_INFO << trameReception;
+        qDebug() << Q_FUNC_INFO << trameReception;
         decomposerTrame();
         trameReception.clear();
     }
