@@ -161,6 +161,7 @@ class IHM : public QMainWindow
     void         afficherPlateau();
     void         initialiserPlateau();
     CouleurJeton verifierLigne(int ligne);
+    CouleurJeton verifierColonne(int colonne);
     CouleurJeton verifierDiagonales();
     bool         aGagne(CouleurJeton couleurEquipe);
     bool         estRempli();
@@ -178,7 +179,6 @@ class IHM : public QMainWindow
     void validerDemarragePartie();
     void gererPartie();
     void ajouterPanier(QString numeroPanier, QString equipe);
-    // void         afficherPuissance4(QString numeroPanier, QString equipe);
     void arreterPartie();
     void gererHorlogePartie();
     void demarrerChronometrePartie();

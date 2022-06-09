@@ -105,6 +105,7 @@ class Communication : public QObject
     void peripheriqueConnecte();
     void peripheriqueDeconnecte();
     void nouveauPanier(QString numeroPanier, QString equipe);
+    int  jouerUnJeton(QString numeroPanier, QString equipe);
 };
 
 #endif // COMMUNICATION_H
