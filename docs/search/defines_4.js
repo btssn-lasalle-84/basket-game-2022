@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['plein_5fecran_423',['PLEIN_ECRAN',['../_i_h_m_8h.html#a13ff9d8f0c9371d77867e51dc1eb7e2a',1,'IHM.h']]],
-  ['point_5fpour_5fvictoire_424',['POINT_POUR_VICTOIRE',['../_seance_8h.html#a311fda17d1332c594508238672368373',1,'Seance.h']]]
+  ['largeur_5fpuissance_5f4_471',['LARGEUR_PUISSANCE_4',['../_seance_8h.html#a7c5ede6bd2f300bcdb029309731a10d9',1,'Seance.h']]],
+  ['longueur_5fpuissance_5f4_472',['LONGUEUR_PUISSANCE_4',['../_seance_8h.html#a770c10999918980718704fed9d403794',1,'Seance.h']]]
 ];

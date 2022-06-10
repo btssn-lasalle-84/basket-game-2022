@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['pageconfiguration_407',['PageConfiguration',['../class_i_h_m.html#a073a62e0f36f4a6b85f3ba9c9eece8f9a9356bc6a7350e056ab5b9c7ce4ea0830',1,'IHM']]],
-  ['pagefinale_408',['PageFinale',['../class_i_h_m.html#a073a62e0f36f4a6b85f3ba9c9eece8f9a2ab82ce6753d557101e098fcabe2c829',1,'IHM']]],
-  ['pagepartie_409',['PagePartie',['../class_i_h_m.html#a073a62e0f36f4a6b85f3ba9c9eece8f9ad4758eb2e4194db772b6a20bc00c8204',1,'IHM']]],
-  ['pageprincipale_410',['PagePrincipale',['../class_i_h_m.html#a073a62e0f36f4a6b85f3ba9c9eece8f9a8635323c04a9a4f1e39ba77a460dee04',1,'IHM']]],
-  ['pageregles_411',['PageRegles',['../class_i_h_m.html#a073a62e0f36f4a6b85f3ba9c9eece8f9adee83ec63a6d8a5356d4627ae448eb96',1,'IHM']]],
-  ['prenom_5fjoueur_412',['PRENOM_JOUEUR',['../class_i_h_m.html#add7270f9efb686d2c5baac0b2e61c43ea6ba1fbb64be61ac7d1e8acbc75392d41',1,'IHM']]],
-  ['pseudo_5fjoueur_413',['PSEUDO_JOUEUR',['../class_i_h_m.html#add7270f9efb686d2c5baac0b2e61c43eaddf3198d61d1155e05cfc2a384a4ab2b',1,'IHM']]]
+  ['nbchampsequipe_446',['NbChampsEquipe',['../class_i_h_m.html#add7270f9efb686d2c5baac0b2e61c43eada300079845d460169f75ad0aeec83c5',1,'IHM']]],
+  ['nbequipes_447',['NbEquipes',['../class_i_h_m.html#afda9cac1f6bfe3e206cad6847772d0ffafa5201122708f380262761d92aae7661',1,'IHM']]],
+  ['nbfenetres_448',['NbFenetres',['../class_i_h_m.html#a073a62e0f36f4a6b85f3ba9c9eece8f9a3275a7bf8880c00538ecc2d9f3819d13',1,'IHM']]],
+  ['nbjetons_449',['NbJetons',['../class_i_h_m.html#ab70b9f9c92231494ed919d1e1968bd88a5f94e1e4c553a2c842f36aabd252ff09',1,'IHM']]],
+  ['nom_5fclub_450',['NOM_CLUB',['../class_i_h_m.html#add7270f9efb686d2c5baac0b2e61c43ea1e5c1ec9000647e8a3dff837d4fd6bd2',1,'IHM']]],
+  ['nom_5fequipe_451',['NOM_EQUIPE',['../class_i_h_m.html#add7270f9efb686d2c5baac0b2e61c43ea37ad023d420ee5c321993bfa406e6283',1,'IHM']]],
+  ['nom_5fjoueur_452',['NOM_JOUEUR',['../class_i_h_m.html#add7270f9efb686d2c5baac0b2e61c43ea40e616966c10fd713d30ab9a864d4df6',1,'IHM']]]
 ];
