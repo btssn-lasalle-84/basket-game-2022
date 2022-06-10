@@ -25,6 +25,7 @@ var class_seance =
     [ "setNomEquipeJaune", "class_seance.html#ab3e0e246344693a2f076fa7ecc17f3f6", null ],
     [ "setNomEquipeRouge", "class_seance.html#a392003393802a32a8d8c63bf6d2ef59c", null ],
     [ "setNumeroManche", "class_seance.html#a2e0a09b08e914f08a970f08b1531dcc3", null ],
+    [ "colonne", "class_seance.html#ae85f45b86ba4f8ca40c3f5451102de92", null ],
     [ "debutTemps", "class_seance.html#a704ca7eee2ce0dfa4a2fab036605f3f0", null ],
     [ "debutTempsTour", "class_seance.html#a738b324c18f6d5c1dd9a4e898acbbc05", null ],
     [ "dureeTempsPartie", "class_seance.html#a63116d7bf7cfea456c50d85c89d1001a", null ],
@@ -32,6 +33,7 @@ var class_seance =
     [ "equipeJaune", "class_seance.html#aa111a908129fe5c9d2c967ca66296aaa", null ],
     [ "equipeRouge", "class_seance.html#a0d6bf4b68557af0f3e24b6d3b7b86c41", null ],
     [ "finTemps", "class_seance.html#a8ab0c5001cbcb1dd1a2bbd4ed71ca344", null ],
+    [ "ligne", "class_seance.html#a7d366b05b73c1c5e5c3e8b924d4ee4db", null ],
     [ "nbPaniersEquipeJaune", "class_seance.html#ae82d6462670207f79f13f40522fb8519", null ],
     [ "nbPaniersEquipeRouge", "class_seance.html#a5a5473ea4e4e463cc7149a29506c37d5", null ],
     [ "numeroManche", "class_seance.html#a94735a1b171043375685504596bd49c6", null ]

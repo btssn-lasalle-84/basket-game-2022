@@ -2,6 +2,14 @@
 
 “Entraînement ludique au tir de basket-ball“
 
+- [Le projet basket-game-2022](#le-projet-basket-game-2022)
+  - [Fonctionnalités](#fonctionnalités)
+  - [TODO](#todo)
+  - [Historique des versions](#historique-des-versions)
+  - [Base de données](#base-de-données)
+  - [Auteur](#auteur)
+  - [Kanban](#kanban)
+
 ## Fonctionnalités
 
 - Démarrer une nouvelle partie
@@ -14,6 +22,8 @@
 - Afficher les règles
 - Communiquer avec le module de détection
 
+![](images/basket-game.gif)
+
 ## TODO
 
 - [ ] Gérer la base de données
@@ -21,24 +31,12 @@
 
 ## Historique des versions
 
-- Version 1.1 : 
+- Version 1.1 : 10/06/2022
 - Version 1.0 : 27/05/2022
 - Version 0.2 : 24/05/2022
 - Version 0.1 : 02/04/2022
 
-## Captures d'écran
-
-La page d'accueil :
-
-![](images/capture-ecran-accueil-v0.2.png)
-
-La page de configuration d'une nouvelle partie :
-
-![](images/capture-ecran-configuration-v1.1.png)
-
-Une partie :
-
-![](images/capture-ecran-partie-v1.1.png)
+![](images/jira-versions-basket-game.png)
 
 ## Base de données
 
@@ -52,3 +50,4 @@ Une partie :
 
 [basket-game-2022](https://github.com/btssn-lasalle-84/basket-game-2022/projects/1)
 
+©️ LaSalle Avignon 2022

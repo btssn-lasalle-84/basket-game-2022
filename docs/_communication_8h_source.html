@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="basket-game.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">basket-game
-   &#160;<span id="projectnumber">1.0</span>
+   &#160;<span id="projectnumber">1.1</span>
    </div>
    <div id="projectbrief">BTS SNIR LaSalle Avignon 2022</div>
   </td>
@@ -154,12 +154,14 @@ $(document).ready(function(){initNavTree('_communication_8h_source.html',''); in
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_communication.html#aecde274aceb663bba936394d82a2d940">peripheriqueConnecte</a>();</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_communication.html#a086419fc47059e38a3d1b53b5925b9e4">peripheriqueDeconnecte</a>();</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_communication.html#a69cea50ef951e52b0c96f3ddd1dc92ff">nouveauPanier</a>(QString numeroPanier, QString equipe);</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;};</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="preprocessor">#endif // COMMUNICATION_H</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordtype">int</span>  <a class="code" href="class_communication.html#a9dfc811b4e2e9f14a4add1586cee60d2">jouerUnJeton</a>(QString numeroPanier, QString equipe);</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;};</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="preprocessor">#endif // COMMUNICATION_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclass_communication_html_afefe1f2aa6de0e7b62c7db59f5f84608"><div class="ttname"><a href="class_communication.html#afefe1f2aa6de0e7b62c7db59f5f84608">Communication::peripheriqueTrouve</a></div><div class="ttdeci">bool peripheriqueTrouve</div><div class="ttdoc">periphérique distant trouvé ou non</div><div class="ttdef"><b>Definition:</b> <a href="_communication_8h_source.html#l00079">Communication.h:79</a></div></div>
+<div class="ttc" id="aclass_communication_html_a9dfc811b4e2e9f14a4add1586cee60d2"><div class="ttname"><a href="class_communication.html#a9dfc811b4e2e9f14a4add1586cee60d2">Communication::jouerUnJeton</a></div><div class="ttdeci">int jouerUnJeton(QString numeroPanier, QString equipe)</div></div>
 <div class="ttc" id="aclass_communication_html_a4e5c8f9b31d24a90f2facacf64e0aead"><div class="ttname"><a href="class_communication.html#a4e5c8f9b31d24a90f2facacf64e0aead">Communication::discoveryAgent</a></div><div class="ttdeci">QBluetoothDeviceDiscoveryAgent * discoveryAgent</div><div class="ttdoc">agent de détection des périphériques</div><div class="ttdef"><b>Definition:</b> <a href="_communication_8h_source.html#l00076">Communication.h:76</a></div></div>
 <div class="ttc" id="aclass_communication_html_aac3496106c36c313f2938181c94c9993"><div class="ttname"><a href="class_communication.html#aac3496106c36c313f2938181c94c9993">Communication::peripheriqueDistant</a></div><div class="ttdeci">QBluetoothDeviceInfo peripheriqueDistant</div><div class="ttdoc">Le module Bluetooth GROOM.</div><div class="ttdef"><b>Definition:</b> <a href="_communication_8h_source.html#l00078">Communication.h:78</a></div></div>
 <div class="ttc" id="aclass_communication_html_ab0f73fd15cf36b22b4af456459100b6c"><div class="ttname"><a href="class_communication.html#ab0f73fd15cf36b22b4af456459100b6c">Communication::estPeripheriqueTrouve</a></div><div class="ttdeci">bool estPeripheriqueTrouve() const</div><div class="ttdoc">Retourne l'état de la recherche.</div><div class="ttdef"><b>Definition:</b> <a href="_communication_8cpp_source.html#l00131">Communication.cpp:131</a></div></div>
@@ -194,7 +196,7 @@ $(document).ready(function(){initNavTree('_communication_8h_source.html',''); in
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_59049d07bf27f9926fb47b73ae8981c0.html">basket-game</a></li><li class="navelem"><a class="el" href="_communication_8h.html">Communication.h</a></li>
-    <li class="footer"><img class="footer" src="lasalle-logo.png" height="31" alt="La Salle Avignon"/>&nbsp;<b>Campus La Salle Avignon</b>&nbsp;-&nbsp;9 Rue Notre Dame des 7 douleurs&nbsp;-&nbsp;BP 50165&nbsp;-&nbsp;84008 Avignon&nbsp;-&nbsp;Généré le Mercredi 25 Mai 2022 06:57:47 pour basket-game par&nbsp;<a href="https://www.doxygen.org/index.html">doxygen</a>&nbsp;1.8.17&nbsp;</li>
+    <li class="footer"><img class="footer" src="lasalle-logo.png" height="31" alt="La Salle Avignon"/>&nbsp;<b>Campus La Salle Avignon</b>&nbsp;-&nbsp;9 Rue Notre Dame des 7 douleurs&nbsp;-&nbsp;BP 50165&nbsp;-&nbsp;84008 Avignon&nbsp;-&nbsp;Généré le Vendredi 10 Juin 2022 20:51:46 pour basket-game par&nbsp;<a href="https://www.doxygen.org/index.html">doxygen</a>&nbsp;1.8.17&nbsp;</li>
   </ul>
 </div>
 </body>

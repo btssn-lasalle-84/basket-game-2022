@@ -11,7 +11,7 @@
 
 \author Guillaume LAMBERT <<guillaumelambert45@gmail.com>>
 \date 2022
-\version 1.0
+\version 1.1
 \see https://github.com/btssn-lasalle-84/basket-game-2022
 
 
@@ -26,7 +26,10 @@
 Fonctionnalités :
 
 - Démarrer une nouvelle partie
+- Paramétrer le temps de la partie et des tours
 - Gérer le déroulement d'une partie
+- Afficher le puissance 4
+- Afficher les jetons en fonction des tirs
 - Afficher le score d'une partie
 - Afficher le vainqueur d'une partie
 - Afficher les règles
@@ -34,7 +37,7 @@ Fonctionnalités :
 
 \author Guillaume LAMBERT <<guillaumelambert45@gmail.com>>
 \date 2022
-\version 1.0
+\version 1.1
 \see https://github.com/btssn-lasalle-84/basket-game-2022
 
 
@@ -42,7 +45,7 @@ Fonctionnalités :
 
 \author Guillaume LAMBERT <<guillaumelambert45@gmail.com>>
 \date 2022
-\version 1.0
+\version 1.1
 \see https://github.com/btssn-lasalle-84/basket-game-2022
 
 
