@@ -5,7 +5,10 @@
 ## Fonctionnalités
 
 - Démarrer une nouvelle partie
+- Paramétrer le temps de la partie et des tours
 - Gérer le déroulement d'une partie
+- Afficher le puissance 4
+- Afficher les jetons en fonction des tirs
 - Afficher le score d'une partie
 - Afficher le vainqueur d'une partie
 - Afficher les règles
@@ -13,13 +16,13 @@
 
 ## TODO
 
-- [ ] Paramétrer le temps de la partie et des tours
-- [ ] Afficher le puissance 4
-- [ ] Afficher les jetons en fonction des tirs
+- [ ] Gérer la base de données
 - [ ] Option : Effectuer des sons par rapport à un tir réussi ou non
 
 ## Historique des versions
 
+- Version 1.1 : 
+- Version 1.0 : 27/05/2022
 - Version 0.2 : 24/05/2022
 - Version 0.1 : 02/04/2022
 
@@ -31,7 +34,11 @@ La page d'accueil :
 
 La page de configuration d'une nouvelle partie :
 
-![](images/capture-ecran-configuration-v0.2.png)
+![](images/capture-ecran-configuration-v1.1.png)
+
+Une partie :
+
+![](images/capture-ecran-partie-v1.1.png)
 
 ## Base de données
 
