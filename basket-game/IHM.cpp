@@ -12,7 +12,7 @@
  *
  * @brief Définition de la classe IHM
  * @author Guillaume LAMBERT
- * @version 1.0
+ * @version 1.1
  *
  */
 
@@ -64,7 +64,7 @@ IHM::~IHM()
 }
 
 /**
- * @brief Pépare une nouvelle partie
+ * @brief Prépare une nouvelle partie
  */
 void IHM::demarrerNouvellePartie()
 {
@@ -355,17 +355,17 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
         {
             ui->labelEquipeEnCours->setText("Tir raté équipe " +
                                             seance->getNomEquipeJaune() + " !");
-                          ui->tempsTour->setText(
-                  QString::number(seance->getDureeTempsTour()) + QString(" s"));
-                seance->setDebutTempsTour(QTime::currentTime());
+            ui->tempsTour->setText(
+              QString::number(seance->getDureeTempsTour()) + QString(" s"));
+            seance->setDebutTempsTour(QTime::currentTime());
         }
         else if(equipe == "R")
         {
             ui->labelEquipeEnCours->setText("Tir raté pour l'équipe " +
                                             seance->getNomEquipeRouge() + " !");
-                          ui->tempsTour->setText(
-                  QString::number(seance->getDureeTempsTour()) + QString(" s"));
-                seance->setDebutTempsTour(QTime::currentTime());
+            ui->tempsTour->setText(
+              QString::number(seance->getDureeTempsTour()) + QString(" s"));
+            seance->setDebutTempsTour(QTime::currentTime());
         }
         return;
     }
@@ -389,9 +389,9 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
               seance->getNbPaniersEquipeRouge());
             ui->labelEquipeEnCours->setText(seance->getNomEquipeJaune());
             etatPartie = aGagne(CouleurJeton::ROUGE);
-              ui->tempsTour->setText(
-                  QString::number(seance->getDureeTempsTour()) + QString(" s"));
-                seance->setDebutTempsTour(QTime::currentTime());
+            ui->tempsTour->setText(
+              QString::number(seance->getDureeTempsTour()) + QString(" s"));
+            seance->setDebutTempsTour(QTime::currentTime());
         }
         else if(equipe == "J")
         {
@@ -400,8 +400,9 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
               seance->getNbPaniersEquipeJaune());
             ui->labelEquipeEnCours->setText(seance->getNomEquipeRouge());
             etatPartie = aGagne(CouleurJeton::JAUNE);
-          QString::number(seance->getDureeTempsTour()) + QString(" s"));
-                seance->setDebutTempsTour(QTime::currentTime());
+            ui->tempsTour->setText(
+              QString::number(seance->getDureeTempsTour()) + QString(" s"));
+            seance->setDebutTempsTour(QTime::currentTime());
         }
         if(etatPartie)
         {
@@ -448,6 +449,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
             if(seance->getNbPaniersEquipeJaune() == POINT_POUR_VICTOIRE)
             {
                 ui->labelEquipeEnCours->setText(
+                  "Bravo à l'équipe " + seance->getNomEquipeJaune() + " !");
             }
             else if(seance->getNbPaniersEquipeRouge() == POINT_POUR_VICTOIRE)
             {
