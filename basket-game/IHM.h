@@ -80,6 +80,28 @@ class IHM : public QMainWindow
     ~IHM();
 
   private:
+    Ui::IHM*       ui;  //!< la fenêtre graphique associée à cette classe
+    BaseDeDonnees* bdd; //!< base de donnes
+    Communication* communication;      //!< pour la communication bluetooth
+    QVector<QStringList> listeEquipes; //!< la liste des équipes
+    QVector<Equipe*>     equipes;      //!< les deux équipes
+    int                  idEquipeRougeSelectionnee; //!< l'id de l'équipe rouge
+    int                  idEquipeJauneSelectionnee; //!< l'id de l'équipe jaune
+    Seance*              seance;      //!< la séance entre deux équipes
+    QTimer*              timerSeance; //!< pour gérer les temps restants
+    QTimer*       chronometrePartie;  //!< pour le chronmétrage d'une partie
+    QElapsedTimer tempsEcoulePartie;  //!< pour gérer le temps écoulé
+
+    void initialiserRessources();
+    void initialiserEquipes();
+    void connecterSignalSlot();
+    void recupererEquipes();
+    void ajouterJoueurs(QString idEquipe, int couleurEquipe);
+    void afficherListeEquipe(QStringList equipe);
+    void initialiserPartie();
+    void gererTempsTour();
+    void gererTempsPartie();
+    void finirPartie();
     /**
      * @enum Fenetre
      * @brief Définit les différents fenêtres de l'IHM
@@ -197,9 +219,10 @@ class IHM : public QMainWindow
     void afficherEtatConnexion();
     void afficherEtatDeconnexion();
     void terminerRecherche();
+    void changerTourEquipe();
 
   signals:
-    void tempsTourExpiree();
+    void tempsTourExpire();
 };
 
 #endif // IHM_H

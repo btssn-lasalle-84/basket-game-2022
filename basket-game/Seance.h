@@ -7,6 +7,18 @@
 class Equipe;
 
 /**
+ * @def LARGEUR_PUISSANCE_4
+ * @brief Constante de la largeur du puissance 4
+ */
+#define LARGEUR_PUISSANCE_4
+
+/**
+ * @def LONGUEUR_PUISSANCE_4
+ * @brief Constante de la longueur du puissance 4
+ */
+#define LONGUEUR_PUISSANCE_4
+
+/**
  * @def POINT_POUR_VICTOIRE
  * @brief Constante des points pour une victoire
  */
@@ -16,8 +28,8 @@ class Equipe;
  * @def TEMPS_PAR_TOUR_DEFAUT
  * @brief Le temps pour un tour
  */
-#define TEMPS_PAR_TOUR_DEFAUT   30 // en s
-#define TEMPS_PAR_PARTIE_DEFAUT 3  // en m
+#define TEMPS_PAR_TOUR_DEFAUT   3 // en s
+#define TEMPS_PAR_PARTIE_DEFAUT 3 // en m
 
 class Seance : public QObject
 {

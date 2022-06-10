@@ -242,9 +242,11 @@ void IHM::validerDemarragePartie()
                  << ui->tempsParTourEnSecondes->value();
         if(ui->tempsParTour->checkState() == Qt::Checked)
         {
+            ui->labelTempsTour->show();
             ui->tempsTour->setText(
               QString::number(ui->tempsParTourEnSecondes->value()) +
               QString(" s"));
+            ui->tempsTour->show();
             seance->setDureeTempsTour(ui->tempsParTourEnSecondes->value());
         }
         else
@@ -271,7 +273,6 @@ void IHM::validerDemarragePartie()
 
         qDebug() << Q_FUNC_INFO << "tempsParPartieEnMinutes"
                  << ui->tempsParPartieEnMinutes->value();
-        // ui->tempsPartie->setText("");
 
         // Il faut être connecté
         if(communication->estConnecte())
@@ -330,11 +331,13 @@ void IHM::gererPartie()
     ui->boutonGererPartiePagePartie->setEnabled(false);
     initialiserPartie();
     demarrerChronometrePartie();
+    gererHorlogePartie();
 }
 
 /**
  * @brief Slot de gestion d'une trame P (PANIER)
  */
+
 void IHM::ajouterPanier(QString numeroPanier, QString equipe)
 {
     /**
@@ -352,11 +355,17 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
         {
             ui->labelEquipeEnCours->setText("Tir raté équipe " +
                                             seance->getNomEquipeJaune() + " !");
+                          ui->tempsTour->setText(
+                  QString::number(seance->getDureeTempsTour()) + QString(" s"));
+                seance->setDebutTempsTour(QTime::currentTime());
         }
         else if(equipe == "R")
         {
             ui->labelEquipeEnCours->setText("Tir raté pour l'équipe " +
                                             seance->getNomEquipeRouge() + " !");
+                          ui->tempsTour->setText(
+                  QString::number(seance->getDureeTempsTour()) + QString(" s"));
+                seance->setDebutTempsTour(QTime::currentTime());
         }
         return;
     }
@@ -380,6 +389,9 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
               seance->getNbPaniersEquipeRouge());
             ui->labelEquipeEnCours->setText(seance->getNomEquipeJaune());
             etatPartie = aGagne(CouleurJeton::ROUGE);
+              ui->tempsTour->setText(
+                  QString::number(seance->getDureeTempsTour()) + QString(" s"));
+                seance->setDebutTempsTour(QTime::currentTime());
         }
         else if(equipe == "J")
         {
@@ -388,6 +400,8 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
               seance->getNbPaniersEquipeJaune());
             ui->labelEquipeEnCours->setText(seance->getNomEquipeRouge());
             etatPartie = aGagne(CouleurJeton::JAUNE);
+          QString::number(seance->getDureeTempsTour()) + QString(" s"));
+                seance->setDebutTempsTour(QTime::currentTime());
         }
         if(etatPartie)
         {
@@ -434,7 +448,6 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
             if(seance->getNbPaniersEquipeJaune() == POINT_POUR_VICTOIRE)
             {
                 ui->labelEquipeEnCours->setText(
-                  "Bravo à l'équipe " + seance->getNomEquipeJaune() + " !");
             }
             else if(seance->getNbPaniersEquipeRouge() == POINT_POUR_VICTOIRE)
             {
@@ -487,7 +500,7 @@ int IHM::jouerUnJeton(QString numeroPanier, QString equipe)
         }
     }
 
-    return -1; // aucune position trouvée
+    return -1; // aucune position trouvé
 }
 
 /**
@@ -514,25 +527,7 @@ void IHM::gererHorlogePartie()
     // qDebug() << Q_FUNC_INFO;
     if(seance != nullptr && !seance->estFinie())
     {
-        QTime heureCourante = QTime::currentTime();
-        int   tempsRestantTour =
-          heureCourante.secsTo(seance->getDebutTempsTour());
-        if(tempsRestantTour > 0)
-        {
-            ui->tempsTour->setText(QString::number(tempsRestantTour) +
-                                   QString(" s"));
-        }
-        else
-        {
-            emit tempsTourExpiree();
-        }
-
-        int tempsRestantPartie = seance->getDureeTempsPartie();
-        if(tempsRestantPartie > 0)
-        {
-            ui->tempsPartie->setText(QString::number(tempsRestantPartie) +
-                                     QString(" m"));
-        }
+        gererTempsTour();
     }
 }
 
@@ -703,6 +698,21 @@ void IHM::terminerRecherche()
     qDebug() << Q_FUNC_INFO;
 }
 
+void IHM::changerTourEquipe()
+{
+    if(ui->labelEquipeEnCours->text() == ui->nomEquipeRouge_2->text())
+    {
+        ui->labelEquipeEnCours->setText(seance->getNomEquipeJaune());
+    }
+    else if(ui->labelEquipeEnCours->text() == ui->nomEquipeJaune_2->text())
+    {
+        ui->labelEquipeEnCours->setText(seance->getNomEquipeRouge());
+    }
+    ui->tempsTour->setText(QString::number(seance->getDureeTempsTour()) +
+                           QString(" s"));
+    seance->setDebutTempsTour(QTime::currentTime());
+}
+
 /**
  * @brief Initialise les ressources
  */
@@ -808,6 +818,8 @@ void IHM::connecterSignalSlot()
             SIGNAL(nouveauPanier(QString, QString)),
             this,
             SLOT(ajouterPanier(QString, QString)));
+    // Fin du tour et changement de l'équipe
+    connect(this, SIGNAL(tempsTourExpire()), this, SLOT(changerTourEquipe()));
     // Communication
     connect(communication,
             SIGNAL(peripheriqueDetecte(QString, QString)),
@@ -903,6 +915,27 @@ void IHM::initialiserPartie()
     seance->setDebutTemps(QTime::currentTime());
     seance->setDebutTempsTour(QTime::currentTime());
     timerSeance->start(500);
+}
+
+void IHM::gererTempsTour()
+{
+    // pas de temps par tour ?
+    if(seance->getDureeTempsTour() == 0)
+        return;
+    QTime heureCourante    = QTime::currentTime();
+    int   tempsRestantTour = heureCourante.secsTo(seance->getDebutTempsTour());
+    if(tempsRestantTour >= 0)
+    {
+        ui->tempsTour->setText(QString::number(tempsRestantTour) +
+                               QString(" s"));
+    }
+    else if(tempsRestantTour < 0)
+    {
+        ui->tempsTour->setText(QString::number(tempsRestantTour) +
+                               QString(" s"));
+        qDebug() << Q_FUNC_INFO << tempsRestantTour;
+        emit tempsTourExpire();
+    }
 }
 
 void IHM::afficherPlateau()
