@@ -2,29 +2,26 @@
 
 ## Présentation du protocole implanté dans le simulateur ESP'ACE
 
-Ce document présente rapidement le fonctionnement du simulateur ainsi que le protocole implémenté. Le protocole complet est disponible dans Google Drive. Actuellement, la version du protocole est la **0.1** (09 avril 2022).
+Ce document présente rapidement le fonctionnement du simulateur ainsi que le protocole implémenté. Le protocole complet est disponible dans Google Drive. Actuellement, la version du protocole est la **0.2** (09 juin 2022).
 
 ## Configuration du simulateur
 
+Valeur par défaut :
+
 ```cpp
-#define NB_PANIERS              5
+#define NB_PANIERS              7
 ```
 
 ## Fonctionnement
 
-- Trame de configuration :
-
-```
-$basket;CFG;\r
-$basket;ACK;5;\r
-```
-
 - Trame de début de partie :
 
 ```
-$basket;STT;\r
+$basket;STT;5;\r
 $basket;ACK;5;\r
 ```
+
+`5` : nombre de paniers
 
 - Trames de détection :
 

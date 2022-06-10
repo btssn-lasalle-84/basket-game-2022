@@ -22,7 +22,7 @@ class Equipe;
  * @def POINT_POUR_VICTOIRE
  * @brief Constante des points pour une victoire
  */
-#define POINT_POUR_VICTOIRE 5
+#define POINT_POUR_VICTOIRE 50
 
 /**
  * @def TEMPS_PAR_TOUR_DEFAUT
@@ -45,6 +45,8 @@ class Seance : public QObject
     QTime   debutTempsTour;
     int     dureeTempsTour;
     int     dureeTempsPartie;
+    int     colonne;
+    int     ligne;
 
   public:
     Seance(Equipe*  equipeJaune = nullptr,
