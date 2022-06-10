@@ -11,6 +11,7 @@ var class_communication =
     [ "estConnecte", "class_communication.html#af3ae011aedc8bcc4098a881b7dec41bf", null ],
     [ "estPeripheriqueTrouve", "class_communication.html#ab0f73fd15cf36b22b4af456459100b6c", null ],
     [ "initialiser", "class_communication.html#a2c10a52807bc7bdc520ec3fae622f672", null ],
+    [ "jouerUnJeton", "class_communication.html#a9dfc811b4e2e9f14a4add1586cee60d2", null ],
     [ "nouveauPanier", "class_communication.html#a69cea50ef951e52b0c96f3ddd1dc92ff", null ],
     [ "peripheriqueConnecte", "class_communication.html#aecde274aceb663bba936394d82a2d940", null ],
     [ "peripheriqueDeconnecte", "class_communication.html#a086419fc47059e38a3d1b53b5925b9e4", null ],

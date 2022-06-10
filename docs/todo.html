@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="basket-game.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">basket-game
-   &#160;<span id="projectnumber">1.0</span>
+   &#160;<span id="projectnumber">1.1</span>
    </div>
    <div id="projectbrief">BTS SNIR LaSalle Avignon 2022</div>
   </td>
@@ -91,10 +91,12 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <div class="textblock"><dl class="reflist">
 <dt>Membre <a class="el" href="class_equipe.html#a08c901172384965b6916ca3da1478ac7">Equipe::ajouterJoueur</a>  (QString idJoueur)</dt>
 <dd><a class="anchor" id="_todo000001"></a>récupérer le joueur dans la base de données, instancier un nouveau <a class="el" href="class_joueur.html">Joueur</a> et l'ajouter au conteneur  </dd>
+<dt>Membre <a class="el" href="class_i_h_m.html#aa5f61e83a4e6fb7062d5172b18f63c85">IHM::ajouterPanier</a>  (QString numeroPanier, QString equipe)</dt>
+<dd><a class="anchor" id="_todo000008"></a>Gérer l'arrêt de la partie et les temps  </dd>
 <dt>Membre <a class="el" href="class_i_h_m.html#a82980058d4fb72be6d978c62f6df9057">IHM::demarrerNouvellePartie</a>  ()</dt>
 <dd><a class="anchor" id="_todo000002"></a>TODO Récupérer les temps dans la base de données  </dd>
-<dt>Membre <a class="el" href="class_i_h_m.html#af0fb4ed670c8845010b1600daae09deb">IHM::gererChronometrePartie</a>  ()</dt>
-<dd><a class="anchor" id="_todo000008"></a>TODO Gérer le temps d'une partie et d'un tir  </dd>
+<dt>Membre <a class="el" href="class_i_h_m.html#aaf357d1ad33f9cb5a4b1e8468efe703f">IHM::gererPartie</a>  ()</dt>
+<dd><a class="anchor" id="_todo000007"></a>TODO Intégrer le nombre de paniers définis dans la trame  </dd>
 <dt>Membre <a class="el" href="class_i_h_m.html#a4f43d0de9be5d071ac2dfcc00ad25143">IHM::saisirNouvelleEquipeJaune</a>  ()</dt>
 <dd><a class="anchor" id="_todo000004"></a>TODO insérer la nouvelle équipe dans la base de données et dans la liste  </dd>
 <dt>Membre <a class="el" href="class_i_h_m.html#a389319e03554eed156cc23bba77a1e8b">IHM::saisirNouvelleEquipeRouge</a>  ()</dt>
@@ -102,9 +104,7 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dt>Membre <a class="el" href="class_i_h_m.html#aab1bc0cc6a8e5ab570dcbcdd203c6f66">IHM::saisirTempsParPartieEnMinutes</a>  (int tempsParPartieEnMinutes)</dt>
 <dd><a class="anchor" id="_todo000006"></a>TODO modifier les paramètres dans la base de données  </dd>
 <dt>Membre <a class="el" href="class_i_h_m.html#ad27297f6c7b9c7c8e4b8bab0f9924d73">IHM::saisirTempsParTourEnSecondes</a>  (int tempsParTourEnSecondes)</dt>
-<dd><a class="anchor" id="_todo000005"></a>TODO modifier les paramètres dans la base de données  </dd>
-<dt>Membre <a class="el" href="class_i_h_m.html#a21f0e44264618b516c001379e52218f7">IHM::validerDemarragePartie</a>  ()</dt>
-<dd><a class="anchor" id="_todo000007"></a>TODO Initialiser le reste de la page Partie </dd>
+<dd><a class="anchor" id="_todo000005"></a>TODO modifier les paramètres dans la base de données </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
@@ -113,7 +113,7 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer"><img class="footer" src="lasalle-logo.png" height="31" alt="La Salle Avignon"/>&nbsp;<b>Campus La Salle Avignon</b>&nbsp;-&nbsp;9 Rue Notre Dame des 7 douleurs&nbsp;-&nbsp;BP 50165&nbsp;-&nbsp;84008 Avignon&nbsp;-&nbsp;Généré le Mercredi 25 Mai 2022 06:57:47 pour basket-game par&nbsp;<a href="https://www.doxygen.org/index.html">doxygen</a>&nbsp;1.8.17&nbsp;</li>
+    <li class="footer"><img class="footer" src="lasalle-logo.png" height="31" alt="La Salle Avignon"/>&nbsp;<b>Campus La Salle Avignon</b>&nbsp;-&nbsp;9 Rue Notre Dame des 7 douleurs&nbsp;-&nbsp;BP 50165&nbsp;-&nbsp;84008 Avignon&nbsp;-&nbsp;Généré le Vendredi 10 Juin 2022 20:51:46 pour basket-game par&nbsp;<a href="https://www.doxygen.org/index.html">doxygen</a>&nbsp;1.8.17&nbsp;</li>
   </ul>
 </div>
 </body>

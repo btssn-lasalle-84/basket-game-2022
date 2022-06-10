@@ -6,7 +6,7 @@
  *
  * @brief Déclaration de la classe IHM
  * @author Guillaume LAMBERT
- * @version 1.0
+ * @version 1.1
  *
  */
 
@@ -19,10 +19,42 @@
 #define BDD "basket-game.sqlite"
 
 /**
+ * @def TAILLE_JETON
+ * @brief Définit la constante de la taille d'un jeton
+ */
+#define TAILLE_JETON 60
+
+/**
+ * @def DEPLACEMENT_X
+ * @brief Définit la constante de déplacement en x
+ */
+#define DEPLACEMENT_X 42
+
+/**
+ * @def DEPLACEMENT_Y
+ * @brief Définit la constante de déplacement en y
+ */
+#define DEPLACEMENT_Y 321
+
+/**
  * @def PLEIN_ECRAN
  * @brief Pour le mode kiosque de la télévision
  */
 #define PLEIN_ECRAN
+
+/**
+ * @def NB_PANIERS
+ * @brief Définit la constante du nombre de paniers de 2 à 7 (7 par défaut)
+ */
+#define NB_PANIERS 7 // colonnes
+
+/**
+ * @def NB_LIGNES
+ * @brief Définit la constante du nombre de ligne
+ */
+#define NB_LIGNES 6 // rangées
+
+#define NB_PIONS_ALIGNES 4
 
 namespace Ui
 {
@@ -48,26 +80,6 @@ class IHM : public QMainWindow
     ~IHM();
 
   private:
-    Ui::IHM*       ui;  //!< la fenêtre graphique associée à cette classe
-    BaseDeDonnees* bdd; //!< base de donnes
-    Communication* communication;      //!< pour la communication bluetooth
-    QVector<QStringList> listeEquipes; //!< la liste des équipes
-    QVector<Equipe*>     equipes;      //!< les deux équipes
-    int                  idEquipeRougeSelectionnee; //!< l'id de l'équipe rouge
-    int                  idEquipeJauneSelectionnee; //!< l'id de l'équipe jaune
-    Seance*              seance;      //!< la séance entre deux équipes
-    QTimer*              timerSeance; //!< pour gérer les temps restants
-    QTimer*       chronometrePartie;  //!< pour le chronmétrage d'une partie
-    QElapsedTimer tempsEcoulePartie;  //!< pour gérer le temps écoulé
-
-    void initialiserRessources();
-    void initialiserEquipes();
-    void connecterSignalSlot();
-    void recupererEquipes();
-    void ajouterJoueurs(QString idEquipe, int couleurEquipe);
-    void afficherListeEquipe(QStringList equipe);
-    void initialiserPartie();
-
     /**
      * @enum Fenetre
      * @brief Définit les différents fenêtres de l'IHM
@@ -96,6 +108,18 @@ class IHM : public QMainWindow
     };
 
     /**
+     * @enum CouleurJeton
+     * @brief Définit les différentes couleurs d'un jeton
+     */
+    enum CouleurJeton
+    {
+        ROUGE = -1,
+        AUCUN = 0,
+        JAUNE = 1,
+        NbJetons /* = 2 */
+    };
+
+    /**
      * @enum ChampsEquipe
      * @brief Définit les différents champs d'e la table Salle'une équipe
      */
@@ -111,6 +135,41 @@ class IHM : public QMainWindow
         PRENOM_JOUEUR, //!< le prénom du joueur
         NbChampsEquipe
     };
+
+    Ui::IHM*       ui;  //!< la fenêtre graphique associée à cette classe
+    BaseDeDonnees* bdd; //!< base de donnes
+    Communication* communication;      //!< pour la communication bluetooth
+    QVector<QStringList> listeEquipes; //!< la liste des équipes
+    QVector<Equipe*>     equipes;      //!< les deux équipes
+    int                  idEquipeRougeSelectionnee; //!< l'id de l'équipe rouge
+    int                  idEquipeJauneSelectionnee; //!< l'id de l'équipe jaune
+    Seance*              seance;      //!< la séance entre deux équipes
+    QTimer*              timerSeance; //!< pour gérer les temps restants
+    QTimer*       chronometrePartie;  //!< pour le chronmétrage d'une partie
+    QElapsedTimer tempsEcoulePartie;  //!< pour gérer le temps écoulé
+    QVector<QVector<CouleurJeton> > plateau; //! QVector<QVector<int> > plateau
+    bool                            etatPartie; //! true si un gagnant
+    int                             nbPaniers;  //! nombre de paniers
+
+    void initialiserRessources();
+    void initialiserEquipes();
+    void connecterSignalSlot();
+    void recupererEquipes();
+    void ajouterJoueurs(QString idEquipe, int couleurEquipe);
+    void afficherListeEquipe(QStringList equipe);
+    void initialiserPartie();
+    void gererTempsTour();
+    // void         gererTempsPartie();
+    // void         finirPartie();
+    void         afficherPlateau();
+    void         initialiserPlateau();
+    CouleurJeton verifierLigne(int ligne);
+    CouleurJeton verifierColonne(int colonne);
+    CouleurJeton verifierDiagonales();
+    bool         aGagne(CouleurJeton couleurEquipe);
+    bool         estRempli();
+    int          jouerUnJeton(QString numeroPanier, QString equipe);
+    void         afficherUnJeton(int ligne, int colonne, QString equipe);
 
   public slots:
     void demarrerNouvellePartie();
@@ -141,9 +200,10 @@ class IHM : public QMainWindow
     void afficherEtatConnexion();
     void afficherEtatDeconnexion();
     void terminerRecherche();
+    void changerTourEquipe();
 
   signals:
-    void tempsTourExpiree();
+    void tempsTourExpire();
 };
 
 #endif // IHM_H

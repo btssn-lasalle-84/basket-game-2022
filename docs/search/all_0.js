@@ -11,10 +11,14 @@ var searchData=
   ['afficherpagepartie_8',['afficherPagePartie',['../class_i_h_m.html#a2f0db4115c6e5b3f5956b424de3b3d5d',1,'IHM']]],
   ['afficherpageprincipale_9',['afficherPagePrincipale',['../class_i_h_m.html#aa4a98b54ce23994bd34de44a179564f6',1,'IHM']]],
   ['afficherpageregles_10',['afficherPageRegles',['../class_i_h_m.html#a18dad59950ea1df511cddfdaf1ac4a04',1,'IHM']]],
-  ['ajouterjoueur_11',['ajouterJoueur',['../class_equipe.html#a08c901172384965b6916ca3da1478ac7',1,'Equipe']]],
-  ['ajouterjoueurs_12',['ajouterJoueurs',['../class_i_h_m.html#a865c6c41778814273a0960a9338d1c53',1,'IHM']]],
-  ['ajouterpanier_13',['ajouterPanier',['../class_i_h_m.html#aa5f61e83a4e6fb7062d5172b18f63c85',1,'IHM']]],
-  ['arreterchronometrepartie_14',['arreterChronometrePartie',['../class_i_h_m.html#a9522c9e292a5a35d5b1566c0afa4bede',1,'IHM']]],
-  ['arreterpartie_15',['arreterPartie',['../class_i_h_m.html#a9030ae7699cfe282c4e63e712b3d4455',1,'IHM']]],
-  ['a_20propos_16',['A propos',['../page_about.html',1,'']]]
+  ['afficherplateau_11',['afficherPlateau',['../class_i_h_m.html#a3c2afa8fdb8a30540ccae8027fefcb8b',1,'IHM']]],
+  ['afficherunjeton_12',['afficherUnJeton',['../class_i_h_m.html#adf716058a591040e3e057affbb27192f',1,'IHM']]],
+  ['agagne_13',['aGagne',['../class_i_h_m.html#a55c9b37274f07670123cbdbca534f0d4',1,'IHM']]],
+  ['ajouterjoueur_14',['ajouterJoueur',['../class_equipe.html#a08c901172384965b6916ca3da1478ac7',1,'Equipe']]],
+  ['ajouterjoueurs_15',['ajouterJoueurs',['../class_i_h_m.html#a865c6c41778814273a0960a9338d1c53',1,'IHM']]],
+  ['ajouterpanier_16',['ajouterPanier',['../class_i_h_m.html#aa5f61e83a4e6fb7062d5172b18f63c85',1,'IHM']]],
+  ['arreterchronometrepartie_17',['arreterChronometrePartie',['../class_i_h_m.html#a9522c9e292a5a35d5b1566c0afa4bede',1,'IHM']]],
+  ['arreterpartie_18',['arreterPartie',['../class_i_h_m.html#a9030ae7699cfe282c4e63e712b3d4455',1,'IHM']]],
+  ['aucun_19',['AUCUN',['../class_i_h_m.html#ab70b9f9c92231494ed919d1e1968bd88a8121a8ef6139c32c289021dc8efda08b',1,'IHM']]],
+  ['a_20propos_20',['A propos',['../page_about.html',1,'']]]
 ];

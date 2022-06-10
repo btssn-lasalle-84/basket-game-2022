@@ -27,7 +27,7 @@
   <td id="projectlogo"><img alt="Logo" src="basket-game.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">basket-game
-   &#160;<span id="projectnumber">1.0</span>
+   &#160;<span id="projectnumber">1.1</span>
    </div>
    <div id="projectbrief">BTS SNIR LaSalle Avignon 2022</div>
   </td>
@@ -120,6 +120,15 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <li>afficherPageRegles()
 : <a class="el" href="class_i_h_m.html#a18dad59950ea1df511cddfdaf1ac4a04">IHM</a>
 </li>
+<li>afficherPlateau()
+: <a class="el" href="class_i_h_m.html#a3c2afa8fdb8a30540ccae8027fefcb8b">IHM</a>
+</li>
+<li>afficherUnJeton()
+: <a class="el" href="class_i_h_m.html#adf716058a591040e3e057affbb27192f">IHM</a>
+</li>
+<li>aGagne()
+: <a class="el" href="class_i_h_m.html#a55c9b37274f07670123cbdbca534f0d4">IHM</a>
+</li>
 <li>ajouterJoueur()
 : <a class="el" href="class_equipe.html#a08c901172384965b6916ca3da1478ac7">Equipe</a>
 </li>
@@ -146,6 +155,9 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 
 
 <h3><a id="index_c"></a>- c -</h3><ul>
+<li>changerTourEquipe()
+: <a class="el" href="class_i_h_m.html#a58265a37cfc5761f547bd3656433b1bb">IHM</a>
+</li>
 <li>Club()
 : <a class="el" href="class_club.html#aa0755264cc4de93e661624c222598ff5">Club</a>
 </li>
@@ -205,6 +217,9 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <li>estPeripheriqueTrouve()
 : <a class="el" href="class_communication.html#ab0f73fd15cf36b22b4af456459100b6c">Communication</a>
 </li>
+<li>estRempli()
+: <a class="el" href="class_i_h_m.html#a5d9e95ce9042ffc483c1583c2c74076e">IHM</a>
+</li>
 <li>executer()
 : <a class="el" href="class_base_de_donnees.html#aa8de5f8f8bb17edc43f5c0ee33712081">BaseDeDonnees</a>
 </li>
@@ -223,6 +238,9 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 </li>
 <li>gererPeripherique()
 : <a class="el" href="class_i_h_m.html#a546fce5eac86355ca29f28a48b76f729">IHM</a>
+</li>
+<li>gererTempsTour()
+: <a class="el" href="class_i_h_m.html#a12c1e332714b6afa73d38c19b25671bf">IHM</a>
 </li>
 <li>getDebutTemps()
 : <a class="el" href="class_seance.html#a15282965787dba96ea366ef6d6a7a225">Seance</a>
@@ -294,6 +312,9 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <li>initialiserPartie()
 : <a class="el" href="class_i_h_m.html#ae88c714a0d4ac5b39d17c7f5f5817eb6">IHM</a>
 </li>
+<li>initialiserPlateau()
+: <a class="el" href="class_i_h_m.html#a501041ea690f74476983ceec8beadfa9">IHM</a>
+</li>
 <li>initialiserRessources()
 : <a class="el" href="class_i_h_m.html#a459d00e35898b43174a6c9b5c0de8691">IHM</a>
 </li>
@@ -301,6 +322,10 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 
 
 <h3><a id="index_j"></a>- j -</h3><ul>
+<li>jouerUnJeton()
+: <a class="el" href="class_communication.html#a9dfc811b4e2e9f14a4add1586cee60d2">Communication</a>
+, <a class="el" href="class_i_h_m.html#a3925d75c4933c09400ef7f7c67a7280a">IHM</a>
+</li>
 <li>Joueur()
 : <a class="el" href="class_joueur.html#a6ed348faee179580db913e65cff3ec74">Joueur</a>
 </li>
@@ -455,8 +480,8 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 
 
 <h3><a id="index_t"></a>- t -</h3><ul>
-<li>tempsTourExpiree()
-: <a class="el" href="class_i_h_m.html#a867e7cc0491fad5986b1491811f0db94">IHM</a>
+<li>tempsTourExpire()
+: <a class="el" href="class_i_h_m.html#a2f4ab5c379f343828733a48d46aab741">IHM</a>
 </li>
 <li>terminerRecherche()
 : <a class="el" href="class_communication.html#a8e72f3eb6ccb10769ffe65d224ab7bb6">Communication</a>
@@ -468,6 +493,15 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <h3><a id="index_v"></a>- v -</h3><ul>
 <li>validerDemarragePartie()
 : <a class="el" href="class_i_h_m.html#a21f0e44264618b516c001379e52218f7">IHM</a>
+</li>
+<li>verifierColonne()
+: <a class="el" href="class_i_h_m.html#a8b504f7cefd214d9b479668ed337c747">IHM</a>
+</li>
+<li>verifierDiagonales()
+: <a class="el" href="class_i_h_m.html#a9dda4b6e71920087392a25351bbb33fa">IHM</a>
+</li>
+<li>verifierLigne()
+: <a class="el" href="class_i_h_m.html#aa1d9799f58a73c4993550bb1e201aa66">IHM</a>
 </li>
 </ul>
 
@@ -501,7 +535,7 @@ $(document).ready(function(){initNavTree('functions_func.html',''); initResizabl
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer"><img class="footer" src="lasalle-logo.png" height="31" alt="La Salle Avignon"/>&nbsp;<b>Campus La Salle Avignon</b>&nbsp;-&nbsp;9 Rue Notre Dame des 7 douleurs&nbsp;-&nbsp;BP 50165&nbsp;-&nbsp;84008 Avignon&nbsp;-&nbsp;Généré le Mercredi 25 Mai 2022 06:57:47 pour basket-game par&nbsp;<a href="https://www.doxygen.org/index.html">doxygen</a>&nbsp;1.8.17&nbsp;</li>
+    <li class="footer"><img class="footer" src="lasalle-logo.png" height="31" alt="La Salle Avignon"/>&nbsp;<b>Campus La Salle Avignon</b>&nbsp;-&nbsp;9 Rue Notre Dame des 7 douleurs&nbsp;-&nbsp;BP 50165&nbsp;-&nbsp;84008 Avignon&nbsp;-&nbsp;Généré le Vendredi 10 Juin 2022 20:51:46 pour basket-game par&nbsp;<a href="https://www.doxygen.org/index.html">doxygen</a>&nbsp;1.8.17&nbsp;</li>
   </ul>
 </div>
 </body>
