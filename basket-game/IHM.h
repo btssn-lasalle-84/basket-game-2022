@@ -201,6 +201,7 @@ class IHM : public QMainWindow
     void afficherEtatDeconnexion();
     void terminerRecherche();
     void changerTourEquipe();
+    void saisirNbPaniers(int nb);
 
   signals:
     void tempsTourExpire();

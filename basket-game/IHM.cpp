@@ -715,6 +715,13 @@ void IHM::changerTourEquipe()
     seance->setDebutTempsTour(QTime::currentTime());
 }
 
+void IHM::saisirNbPaniers(int nb)
+{
+    qDebug() << Q_FUNC_INFO << nb;
+    nbPaniers = nb;
+    afficherPlateau();
+}
+
 /**
  * @brief Initialise les ressources
  */
@@ -801,6 +808,10 @@ void IHM::connecterSignalSlot()
             SIGNAL(valueChanged(int)),
             this,
             SLOT(saisirTempsParPartieEnMinutes(int)));
+    connect(ui->spinBoxNbPaniers,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(saisirNbPaniers(int)));
     // PagePartie
     connect(ui->boutonRetourPagePartie,
             SIGNAL(clicked(bool)),
