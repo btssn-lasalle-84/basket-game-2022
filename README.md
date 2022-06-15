@@ -7,6 +7,8 @@
   - [TODO](#todo)
   - [Historique des versions](#historique-des-versions)
   - [Base de données](#base-de-données)
+  - [Protocole](#protocole)
+  - [Diaporama](#diaporama)
   - [Auteur](#auteur)
   - [Kanban](#kanban)
 
@@ -27,7 +29,7 @@
 ## TODO
 
 - [ ] Gérer la base de données
-- [ ] Option : Effectuer des sons par rapport à un tir réussi ou non
+- [ ] Option : Produire des sons (tir réussi ou non, ...)
 
 ## Historique des versions
 
@@ -41,6 +43,14 @@
 ## Base de données
 
 ![](images/schema-bdd-basket-game-v0.2.png)
+
+## Protocole
+
+- [Protocole basket-game.pdf](docs/Protocole%20basket-game.pdf)
+
+## Diaporama
+
+- [Basket-Game Revue Finale - LAMBERT Guillaume.pptx](docs/Basket-Game%20Revue%20Finale%20-%20LAMBERT%20Guillaume.pptx)
 
 ## Auteur
 
