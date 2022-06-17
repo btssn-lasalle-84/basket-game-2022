@@ -6,6 +6,7 @@
 #include "Seance.h"
 #include <QDebug>
 #include <QPainter>
+#include <QSound>
 
 /**
  * @file ihm.cpp
@@ -355,10 +356,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
     // tir raté ?
     if(numeroPanier == "0")
     {
-        /**
-         * @todo Jouer un son tir raté avec QSound::play()
-         */
-        // fonctionnalité non supportée
+        tirRate.play();
         return;
     }
 
@@ -374,9 +372,6 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
             return;
         afficherUnJeton(ligne, numeroPanier.toInt() - 1, equipeQuiJoue);
 
-        /**
-         * @todo Jouer un son tir réussi avec QSound::play()
-         */
         if(equipeQuiJoue == "R")
         {
             seance->marquerUnPointEquipeRouge();
@@ -391,6 +386,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
               seance->getNbPaniersEquipeJaune());
             etatPartie = aGagne(CouleurJeton::JAUNE);
         }
+        tirReussi.play();
         if(etatPartie)
         {
             if(equipeQuiJoue == "R")
