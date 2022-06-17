@@ -6,7 +6,7 @@
  *
  * @brief Déclaration de la classe IHM
  * @author Guillaume LAMBERT
- * @version 1.1
+ * @version 1.2
  *
  */
 
@@ -147,20 +147,19 @@ class IHM : public QMainWindow
     QTimer*              timerSeance; //!< pour gérer les temps restants
     QTimer*       chronometrePartie;  //!< pour le chronmétrage d'une partie
     QElapsedTimer tempsEcoulePartie;  //!< pour gérer le temps écoulé
-    QVector<QVector<CouleurJeton> > plateau; //! QVector<QVector<int> > plateau
-    bool                            etatPartie; //! true si un gagnant
-    int                             nbPaniers;  //! nombre de paniers
+    QVector<QVector<CouleurJeton> > plateau; //!< QVector<QVector<int> > plateau
+    bool                            etatPartie; //!< true si un gagnant
+    int                             nbPaniers;  //!< nombre de paniers
+    QString equipeQuiJoue; //!< identificant de l'équipe qui joue
 
-    void initialiserRessources();
-    void initialiserEquipes();
-    void connecterSignalSlot();
-    void recupererEquipes();
-    void ajouterJoueurs(QString idEquipe, int couleurEquipe);
-    void afficherListeEquipe(QStringList equipe);
-    void initialiserPartie();
-    void gererTempsTour();
-    // void         gererTempsPartie();
-    // void         finirPartie();
+    void         initialiserRessources();
+    void         initialiserEquipes();
+    void         connecterSignalSlot();
+    void         recupererEquipes();
+    void         ajouterJoueurs(QString idEquipe, int couleurEquipe);
+    void         afficherListeEquipe(QStringList equipe);
+    void         initialiserPartie();
+    void         gererTempsTour();
     void         afficherPlateau();
     void         initialiserPlateau();
     CouleurJeton verifierLigne(int ligne);
@@ -202,6 +201,8 @@ class IHM : public QMainWindow
     void terminerRecherche();
     void changerTourEquipe();
     void saisirNbPaniers(int nb);
+    void allerJoueurSuivant();
+    void mettreEnPause();
 
   signals:
     void tempsTourExpire();

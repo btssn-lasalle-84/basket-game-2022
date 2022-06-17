@@ -12,7 +12,7 @@
  *
  * @brief Définition de la classe IHM
  * @author Guillaume LAMBERT
- * @version 1.1
+ * @version 1.2
  *
  */
 
@@ -27,7 +27,8 @@ IHM::IHM(QWidget* parent) :
     QMainWindow(parent), ui(new Ui::IHM), bdd(nullptr), communication(nullptr),
     idEquipeRougeSelectionnee(-1), idEquipeJauneSelectionnee(-1),
     seance(nullptr), timerSeance(nullptr), chronometrePartie(nullptr),
-    plateau(NB_PANIERS), etatPartie(false), nbPaniers(NB_PANIERS)
+    plateau(NB_PANIERS), etatPartie(false), nbPaniers(NB_PANIERS),
+    equipeQuiJoue("R")
 {
     ui->setupUi(this);
     qDebug() << Q_FUNC_INFO;
@@ -337,7 +338,6 @@ void IHM::gererPartie()
 /**
  * @brief Slot de gestion d'une trame P (PANIER)
  */
-
 void IHM::ajouterPanier(QString numeroPanier, QString equipe)
 {
     /**
@@ -346,12 +346,17 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
     if(etatPartie || estRempli())
         return;
     qDebug() << Q_FUNC_INFO << "numeroPanier" << numeroPanier << "equipe"
-             << equipe;
+             << equipe << "equipeQuiJoue" << equipeQuiJoue;
     ui->lcdNumberPointsEquipeRouge->display(seance->getNbPaniersEquipeRouge());
     ui->lcdNumberPointsEquipeJaune->display(seance->getNbPaniersEquipeJaune());
+
+    // tir raté ?
     if(numeroPanier == "0")
     {
-        if(equipe == "J")
+        /**
+         * @todo Jouer un son tir raté avec QSound::play()
+         */
+        if(equipeQuiJoue == "J")
         {
             ui->labelEquipeEnCours->setText("Tir raté équipe " +
                                             seance->getNomEquipeJaune() + " !");
@@ -359,7 +364,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
               QString::number(seance->getDureeTempsTour()) + QString(" s"));
             seance->setDebutTempsTour(QTime::currentTime());
         }
-        else if(equipe == "R")
+        else if(equipeQuiJoue == "R")
         {
             ui->labelEquipeEnCours->setText("Tir raté pour l'équipe " +
                                             seance->getNomEquipeRouge() + " !");
@@ -376,13 +381,16 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
         if(numeroPanier.toInt() - 1 < 0 ||
            numeroPanier.toInt() - 1 >= nbPaniers)
             return;
-        int ligne = jouerUnJeton(numeroPanier, equipe);
+        int ligne = jouerUnJeton(numeroPanier, equipeQuiJoue);
         qDebug() << Q_FUNC_INFO << "ligne" << ligne;
         if(ligne == -1)
             return;
-        afficherUnJeton(ligne, numeroPanier.toInt() - 1, equipe);
+        afficherUnJeton(ligne, numeroPanier.toInt() - 1, equipeQuiJoue);
 
-        if(equipe == "R")
+        /**
+         * @todo Jouer un son tir réussi avec QSound::play()
+         */
+        if(equipeQuiJoue == "R")
         {
             seance->marquerUnPointEquipeRouge();
             ui->lcdNumberPointsEquipeRouge->display(
@@ -393,7 +401,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
               QString::number(seance->getDureeTempsTour()) + QString(" s"));
             seance->setDebutTempsTour(QTime::currentTime());
         }
-        else if(equipe == "J")
+        else if(equipeQuiJoue == "J")
         {
             seance->marquerUnPointEquipeJaune();
             ui->lcdNumberPointsEquipeJaune->display(
@@ -406,10 +414,10 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
         }
         if(etatPartie)
         {
-            if(equipe == "R")
+            if(equipeQuiJoue == "R")
                 ui->labelEquipeEnCours->setText(
                   "Bravo à l'équipe " + seance->getNomEquipeRouge() + " !");
-            else if(equipe == "J")
+            else if(equipeQuiJoue == "J")
                 ui->labelEquipeEnCours->setText(
                   "Bravo à l'équipe " + seance->getNomEquipeJaune() + " !");
         }
@@ -425,7 +433,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
         {
             if(numeroPanier != "0")
             {
-                if(equipe == "J")
+                if(equipeQuiJoue == "J")
                 {
                     seance->marquerUnPointEquipeJaune();
                     ui->lcdNumberPointsEquipeJaune->display(
@@ -433,7 +441,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
                     ui->labelEquipeEnCours->setText(
                       seance->getNomEquipeRouge());
                 }
-                else if(equipe == "R")
+                else if(equipeQuiJoue == "R")
                 {
                     seance->marquerUnPointEquipeRouge();
                     ui->lcdNumberPointsEquipeRouge->display(
@@ -458,6 +466,8 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
             }
         }
     }
+
+    changerTourEquipe();
 }
 
 void IHM::afficherUnJeton(int ligne, int colonne, QString equipe)
@@ -702,13 +712,18 @@ void IHM::terminerRecherche()
 
 void IHM::changerTourEquipe()
 {
+    /**
+     * @todo Jouer un son pour changement joueur avec QSound::play()
+     */
     if(ui->labelEquipeEnCours->text() == ui->nomEquipeRouge_2->text())
     {
-        ui->labelEquipeEnCours->setText(seance->getNomEquipeJaune());
+        equipeQuiJoue = seance->getNomEquipeJaune();
+        ui->labelEquipeEnCours->setText(equipeQuiJoue);
     }
     else if(ui->labelEquipeEnCours->text() == ui->nomEquipeJaune_2->text())
     {
-        ui->labelEquipeEnCours->setText(seance->getNomEquipeRouge());
+        equipeQuiJoue = seance->getNomEquipeRouge();
+        ui->labelEquipeEnCours->setText(equipeQuiJoue);
     }
     ui->tempsTour->setText(QString::number(seance->getDureeTempsTour()) +
                            QString(" s"));
@@ -720,6 +735,26 @@ void IHM::saisirNbPaniers(int nb)
     qDebug() << Q_FUNC_INFO << nb;
     nbPaniers = nb;
     afficherPlateau();
+}
+
+/**
+ * @brief Permet de passer au joueur suivant
+ */
+void IHM::allerJoueurSuivant()
+{
+    changerTourEquipe();
+}
+
+/**
+ * @brief Permet de mettre le jeu en pause
+ */
+void IHM::mettreEnPause()
+{
+    qDebug() << Q_FUNC_INFO;
+    /**
+     * @todo Gérer la mise en pause du jeu (timers, bloquer ajouterPanier(), etc
+     * ...) et sa reprise
+     */
 }
 
 /**
@@ -846,6 +881,19 @@ void IHM::connecterSignalSlot()
             SIGNAL(peripheriqueDeconnecte()),
             this,
             SLOT(afficherEtatDeconnexion()));
+    QAction* actionJoueurSuivant = new QAction(this);
+    // Touche ->
+    actionJoueurSuivant->setShortcut(QKeySequence(Qt::Key_Right));
+    addAction(actionJoueurSuivant);
+    connect(actionJoueurSuivant,
+            SIGNAL(triggered()),
+            this,
+            SLOT(allerJoueurSuivant()));
+    QAction* actionPause = new QAction(this);
+    // Touche espace
+    actionPause->setShortcut(QKeySequence(Qt::Key_Space));
+    addAction(actionPause);
+    connect(actionPause, SIGNAL(triggered()), this, SLOT(mettreEnPause()));
 }
 
 /**
@@ -923,6 +971,7 @@ void IHM::afficherListeEquipe(QStringList equipe)
  */
 void IHM::initialiserPartie()
 {
+    equipeQuiJoue = "R"; // les rouges commencent au Puissance 4
     seance->setNbPaniersEquipeJaune(0);
     seance->setNbPaniersEquipeRouge(0);
     seance->setDebutTemps(QTime::currentTime());
@@ -1119,7 +1168,7 @@ bool IHM::aGagne(CouleurJeton couleurEquipe)
 
 bool IHM::estRempli()
 {
-    for(int colonne = 0; colonne < plateau.size(); ++colonne)
+    for(int colonne = 0; colonne < nbPaniers; ++colonne)
     {
         for(int ligne = 0; ligne < plateau[colonne].size(); ++ligne)
         {
