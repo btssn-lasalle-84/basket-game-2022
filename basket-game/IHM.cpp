@@ -6,6 +6,7 @@
 #include "Seance.h"
 #include <QDebug>
 #include <QPainter>
+#include <QSound>
 
 /**
  * @file ihm.cpp
@@ -349,13 +350,11 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
              << equipe << "equipeQuiJoue" << equipeQuiJoue;
     ui->lcdNumberPointsEquipeRouge->display(seance->getNbPaniersEquipeRouge());
     ui->lcdNumberPointsEquipeJaune->display(seance->getNbPaniersEquipeJaune());
-
+    QSound tirRate("/sons/tirRate.wav");
+    QSound tirReussi("/sons.tirReussi.wav");
     // tir raté ?
     if(numeroPanier == "0")
     {
-        /**
-         * @todo Jouer un son tir raté avec QSound::play()
-         */
         if(equipeQuiJoue == "J")
         {
             ui->labelEquipeEnCours->setText("Tir raté équipe " +
@@ -372,6 +371,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
               QString::number(seance->getDureeTempsTour()) + QString(" s"));
             seance->setDebutTempsTour(QTime::currentTime());
         }
+        tirRate.play();
         return;
     }
 
@@ -387,9 +387,6 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
             return;
         afficherUnJeton(ligne, numeroPanier.toInt() - 1, equipeQuiJoue);
 
-        /**
-         * @todo Jouer un son tir réussi avec QSound::play()
-         */
         if(equipeQuiJoue == "R")
         {
             seance->marquerUnPointEquipeRouge();
@@ -412,6 +409,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
               QString::number(seance->getDureeTempsTour()) + QString(" s"));
             seance->setDebutTempsTour(QTime::currentTime());
         }
+        tirReussi.play();
         if(etatPartie)
         {
             if(equipeQuiJoue == "R")
@@ -717,13 +715,13 @@ void IHM::changerTourEquipe()
      */
     if(ui->labelEquipeEnCours->text() == ui->nomEquipeRouge_2->text())
     {
-        equipeQuiJoue = seance->getNomEquipeJaune();
-        ui->labelEquipeEnCours->setText(equipeQuiJoue);
+        equipeQuiJoue = "J";
+        ui->labelEquipeEnCours->setText(seance->getNomEquipeJaune());
     }
     else if(ui->labelEquipeEnCours->text() == ui->nomEquipeJaune_2->text())
     {
-        equipeQuiJoue = seance->getNomEquipeRouge();
-        ui->labelEquipeEnCours->setText(equipeQuiJoue);
+        equipeQuiJoue = "R";
+        ui->labelEquipeEnCours->setText(seance->getNomEquipeRouge());
     }
     ui->tempsTour->setText(QString::number(seance->getDureeTempsTour()) +
                            QString(" s"));
