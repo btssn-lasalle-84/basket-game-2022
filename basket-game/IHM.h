@@ -54,6 +54,10 @@
  */
 #define NB_LIGNES 6 // rangées
 
+/**
+ * @def NB_PIONS_ALIGNES
+ * @brief Définit le nombre de pions par défaut à aligner pour gagner
+ */
 #define NB_PIONS_ALIGNES 4
 
 namespace Ui
@@ -150,6 +154,7 @@ class IHM : public QMainWindow
     QVector<QVector<CouleurJeton> > plateau; //!< QVector<QVector<int> > plateau
     bool                            etatPartie; //!< true si un gagnant
     int                             nbPaniers;  //!< nombre de paniers
+    int     nbPionsAlignes;                     //!< nombre de pions à aligner
     QString equipeQuiJoue; //!< identificant de l'équipe qui joue
 
     void         initialiserRessources();
@@ -201,6 +206,7 @@ class IHM : public QMainWindow
     void terminerRecherche();
     void changerTourEquipe();
     void saisirNbPaniers(int nb);
+    void saisirNbPionsAlignes(int nb);
     void allerJoueurSuivant();
     void mettreEnPause();
 
