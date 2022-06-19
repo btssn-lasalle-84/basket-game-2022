@@ -28,9 +28,8 @@ IHM::IHM(QWidget* parent) :
     idEquipeRougeSelectionnee(-1), idEquipeJauneSelectionnee(-1),
     seance(nullptr), timerSeance(nullptr), chronometrePartie(nullptr),
     plateau(NB_PANIERS), etatPartie(false), nbPaniers(NB_PANIERS),
-    nbPionsAlignes(NB_PIONS_ALIGNES),
-    equipeQuiJoue("R")
-      tirRate(qApp->applicationDirPath() + "/sons/tirRate.wav", this),
+    nbPionsAlignes(NB_PIONS_ALIGNES), equipeQuiJoue("R"),
+    tirRate(qApp->applicationDirPath() + "/sons/tirRate.wav", this),
     tirReussi(qApp->applicationDirPath() + "/sons/tirReussi.wav", this)
 {
     ui->setupUi(this);
@@ -354,7 +353,6 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
              << equipe << "equipeQuiJoue" << equipeQuiJoue;
     ui->lcdNumberPointsEquipeRouge->display(seance->getNbPaniersEquipeRouge());
     ui->lcdNumberPointsEquipeJaune->display(seance->getNbPaniersEquipeJaune());
-
     // tir raté ?
     if(numeroPanier == "0")
     {
