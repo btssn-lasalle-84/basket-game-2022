@@ -6,7 +6,6 @@
 #include "Seance.h"
 #include <QDebug>
 #include <QPainter>
-#include <QSound>
 
 /**
  * @file ihm.cpp
@@ -29,7 +28,10 @@ IHM::IHM(QWidget* parent) :
     idEquipeRougeSelectionnee(-1), idEquipeJauneSelectionnee(-1),
     seance(nullptr), timerSeance(nullptr), chronometrePartie(nullptr),
     plateau(NB_PANIERS), etatPartie(false), nbPaniers(NB_PANIERS),
-    nbPionsAlignes(NB_PIONS_ALIGNES), equipeQuiJoue("R")
+    nbPionsAlignes(NB_PIONS_ALIGNES),
+    equipeQuiJoue("R")
+      tirRate(qApp->applicationDirPath() + "/sons/tirRate.wav", this),
+    tirReussi(qApp->applicationDirPath() + "/sons/tirReussi.wav", this)
 {
     ui->setupUi(this);
     qDebug() << Q_FUNC_INFO;

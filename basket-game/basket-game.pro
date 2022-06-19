@@ -1,7 +1,8 @@
 QT       += core gui widgets sql
 QT       += bluetooth
 QT       += multimedia
-CONFIG += c++11
+CONFIG += c++11 \
+          file_copies
 
 DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
@@ -35,5 +36,10 @@ COPIES += bd
 bd.files = basket-game.sqlite
 bd.path = $$OUT_PWD/
 bd.base = $$PWD/
+
+COPIES += sons
+sons.files = sons
+sons.path = $$OUT_PWD/
+sons.base = $$PWD/
 
 CONFIG(release, debug|release):DEFINES+=QT_NO_DEBUG_OUTPUT
