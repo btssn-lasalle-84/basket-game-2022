@@ -11,6 +11,7 @@
  */
 
 #include <QtWidgets>
+#include <QSound>
 
 /**
  * @def BDD
@@ -151,6 +152,8 @@ class IHM : public QMainWindow
     bool                            etatPartie; //!< true si un gagnant
     int                             nbPaniers;  //!< nombre de paniers
     QString equipeQuiJoue; //!< identificant de l'équipe qui joue
+    QSound  tirRate;
+    QSound  tirReussi;
 
     void         initialiserRessources();
     void         initialiserEquipes();
