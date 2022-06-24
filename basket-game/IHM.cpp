@@ -30,7 +30,9 @@ IHM::IHM(QWidget* parent) :
     plateau(NB_PANIERS), etatPartie(false), nbPaniers(NB_PANIERS),
     nbPionsAlignes(NB_PIONS_ALIGNES), equipeQuiJoue("R"),
     tirRate(qApp->applicationDirPath() + "/sons/tirRate.wav", this),
-    tirReussi(qApp->applicationDirPath() + "/sons/tirReussi.wav", this)
+    tirReussi(qApp->applicationDirPath() + "/sons/tirReussi.wav", this),
+    musiqueVictoire(qApp->applicationDirPath() + "/sons/musiqueVictoire.wav",
+                    this)
 {
     ui->setupUi(this);
     qDebug() << Q_FUNC_INFO;
@@ -403,6 +405,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
                 ui->labelEquipeEnCours->setStyleSheet(
                   QString::fromUtf8("color: rgb(196, 160, 0);"));
             }
+            musiqueVictoire.play();
             arreterPartie();
             return;
         }

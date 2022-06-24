@@ -159,6 +159,7 @@ class IHM : public QMainWindow
     QString equipeQuiJoue; //!< identificant de l'équipe qui joue
     QSound  tirRate;
     QSound  tirReussi;
+    QSound  musiqueVictoire;
 
     void         initialiserRessources();
     void         initialiserEquipes();
