@@ -48,7 +48,7 @@ int Equipe::getNbrPointEquipeRouge() const
 
 void Equipe::setNbrPointEquipeRouge(const int& nbrPointEquipeRouge)
 {
-    this->nbrPointEquipeRouge = getNbrPointEquipeRouge();
+    this->nbrPointEquipeRouge = nbrPointEquipeRouge;
 }
 
 int Equipe::getNbrPointEquipeJaune() const

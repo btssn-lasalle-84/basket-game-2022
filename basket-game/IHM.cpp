@@ -28,7 +28,11 @@ IHM::IHM(QWidget* parent) :
     idEquipeRougeSelectionnee(-1), idEquipeJauneSelectionnee(-1),
     seance(nullptr), timerSeance(nullptr), chronometrePartie(nullptr),
     plateau(NB_PANIERS), etatPartie(false), nbPaniers(NB_PANIERS),
-    nbPionsAlignes(NB_PIONS_ALIGNES), equipeQuiJoue("R")
+    nbPionsAlignes(NB_PIONS_ALIGNES), equipeQuiJoue("R"),
+    tirRate(qApp->applicationDirPath() + "/sons/tirRate.wav", this),
+    tirReussi(qApp->applicationDirPath() + "/sons/tirReussi.wav", this),
+    musiqueVictoire(qApp->applicationDirPath() + "/sons/musiqueVictoire.wav",
+                    this)
 {
     ui->setupUi(this);
     qDebug() << Q_FUNC_INFO;
@@ -351,14 +355,10 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
              << equipe << "equipeQuiJoue" << equipeQuiJoue;
     ui->lcdNumberPointsEquipeRouge->display(seance->getNbPaniersEquipeRouge());
     ui->lcdNumberPointsEquipeJaune->display(seance->getNbPaniersEquipeJaune());
-
     // tir raté ?
     if(numeroPanier == "0")
     {
-        /**
-         * @todo Jouer un son tir raté avec QSound::play()
-         */
-        // fonctionnalité non supportée
+        tirRate.play();
         return;
     }
 
@@ -374,9 +374,6 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
             return;
         afficherUnJeton(ligne, numeroPanier.toInt() - 1, equipeQuiJoue);
 
-        /**
-         * @todo Jouer un son tir réussi avec QSound::play()
-         */
         if(equipeQuiJoue == "R")
         {
             seance->marquerUnPointEquipeRouge();
@@ -391,6 +388,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
               seance->getNbPaniersEquipeJaune());
             etatPartie = aGagne(CouleurJeton::JAUNE);
         }
+        tirReussi.play();
         if(etatPartie)
         {
             if(equipeQuiJoue == "R")
@@ -407,6 +405,7 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
                 ui->labelEquipeEnCours->setStyleSheet(
                   QString::fromUtf8("color: rgb(196, 160, 0);"));
             }
+            musiqueVictoire.play();
             arreterPartie();
             return;
         }

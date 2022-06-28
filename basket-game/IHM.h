@@ -11,6 +11,7 @@
  */
 
 #include <QtWidgets>
+#include <QSound>
 
 /**
  * @def BDD
@@ -156,6 +157,9 @@ class IHM : public QMainWindow
     int                             nbPaniers;  //!< nombre de paniers
     int     nbPionsAlignes;                     //!< nombre de pions à aligner
     QString equipeQuiJoue; //!< identificant de l'équipe qui joue
+    QSound  tirRate;
+    QSound  tirReussi;
+    QSound  musiqueVictoire;
 
     void         initialiserRessources();
     void         initialiserEquipes();
