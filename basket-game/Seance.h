@@ -22,14 +22,14 @@ class Equipe;
  * @def POINT_POUR_VICTOIRE
  * @brief Constante des points pour une victoire
  */
-#define POINT_POUR_VICTOIRE 50
+#define POINT_POUR_VICTOIRE 10
 
 /**
  * @def TEMPS_PAR_TOUR_DEFAUT
  * @brief Le temps pour un tour
  */
-#define TEMPS_PAR_TOUR_DEFAUT   3 // en s
-#define TEMPS_PAR_PARTIE_DEFAUT 3 // en m
+#define TEMPS_PAR_TOUR_DEFAUT   10 // en s
+#define TEMPS_PAR_PARTIE_DEFAUT 3  // en m
 
 class Seance : public QObject
 {

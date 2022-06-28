@@ -12,7 +12,7 @@
  *
  * @brief Définition de la classe IHM
  * @author Guillaume LAMBERT
- * @version 1.1
+ * @version 1.2
  *
  */
 
@@ -27,7 +27,12 @@ IHM::IHM(QWidget* parent) :
     QMainWindow(parent), ui(new Ui::IHM), bdd(nullptr), communication(nullptr),
     idEquipeRougeSelectionnee(-1), idEquipeJauneSelectionnee(-1),
     seance(nullptr), timerSeance(nullptr), chronometrePartie(nullptr),
-    plateau(NB_PANIERS), etatPartie(false), nbPaniers(NB_PANIERS)
+    plateau(NB_PANIERS), etatPartie(false), nbPaniers(NB_PANIERS),
+    nbPionsAlignes(NB_PIONS_ALIGNES), equipeQuiJoue("R"),
+    tirRate(qApp->applicationDirPath() + "/sons/tirRate.wav", this),
+    tirReussi(qApp->applicationDirPath() + "/sons/tirReussi.wav", this),
+    musiqueVictoire(qApp->applicationDirPath() + "/sons/musiqueVictoire.wav",
+                    this)
 {
     ui->setupUi(this);
     qDebug() << Q_FUNC_INFO;
@@ -236,6 +241,8 @@ void IHM::validerDemarragePartie()
           equipes[CouleurEquipe::Jaune]->getNomEquipe());
         ui->labelEquipeEnCours->setText(
           equipes[CouleurEquipe::Rouge]->getNomEquipe());
+        ui->labelEquipeEnCours->setStyleSheet(
+          QString::fromUtf8("color: rgb(164, 0, 0);"));
         qDebug() << Q_FUNC_INFO << "tempsParTour"
                  << ui->tempsParTour->checkState();
         qDebug() << Q_FUNC_INFO << "tempsParTourEnSecondes"
@@ -337,7 +344,6 @@ void IHM::gererPartie()
 /**
  * @brief Slot de gestion d'une trame P (PANIER)
  */
-
 void IHM::ajouterPanier(QString numeroPanier, QString equipe)
 {
     /**
@@ -346,27 +352,13 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
     if(etatPartie || estRempli())
         return;
     qDebug() << Q_FUNC_INFO << "numeroPanier" << numeroPanier << "equipe"
-             << equipe;
+             << equipe << "equipeQuiJoue" << equipeQuiJoue;
     ui->lcdNumberPointsEquipeRouge->display(seance->getNbPaniersEquipeRouge());
     ui->lcdNumberPointsEquipeJaune->display(seance->getNbPaniersEquipeJaune());
+    // tir raté ?
     if(numeroPanier == "0")
     {
-        if(equipe == "J")
-        {
-            ui->labelEquipeEnCours->setText("Tir raté équipe " +
-                                            seance->getNomEquipeJaune() + " !");
-            ui->tempsTour->setText(
-              QString::number(seance->getDureeTempsTour()) + QString(" s"));
-            seance->setDebutTempsTour(QTime::currentTime());
-        }
-        else if(equipe == "R")
-        {
-            ui->labelEquipeEnCours->setText("Tir raté pour l'équipe " +
-                                            seance->getNomEquipeRouge() + " !");
-            ui->tempsTour->setText(
-              QString::number(seance->getDureeTempsTour()) + QString(" s"));
-            seance->setDebutTempsTour(QTime::currentTime());
-        }
+        tirRate.play();
         return;
     }
 
@@ -376,46 +368,54 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
         if(numeroPanier.toInt() - 1 < 0 ||
            numeroPanier.toInt() - 1 >= nbPaniers)
             return;
-        int ligne = jouerUnJeton(numeroPanier, equipe);
+        int ligne = jouerUnJeton(numeroPanier, equipeQuiJoue);
         qDebug() << Q_FUNC_INFO << "ligne" << ligne;
         if(ligne == -1)
             return;
-        afficherUnJeton(ligne, numeroPanier.toInt() - 1, equipe);
+        afficherUnJeton(ligne, numeroPanier.toInt() - 1, equipeQuiJoue);
 
-        if(equipe == "R")
+        if(equipeQuiJoue == "R")
         {
             seance->marquerUnPointEquipeRouge();
             ui->lcdNumberPointsEquipeRouge->display(
               seance->getNbPaniersEquipeRouge());
-            ui->labelEquipeEnCours->setText(seance->getNomEquipeJaune());
             etatPartie = aGagne(CouleurJeton::ROUGE);
-            ui->tempsTour->setText(
-              QString::number(seance->getDureeTempsTour()) + QString(" s"));
-            seance->setDebutTempsTour(QTime::currentTime());
         }
-        else if(equipe == "J")
+        else if(equipeQuiJoue == "J")
         {
             seance->marquerUnPointEquipeJaune();
             ui->lcdNumberPointsEquipeJaune->display(
               seance->getNbPaniersEquipeJaune());
-            ui->labelEquipeEnCours->setText(seance->getNomEquipeRouge());
             etatPartie = aGagne(CouleurJeton::JAUNE);
-            ui->tempsTour->setText(
-              QString::number(seance->getDureeTempsTour()) + QString(" s"));
-            seance->setDebutTempsTour(QTime::currentTime());
         }
+        tirReussi.play();
         if(etatPartie)
         {
-            if(equipe == "R")
+            if(equipeQuiJoue == "R")
+            {
                 ui->labelEquipeEnCours->setText(
                   "Bravo à l'équipe " + seance->getNomEquipeRouge() + " !");
-            else if(equipe == "J")
+                ui->labelEquipeEnCours->setStyleSheet(
+                  QString::fromUtf8("color: rgb(164, 0, 0);"));
+            }
+            else if(equipeQuiJoue == "J")
+            {
                 ui->labelEquipeEnCours->setText(
                   "Bravo à l'équipe " + seance->getNomEquipeJaune() + " !");
+                ui->labelEquipeEnCours->setStyleSheet(
+                  QString::fromUtf8("color: rgb(196, 160, 0);"));
+            }
+            musiqueVictoire.play();
+            arreterPartie();
+            return;
         }
         else if(estRempli())
         {
             ui->labelEquipeEnCours->setText("Match nul !");
+            ui->labelEquipeEnCours->setStyleSheet(
+              QString::fromUtf8("color: rgb(238, 238, 236);"));
+            arreterPartie();
+            return;
         }
     }
     else
@@ -425,21 +425,17 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
         {
             if(numeroPanier != "0")
             {
-                if(equipe == "J")
+                if(equipeQuiJoue == "J")
                 {
                     seance->marquerUnPointEquipeJaune();
                     ui->lcdNumberPointsEquipeJaune->display(
                       seance->getNbPaniersEquipeJaune());
-                    ui->labelEquipeEnCours->setText(
-                      seance->getNomEquipeRouge());
                 }
-                else if(equipe == "R")
+                else if(equipeQuiJoue == "R")
                 {
                     seance->marquerUnPointEquipeRouge();
                     ui->lcdNumberPointsEquipeRouge->display(
                       seance->getNbPaniersEquipeRouge());
-                    ui->labelEquipeEnCours->setText(
-                      seance->getNomEquipeJaune());
                 }
             }
         }
@@ -450,14 +446,24 @@ void IHM::ajouterPanier(QString numeroPanier, QString equipe)
             {
                 ui->labelEquipeEnCours->setText(
                   "Bravo à l'équipe " + seance->getNomEquipeJaune() + " !");
+                ui->labelEquipeEnCours->setStyleSheet(
+                  QString::fromUtf8("color: rgb(196, 160, 0);"));
+                arreterPartie();
+                return;
             }
             else if(seance->getNbPaniersEquipeRouge() == POINT_POUR_VICTOIRE)
             {
                 ui->labelEquipeEnCours->setText(
                   "Bravo à l'équipe " + seance->getNomEquipeRouge() + " !");
+                ui->labelEquipeEnCours->setStyleSheet(
+                  QString::fromUtf8("color: rgb(164, 0, 0);"));
+                arreterPartie();
+                return;
             }
         }
     }
+
+    changerTourEquipe();
 }
 
 void IHM::afficherUnJeton(int ligne, int colonne, QString equipe)
@@ -702,17 +708,65 @@ void IHM::terminerRecherche()
 
 void IHM::changerTourEquipe()
 {
+    qDebug() << Q_FUNC_INFO << "labelEquipeEnCours"
+             << ui->labelEquipeEnCours->text() << "equipeQuiJoue"
+             << equipeQuiJoue;
     if(ui->labelEquipeEnCours->text() == ui->nomEquipeRouge_2->text())
     {
+        equipeQuiJoue = "J";
         ui->labelEquipeEnCours->setText(seance->getNomEquipeJaune());
+        ui->labelEquipeEnCours->setStyleSheet(
+          QString::fromUtf8("color: rgb(196, 160, 0);"));
     }
     else if(ui->labelEquipeEnCours->text() == ui->nomEquipeJaune_2->text())
     {
+        equipeQuiJoue = "R";
         ui->labelEquipeEnCours->setText(seance->getNomEquipeRouge());
+        ui->labelEquipeEnCours->setStyleSheet(
+          QString::fromUtf8("color: rgb(164, 0, 0);"));
     }
+    qDebug() << Q_FUNC_INFO << "labelEquipeEnCours"
+             << ui->labelEquipeEnCours->text() << "equipeQuiJoue"
+             << equipeQuiJoue;
     ui->tempsTour->setText(QString::number(seance->getDureeTempsTour()) +
                            QString(" s"));
     seance->setDebutTempsTour(QTime::currentTime());
+    /**
+     * @todo Jouer un son pour changement joueur avec QSound::play()
+     */
+}
+
+void IHM::saisirNbPaniers(int nb)
+{
+    qDebug() << Q_FUNC_INFO << nb;
+    nbPaniers = nb;
+    afficherPlateau();
+}
+
+void IHM::saisirNbPionsAlignes(int nb)
+{
+    qDebug() << Q_FUNC_INFO << nb;
+    nbPionsAlignes = nb;
+}
+
+/**
+ * @brief Permet de passer au joueur suivant
+ */
+void IHM::allerJoueurSuivant()
+{
+    changerTourEquipe();
+}
+
+/**
+ * @brief Permet de mettre le jeu en pause
+ */
+void IHM::mettreEnPause()
+{
+    qDebug() << Q_FUNC_INFO;
+    /**
+     * @todo Gérer la mise en pause du jeu (timers, bloquer ajouterPanier(), etc
+     * ...) et sa reprise
+     */
 }
 
 /**
@@ -801,6 +855,14 @@ void IHM::connecterSignalSlot()
             SIGNAL(valueChanged(int)),
             this,
             SLOT(saisirTempsParPartieEnMinutes(int)));
+    connect(ui->spinBoxNbPaniers,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(saisirNbPaniers(int)));
+    connect(ui->spinBoxNbPionsAlignes,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(saisirNbPionsAlignes(int)));
     // PagePartie
     connect(ui->boutonRetourPagePartie,
             SIGNAL(clicked(bool)),
@@ -835,6 +897,19 @@ void IHM::connecterSignalSlot()
             SIGNAL(peripheriqueDeconnecte()),
             this,
             SLOT(afficherEtatDeconnexion()));
+    QAction* actionJoueurSuivant = new QAction(this);
+    // Touche ->
+    actionJoueurSuivant->setShortcut(QKeySequence(Qt::Key_Right));
+    addAction(actionJoueurSuivant);
+    connect(actionJoueurSuivant,
+            SIGNAL(triggered()),
+            this,
+            SLOT(allerJoueurSuivant()));
+    QAction* actionPause = new QAction(this);
+    // Touche espace
+    actionPause->setShortcut(QKeySequence(Qt::Key_Space));
+    addAction(actionPause);
+    connect(actionPause, SIGNAL(triggered()), this, SLOT(mettreEnPause()));
 }
 
 /**
@@ -912,6 +987,7 @@ void IHM::afficherListeEquipe(QStringList equipe)
  */
 void IHM::initialiserPartie()
 {
+    equipeQuiJoue = "R"; // les rouges commencent au Puissance 4
     seance->setNbPaniersEquipeJaune(0);
     seance->setNbPaniersEquipeRouge(0);
     seance->setDebutTemps(QTime::currentTime());
@@ -965,18 +1041,27 @@ void IHM::initialiserPlateau()
 
 IHM::CouleurJeton IHM::verifierLigne(int ligne)
 {
+    // qDebug() << Q_FUNC_INFO << "ligne" << ligne;
     // horizontalement
     int somme = 0;
-    for(int colonne = 0; colonne <= (nbPaniers - NB_PIONS_ALIGNES); ++colonne)
+    for(int colonne = 0; colonne <= (nbPaniers - nbPionsAlignes); ++colonne)
     {
-        somme = plateau[colonne][ligne] + plateau[colonne + 1][ligne] +
-                plateau[colonne + 2][ligne] + plateau[colonne + 3][ligne];
+        if(nbPionsAlignes == NB_PIONS_ALIGNES)
+        {
+            somme = plateau[colonne][ligne] + plateau[colonne + 1][ligne] +
+                    plateau[colonne + 2][ligne] + plateau[colonne + 3][ligne];
+        }
+        else if(nbPionsAlignes == NB_PIONS_ALIGNES - 1)
+        {
+            somme = plateau[colonne][ligne] + plateau[colonne + 1][ligne] +
+                    plateau[colonne + 2][ligne];
+        }
         // qDebug() << Q_FUNC_INFO << somme;
-        if(somme == NB_PIONS_ALIGNES)
+        if(somme == nbPionsAlignes)
         {
             return CouleurJeton::JAUNE;
         }
-        else if(somme == NB_PIONS_ALIGNES * -1)
+        else if(somme == (nbPionsAlignes * -1))
         {
             return CouleurJeton::ROUGE;
         }
@@ -987,18 +1072,27 @@ IHM::CouleurJeton IHM::verifierLigne(int ligne)
 
 IHM::CouleurJeton IHM::verifierColonne(int colonne)
 {
+    // qDebug() << Q_FUNC_INFO << "colonne" << colonne;
     // verticalement
     int somme = 0;
-    for(int ligne = 0; ligne <= (NB_LIGNES - NB_PIONS_ALIGNES); ++ligne)
+    for(int ligne = 0; ligne <= (NB_LIGNES - nbPionsAlignes); ++ligne)
     {
-        somme = plateau[colonne][ligne] + plateau[colonne][ligne + 1] +
-                plateau[colonne][ligne + 2] + plateau[colonne][ligne + 3];
+        if(nbPionsAlignes == NB_PIONS_ALIGNES)
+        {
+            somme = plateau[colonne][ligne] + plateau[colonne][ligne + 1] +
+                    plateau[colonne][ligne + 2] + plateau[colonne][ligne + 3];
+        }
+        else if(nbPionsAlignes == NB_PIONS_ALIGNES - 1)
+        {
+            somme = plateau[colonne][ligne] + plateau[colonne][ligne + 1] +
+                    plateau[colonne][ligne + 2];
+        }
         // qDebug() << Q_FUNC_INFO << somme;
-        if(somme == NB_PIONS_ALIGNES)
+        if(somme == nbPionsAlignes)
         {
             return CouleurJeton::JAUNE;
         }
-        else if(somme == NB_PIONS_ALIGNES * -1)
+        else if(somme == nbPionsAlignes * -1)
         {
             return CouleurJeton::ROUGE;
         }
@@ -1019,20 +1113,29 @@ IHM::CouleurJeton IHM::verifierDiagonales()
               X X X X X . .
               X X X X . . .
     */
-    for(int ligne = 0; ligne <= (NB_LIGNES - NB_PIONS_ALIGNES); ++ligne)
+    for(int ligne = 0; ligne <= (NB_LIGNES - nbPionsAlignes); ++ligne)
     {
-        for(int colonne = 0; colonne <= (nbPaniers - NB_PIONS_ALIGNES);
-            ++colonne)
+        for(int colonne = 0; colonne <= (nbPaniers - nbPionsAlignes); ++colonne)
         {
-            somme = plateau[colonne][ligne] + plateau[colonne + 1][ligne + 1] +
-                    plateau[colonne + 2][ligne + 2] +
-                    plateau[colonne + 3][ligne + 3];
+            if(nbPionsAlignes == NB_PIONS_ALIGNES)
+            {
+                somme = plateau[colonne][ligne] +
+                        plateau[colonne + 1][ligne + 1] +
+                        plateau[colonne + 2][ligne + 2] +
+                        plateau[colonne + 3][ligne + 3];
+            }
+            else if(nbPionsAlignes == NB_PIONS_ALIGNES - 1)
+            {
+                somme = plateau[colonne][ligne] +
+                        plateau[colonne + 1][ligne + 1] +
+                        plateau[colonne + 2][ligne + 2];
+            }
             // qDebug() << Q_FUNC_INFO << somme;
-            if(somme == NB_PIONS_ALIGNES)
+            if(somme == nbPionsAlignes)
             {
                 return CouleurJeton::JAUNE;
             }
-            else if(somme == NB_PIONS_ALIGNES * -1)
+            else if(somme == nbPionsAlignes * -1)
             {
                 return CouleurJeton::ROUGE;
             }
@@ -1047,20 +1150,29 @@ IHM::CouleurJeton IHM::verifierDiagonales()
               . . X X X X X
               . . . X X X X
     */
-    for(int ligne = NB_LIGNES - 1; ligne >= (NB_PIONS_ALIGNES - 1); --ligne)
+    for(int ligne = NB_LIGNES - 1; ligne >= (nbPionsAlignes - 1); --ligne)
     {
-        for(int colonne = 0; colonne <= (nbPaniers - NB_PIONS_ALIGNES);
-            ++colonne)
+        for(int colonne = 0; colonne <= (nbPaniers - nbPionsAlignes); ++colonne)
         {
-            somme = plateau[colonne][ligne] + plateau[colonne + 1][ligne - 1] +
-                    plateau[colonne + 2][ligne - 2] +
-                    plateau[colonne + 3][ligne - 3];
+            if(nbPionsAlignes == NB_PIONS_ALIGNES)
+            {
+                somme = plateau[colonne][ligne] +
+                        plateau[colonne + 1][ligne - 1] +
+                        plateau[colonne + 2][ligne - 2] +
+                        plateau[colonne + 3][ligne - 3];
+            }
+            else if(nbPionsAlignes == NB_PIONS_ALIGNES - 1)
+            {
+                somme = plateau[colonne][ligne] +
+                        plateau[colonne + 1][ligne - 1] +
+                        plateau[colonne + 2][ligne - 2];
+            }
             // qDebug() << Q_FUNC_INFO << somme;
-            if(somme == NB_PIONS_ALIGNES)
+            if(somme == nbPionsAlignes)
             {
                 return CouleurJeton::JAUNE;
             }
-            else if(somme == NB_PIONS_ALIGNES * -1)
+            else if(somme == nbPionsAlignes * -1)
             {
                 return CouleurJeton::ROUGE;
             }
@@ -1071,6 +1183,7 @@ IHM::CouleurJeton IHM::verifierDiagonales()
 
 bool IHM::aGagne(CouleurJeton couleurEquipe)
 {
+    // qDebug() << Q_FUNC_INFO << "couleurEquipe" << couleurEquipe;
     // horizontalement
     for(int ligne = 0; ligne < NB_LIGNES; ++ligne)
     {
@@ -1108,7 +1221,7 @@ bool IHM::aGagne(CouleurJeton couleurEquipe)
 
 bool IHM::estRempli()
 {
-    for(int colonne = 0; colonne < plateau.size(); ++colonne)
+    for(int colonne = 0; colonne < nbPaniers; ++colonne)
     {
         for(int ligne = 0; ligne < plateau[colonne].size(); ++ligne)
         {
