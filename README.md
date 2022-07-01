@@ -11,8 +11,11 @@
   - [Diaporama](#diaporama)
   - [Auteur](#auteur)
   - [Kanban](#kanban)
+  - [EC](#ec)
 
-![](images/basket-game-ec.gif)
+Regardez la vidéo :
+
+[<img src="https://img.youtube.com/vi/qUwvlZFmvIg/maxresdefault.jpg" width="50%">](https://youtu.be/qUwvlZFmvIg)
 
 ## Fonctionnalités
 
@@ -76,5 +79,9 @@
 ## Kanban
 
 [basket-game-2022](https://github.com/btssn-lasalle-84/basket-game-2022/projects/1)
+
+## EC
+
+![](images/basket-game-ec.gif)
 
 ©️ LaSalle Avignon 2022
