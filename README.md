@@ -3,6 +3,7 @@
 “Entraînement ludique au tir de basket-ball“
 
 - [Le projet basket-game-2022](#le-projet-basket-game-2022)
+  - [Vidéo](#vidéo)
   - [Fonctionnalités](#fonctionnalités)
   - [TODO](#todo)
   - [Historique des versions](#historique-des-versions)
@@ -13,7 +14,7 @@
   - [Kanban](#kanban)
   - [EC](#ec)
 
-Regardez la vidéo :
+## Vidéo
 
 [<img src="https://img.youtube.com/vi/qUwvlZFmvIg/maxresdefault.jpg" width="50%">](https://youtu.be/qUwvlZFmvIg)
 
